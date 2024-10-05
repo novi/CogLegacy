@@ -34,6 +34,7 @@
 	int channels;
 	float frequency;
 	long totalFrames;
+    AudioChannelLayoutTag channelLayoutTag;
 }
 
 @end

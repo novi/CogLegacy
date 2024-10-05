@@ -13,6 +13,18 @@
 
 static NSString *DockIconPlaybackStatusObservationContext = @"DockIconPlaybackStatusObservationContext";
 
+static NSString *getBadgeName(NSString *baseName, BOOL colorfulIcons)
+{
+    if (colorfulIcons)
+    {
+        return [baseName stringByAppendingString:@"Colorful"];
+    }
+    else
+    {
+        return baseName;
+    }
+}
+
 - (void)startObserving
 {
 	[playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial) context:DockIconPlaybackStatusObservationContext];
@@ -31,21 +43,39 @@ static NSString *DockIconPlaybackStatusObservationContext = @"DockIconPlaybackSt
 		
 		NSImage *badgeImage = nil;
 		
-		if (playbackStatus == kCogStatusPlaying) {
-			badgeImage = [NSImage imageNamed:@"playBadge"];
+        BOOL colorfulIcons = [[NSUserDefaults standardUserDefaults] boolForKey:@"colorfulDockIcons"];
+        
+		if (playbackStatus == kCogStatusPlaying) 
+        {
+			badgeImage = [NSImage imageNamed:getBadgeName(@"playDockBadge", colorfulIcons)];
 		}
-		else if (playbackStatus == kCogStatusPaused) {
-			badgeImage = [NSImage imageNamed:@"pauseBadge"];
+		else if (playbackStatus == kCogStatusPaused) 
+        {
+			badgeImage = [NSImage imageNamed:getBadgeName(@"pauseDockBadge", colorfulIcons)];
 		}
-		else {
-			badgeImage = [NSImage imageNamed:@"stopBadge"];
+		else 
+        {
+			badgeImage = [NSImage imageNamed:getBadgeName(@"stopDockBadge", colorfulIcons)];
 		}
 		
 		NSSize badgeSize = [badgeImage size];
 		
 		NSImage *newDockImage = [dockImage copy];
 		[newDockImage lockFocus];
-		[badgeImage drawInRect:NSMakeRect(92, 24, badgeSize.width,badgeSize.height) fromRect:NSMakeRect(0, 0, badgeSize.width, badgeSize.height) operation:NSCompositeSourceOver fraction:1.0];
+        
+        if (colorfulIcons)
+        {
+            [badgeImage drawInRect:NSMakeRect(0, 0, 128, 128) 
+                          fromRect:NSMakeRect(0, 0, badgeSize.width, badgeSize.height) 
+                         operation:NSCompositeSourceOver fraction:1.0];
+        }
+        else 
+        {
+            [badgeImage drawInRect:NSMakeRect(0, 0, 128, 128) 
+                          fromRect:NSMakeRect(0, 0, badgeSize.width, badgeSize.height) 
+                         operation:NSCompositeSourceOver fraction:1.0];
+        }
+        
 		[newDockImage unlockFocus];
 		[NSApp setApplicationIconImage:newDockImage];
 		[newDockImage release];
@@ -58,7 +88,7 @@ static NSString *DockIconPlaybackStatusObservationContext = @"DockIconPlaybackSt
 
 - (void)awakeFromNib
 {
-	dockImage = [[NSImage imageNamed:@"wheel"] copy];
+	dockImage = [[NSImage imageNamed:@"icon_blank"] copy];
 	[self startObserving];
 }
 

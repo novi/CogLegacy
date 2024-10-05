@@ -8,17 +8,19 @@
 
 #import "GameDecoder.h"
 
+#import "Logging.h"
+
 @implementation GameDecoder
 
 gme_err_t readCallback( void* data, void* out, long count )
 {
 	GameDecoder *decoder = (GameDecoder *)data;
-	NSLog(@"Amount: %li", count);
+	DLog(@"Amount: %li", count);
 	int n = [[decoder source] read:out amount:count];
-	NSLog(@"Read: %i", n);
+	DLog(@"Read: %i", n);
 	if (n <= 0) {
 		
-		NSLog(@"ERROR!");
+		DLog(@"ERROR!");
 		return (gme_err_t)1; //Return non-zero for error
 	}
 	
@@ -41,14 +43,14 @@ gme_err_t readCallback( void* data, void* out, long count )
 	gme_type_t type = gme_identify_extension([ext UTF8String]);
 	if (!type) 
 	{
-		NSLog(@"No type!");
+		DLog(@"No type!");
 		return NO;
 	}
 	
 	emu = gme_new_emu(type, 44100);
 	if (!emu)
 	{
-		NSLog(@"No new emu!");
+		DLog(@"No new emu!");
 		return NO;
 	}
 	
@@ -56,51 +58,53 @@ gme_err_t readCallback( void* data, void* out, long count )
 	long size = [source tell];
 	[source seek:0 whence:SEEK_SET];
 	
-	NSLog(@"Size: %li", size);
+	DLog(@"Size: %li", size);
 	
 	error = gme_load_custom(emu, readCallback, size, self);
 	if (error) 
 	{
-		NSLog(@"ERROR Loding custom!");
+        DLog(@"ERROR Loding custom!");
 		return NO;
 	}
 	
 	int track_num = [[[source url] fragment] intValue]; //What if theres no fragment? Assuming we get 0.
 	
-	track_info_t info;
+    gme_info_t *info;
 	error = gme_track_info( emu, &info, track_num );
 	if (error)
 	{
-		NSLog(@"Unable to get track info");
+		DLog(@"Unable to get track info");
 	}
 	
 	//As recommended
-	if (info.length > 0) {
-		NSLog(@"Using length: %li", info.length);
-		length = info.length;
+	if (info->length > 0) {
+		DLog(@"Using length: %i", info->length);
+		length = info->length;
 	}
-	else if (info.loop_length > 0) {
-		NSLog(@"Using loop length: %li", info.loop_length);
-		length = info.intro_length + 2*info.loop_length;
+	else if (info->loop_length > 0) {
+		DLog(@"Using loop length: %i", info->loop_length);
+		length = info->intro_length + 2*info->loop_length;
 	}
 	else {
 		length = 150000; 
-		NSLog(@"Setting default: %li", length);
+		DLog(@"Setting default: %li", length);
 	}
 
-	NSLog(@"Length: %li", length);
+	DLog(@"Length: %li", length);
 	
-	NSLog(@"Track num: %i", track_num);
+	DLog(@"Track num: %i", track_num);
 	error = gme_start_track(emu, track_num);
 	if (error) 
 	{
-		NSLog(@"Error starting track");
+		DLog(@"Error starting track");
 		return NO;
 	}
 
 	[self willChangeValueForKey:@"properties"];
 	[self didChangeValueForKey:@"properties"];
 	
+    free(info);
+    
 	return YES;
 }
 
@@ -120,7 +124,7 @@ gme_err_t readCallback( void* data, void* out, long count )
 - (int)readAudio:(void *)buf frames:(UInt32)frames
 {
 	int numSamples = frames * 2; //channels = 2
-	
+    
 	if (gme_track_ended(emu) || length < gme_tell(emu)) {
 		return 0;
 	}
@@ -156,18 +160,25 @@ gme_err_t readCallback( void* data, void* out, long count )
 }
 
 + (NSArray *)fileTypes 
-{	
-	NSMutableArray *types = [NSMutableArray array];
-	gme_type_t const* type = gme_type_list();
-	while(*type)
-	{
-		//We're digging a little deep here, but there seems to be no other choice.
-		[types addObject:[NSString stringWithCString:(*type)->extension_ encoding: NSASCIIStringEncoding]];
-		
-		type++;
-	}
-	
-	return [[types copy] autorelease];
+{
+// For GME 0.5.5 underlying gme_type_t_ seems to be considered private api so extension_ is unavailable.
+// Original game system name is available (so it's possible to map it to extension), 
+// but i'm lazy so i'll just put static list here
+ 
+// This is how determining supported file types has been done originally (for GME 0.5.2)
+//	NSMutableArray *types = [NSMutableArray array];
+//	gme_type_t const* type = gme_type_list();
+//	while(*type)
+//	{
+//		//We're digging a little deep here, but there seems to be no other choice.
+//		[types addObject:[NSString stringWithCString:(*type)->extension_ encoding: NSASCIIStringEncoding]];
+//		
+//		type++;
+//	}
+//	
+//	return [[types copy] autorelease];
+    
+    return [NSArray arrayWithObjects:@"ay",@"gbs",@"gym", @"hes", @"kss", @"nsf", @"nsfe", @"sap", @"spc", @"vgm", @"vgz", nil];
 }
 
 + (NSArray *)mimeTypes 

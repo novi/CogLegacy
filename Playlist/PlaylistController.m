@@ -6,20 +6,20 @@
 //	Copyright 2005 Vincent Spader All rights reserved.
 //
 
-#import "PlaylistLoader.h"
-#import "PlaylistController.h"
-#import "PlaybackController.h"
-#import "EntriesController.h"
 #import "PlaylistEntry.h"
+#import "PlaylistLoader.h"
+#import "PlaybackController.h"
 #import "Shuffle.h"
 #import "SpotlightWindowController.h"
 #import "RepeatTransformers.h"
 #import "ShuffleTransformers.h"
 #import "StatusImageTransformer.h"
 #import "ToggleQueueTitleTransformer.h"
-#import "TagEditorController.h"
 
-#import "CogAudio/AudioPlayer.h"
+#import "Logging.h"
+
+
+#define UNDO_STACK_LIMIT 0
 
 @implementation PlaylistController
 
@@ -95,6 +95,11 @@
 	{
 		shuffleList = [[NSMutableArray alloc] init];
 		queueList = [[NSMutableArray alloc] init];
+
+        undoManager = [[NSUndoManager alloc] init];
+
+        [undoManager setLevelsOfUndo:UNDO_STACK_LIMIT];
+
 		[self initDefaults];
 	}
 	
@@ -106,7 +111,9 @@
 {
 	[shuffleList release];
 	[queueList release];
-	
+
+    [undoManager release];
+
 	[super dealloc];
 }
 
@@ -163,7 +170,7 @@
 
 - (NSString *)tableView:(NSTableView *)tv toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc row:(int)row mouseLocation:(NSPoint)mouseLocation
 {
-	NSLog(@"GETTING STATUS FOR ROW: %i: %@!", row, [[[self arrangedObjects] objectAtIndex:row] statusMessage]);
+	DLog(@"GETTING STATUS FOR ROW: %i: %@!", row, [[[self arrangedObjects] objectAtIndex:row] statusMessage]);
 	return [[[self arrangedObjects] objectAtIndex:row] statusMessage];
 }
 
@@ -228,7 +235,7 @@
 	// Get files from an file drawer drop
 	if ([bestType isEqualToString:CogUrlsPboardType]) {
 		NSArray *urls = [NSUnarchiver unarchiveObjectWithData:[[info draggingPasteboard] dataForType:CogUrlsPboardType]];
-		NSLog(@"URLS: %@", urls);
+		DLog(@"URLS: %@", urls);
 		//[playlistLoader insertURLs: urls atIndex:row sort:YES];
 		[acceptedURLs addObjectsFromArray:urls];
 	}
@@ -268,7 +275,7 @@
 	{
 		[self willInsertURLs:acceptedURLs origin:URLOriginInternal];
 		
-		if (![[entriesController entries] count]) {
+		if (![[self content] count]) {
 			row = 0;
 		}
 		
@@ -286,55 +293,64 @@
 
 - (NSUndoManager *)undoManager
 {
-	return [entriesController undoManager];
+	return undoManager;
 }
 
 - (void)insertObjects:(NSArray *)objects atArrangedObjectIndexes:(NSIndexSet *)indexes
 {
-	[super insertObjects:objects atArrangedObjectIndexes:indexes];
-	
-	if ([self shuffle] != ShuffleOff)
-		[self resetShuffleList];
+    [[[self undoManager] prepareWithInvocationTarget:self] removeObjectsAtArrangedObjectIndexes:indexes];
+    NSString *actionName = [NSString stringWithFormat:@"Adding %d entries", [objects count]];
+    [[self undoManager] setActionName:actionName];
+
+    [super insertObjects:objects atArrangedObjectIndexes:indexes];
+
+    if ([self shuffle] != ShuffleOff)
+        [self resetShuffleList];
 }
 
 - (void)removeObjectsAtArrangedObjectIndexes:(NSIndexSet *)indexes
 {
-	NSLog(@"Removing indexes: %@", indexes);
-	NSLog(@"Current index: %i", currentEntry.index);
+    NSArray *objects = [[self content] objectsAtIndexes:indexes];
+    [[[self undoManager] prepareWithInvocationTarget:self] insertObjects:objects atArrangedObjectIndexes:indexes];
+    NSString *actionName = [NSString stringWithFormat:@"Removing %d entries", [indexes count]];
+    [[self undoManager] setActionName:actionName];
 
-	if (currentEntry.index >= 0 && [indexes containsIndex:currentEntry.index])
-	{
-		currentEntry.index = -currentEntry.index - 1;
-		NSLog(@"Current removed: %i", currentEntry.index);
-	}
-	
-	if (currentEntry.index < 0) //Need to update the negative index
-	{
-		int i = -currentEntry.index - 1;
-		NSLog(@"I is %i", i);
-		int j;
-		for (j = i - 1; j >= 0; j--)
-		{
-			if ([indexes containsIndex:j]) {
-				NSLog(@"Removing 1");
-				i--;
-			}
-		}
-		currentEntry.index = -i - 1;
+    DLog(@"Removing indexes: %@", indexes);
+    DLog(@"Current index: %i", currentEntry.index);
 
-	}
-	
-	[super removeObjectsAtArrangedObjectIndexes:indexes];
-	
-	if ([self shuffle] != ShuffleOff)
-		[self resetShuffleList];
+    if (currentEntry.index >= 0 && [indexes containsIndex:currentEntry.index])
+    {
+        currentEntry.index = -currentEntry.index - 1;
+        DLog(@"Current removed: %i", currentEntry.index);
+    }
 
-	[playbackController playlistDidChange:self];
+    if (currentEntry.index < 0) //Need to update the negative index
+    {
+        int i = -currentEntry.index - 1;
+        DLog(@"I is %i", i);
+        int j;
+        for (j = i - 1; j >= 0; j--)
+        {
+            if ([indexes containsIndex:j]) {
+                DLog(@"Removing 1");
+                i--;
+            }
+        }
+        currentEntry.index = -i - 1;
+
+    }
+
+    [super removeObjectsAtArrangedObjectIndexes:indexes];
+
+    if ([self shuffle] != ShuffleOff)
+        [self resetShuffleList];
+
+    [playbackController playlistDidChange:self];
 }
 
 - (void)setSortDescriptors:(NSArray *)sortDescriptors
 {
-	NSLog(@"Current: %@, setting: %@", [self sortDescriptors], sortDescriptors);
+	DLog(@"Current: %@, setting: %@", [self sortDescriptors], sortDescriptors);
 
 	//Cheap hack so the index column isn't sorted
 	if (([sortDescriptors count] != 0) && [[[sortDescriptors objectAtIndex:0] key] caseInsensitiveCompare:@"index"] == NSOrderedSame)
@@ -351,26 +367,26 @@
 
 	[playbackController playlistDidChange:self];
 }
-		
-- (IBAction)sortByPath
-{
-	NSSortDescriptor *s = [[NSSortDescriptor alloc] initWithKey:@"url" ascending:YES selector:@selector(compare:)];
-	
-	[self setSortDescriptors:[NSArray arrayWithObject:s]];
 
-	[s release];	
-
-	if ([self shuffle] != ShuffleOff)
-		[self resetShuffleList];
-}
-
-- (IBAction)randomizeList
+- (IBAction)randomizeList:(id)sender
 {
 	[self setSortDescriptors:nil];
 
-	[self setContent:[Shuffle shuffleList:[self content]]];
-	if ([self shuffle] != ShuffleOff)
+    NSArray *unrandomized = [self content];
+    [[[self undoManager] prepareWithInvocationTarget:self] unrandomizeList:unrandomized];
+
+    [self setContent:[Shuffle shuffleList:[self content]]];
+
+    if ([self shuffle] != ShuffleOff)
 		[self resetShuffleList];
+
+    [[self undoManager] setActionName:@"Playlist Randomization"];
+}
+
+- (void)unrandomizeList:(NSArray *)entries
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] randomizeList:self];
+    [self setContent:entries];
 }
 
 - (IBAction)toggleShuffle:(id)sender
@@ -424,12 +440,28 @@
 		else
 			return nil;
 	}
-	
+
 	return [[self arrangedObjects] objectAtIndex:i];
+}
+
+- (void)remove:(id)sender {
+    // It's a kind of magic.
+    // Plain old NSArrayController's remove: isn't working properly for some reason.
+    // The method is definitely called but (overridden) removeObjectsAtArrangedObjectIndexes: isn't called
+    // and no entries are removed.
+    // Putting explicit call to removeObjectsAtArrangedObjectIndexes: here for now.
+    // TODO: figure it out
+
+    NSIndexSet *selected = [self selectionIndexes];
+    if ([selected count] > 0)
+    {
+        [self removeObjectsAtArrangedObjectIndexes:selected];
+    }
 }
 
 - (PlaylistEntry *)shuffledEntryAtIndex:(int)i
 {
+    DLog(@"In shuffledEntryAtIndex: %d", i);
 	RepeatMode repeat = [self repeat];
 	
 	while (i < 0)
@@ -456,7 +488,8 @@
 			return nil;
 		}
 	}
-	
+
+    DLog(@"Exiting shuffledEntryAtIndex");
 	return [shuffleList objectAtIndex:i];
 }
 
@@ -510,7 +543,7 @@
 				if ([pe album] == nil)
 					i--;
 				else
-					i = [(NSNumber *)[[filtered objectAtIndex:0] index] intValue];
+					i = [[filtered objectAtIndex:0] index];
 			}
 			
 		}
@@ -637,6 +670,16 @@
 
 - (void)setCurrentEntry:(PlaylistEntry *)pe
 {
+    
+    if (![pe metadataLoaded]) {
+        // Force loading metadata if it isn't loaded,
+        // will hopefully prevent wrong Growl notifications,
+        // non-updating progress slider and wrong remaining time
+        DLog(@"Metadata isn't loaded for %@", [pe description]);
+        NSDictionary *metadata = [playlistLoader readEntryInfo:pe];
+        [pe setMetadata:metadata];
+    }
+    
 	currentEntry.current = NO;
 	currentEntry.stopAfter = NO;
 	
@@ -693,7 +736,7 @@
 - (IBAction)showEntryInFinder:(id)sender
 {
 	NSWorkspace* ws = [NSWorkspace sharedWorkspace];
-	if ([self selectionIndex] < 0)
+	if (NSNotFound == [self selectionIndex])
 		return;
 	
 	NSURL *url = [[[self selectedObjects] objectAtIndex:0] URL];
@@ -760,7 +803,7 @@
 			[queueList addObject:queueItem];
 		}
 		
-		NSLog(@"TOGGLE QUEUED: %i", queueItem.queued);
+		DLog(@"TOGGLE QUEUED: %i", queueItem.queued);
 	}
 
 	int i = 0;
@@ -867,10 +910,9 @@
 	}
 
 	//Auto start playback
-	if (shouldPlay	&& [[entriesController entries] count] > 0) {
+	if (shouldPlay	&& [[self content] count] > 0) {
 		[playbackController playEntry: [urls objectAtIndex:0]];
 	}
 }
-
 
 @end

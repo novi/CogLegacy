@@ -12,6 +12,8 @@
 
 #import <GME/gme.h>
 
+#import "Logging.h"
+
 @implementation GameMetadataReader
 
 + (NSArray *)fileTypes
@@ -34,7 +36,7 @@
 	gme_type_t type = gme_identify_extension([ext UTF8String]);
 	if (!type) 
 	{
-		NSLog(@"No type!");
+		DLog(@"No type!");
 		return NO;
 	}
 	
@@ -42,7 +44,7 @@
 	emu = gme_new_emu(type, gme_info_only);
 	if (!emu)
 	{
-		NSLog(@"No new emu!");
+		DLog(@"No new emu!");
 		return NO;
 	}
 	
@@ -50,7 +52,7 @@
 	error = gme_load_file(emu, [[url path] UTF8String]);
 	if (error) 
 	{
-		NSLog(@"ERROR Loding file!");
+		DLog(@"ERROR Loding file!");
 		return NO;
 	}
 	
@@ -60,22 +62,33 @@
 	else
 		track_num = [[url fragment] intValue];
 	
-	track_info_t info;
+	gme_info_t *info;
 	error = gme_track_info( emu, &info, track_num );
 	if (error)
 	{
-		NSLog(@"Unable to get track info");
+		DLog(@"Unable to get track info");
 	}
 	
 	gme_delete(emu);
 
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-		[NSString stringWithUTF8String: info.system], @"genre",
-		[NSString stringWithUTF8String: info.game], @"album",
-		[NSString stringWithUTF8String: info.song], @"title",
-		[NSString stringWithUTF8String: info.author], @"artist",
+    NSString *title = [NSString stringWithUTF8String: info->song];
+    if (!title || ![title length]) 
+    {
+        // this is needed to distinguish between different tracks in NSF, for example
+        // otherwise they will all be displayed as 'blahblah.nsf' in playlist
+        title = [[url lastPathComponent] stringByAppendingFormat:@" [%d]", track_num];
+    }
+    
+	NSDictionary *result = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSString stringWithUTF8String: info->system], @"genre",
+		[NSString stringWithUTF8String: info->game], @"album",
+		title, @"title",
+		[NSString stringWithUTF8String: info->author], @"artist",
 		[NSNumber numberWithInt:track_num+1], @"track",
 		nil];
+    
+    free(info);
+    return result;
 }
 
 @end

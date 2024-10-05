@@ -76,7 +76,6 @@
 
 - (BOOL)endOfInputReached:(BufferChain *)sender;
 - (void)setShouldContinue:(BOOL)s;
-- (BufferChain *)bufferChain;
 - (void)launchOutputThread;
 - (void)endOfInputPlayed;
 - (void)sendDelegateMethod:(SEL)selector withObject:(id)obj waitUntilDone:(BOOL)wait;
@@ -86,6 +85,6 @@
 @protocol AudioPlayerDelegate
 - (void)audioPlayer:(AudioPlayer *)player willEndStream:(id)userInfo; //You must use setNextStream in this method
 - (void)audioPlayer:(AudioPlayer *)player didBeginStream:(id)userInfo;
-- (void)audioPlayer:(AudioPlayer *)player didChangeStatus:(id)status;
+- (void)audioPlayer:(AudioPlayer *)player didChangeStatus:(NSNumber *)status userInfo:(id)userInfo;
 @end
 

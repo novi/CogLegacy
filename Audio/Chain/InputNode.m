@@ -11,7 +11,21 @@
 #import "Plugin.h"
 #import "CoreAudioUtils.h"
 
+#import "Logging.h"
+
 @implementation InputNode
+@synthesize exitAtTheEndOfTheStream;
+
+
+- (id)initWithController:(id)c previous:(id)p {
+    self = [super initWithController:c previous:p];
+    if (self) {
+        exitAtTheEndOfTheStream = [[Semaphore alloc] init];
+    }
+
+    return self;
+}
+
 
 - (BOOL)openWithSource:(id<CogSource>)source
 {
@@ -25,7 +39,7 @@
 
 	if (![decoder open:source])
 	{
-		NSLog(@"Couldn't open decoder...");
+		ALog(@"Couldn't open decoder...");
 		return NO;
 	}
 	
@@ -43,7 +57,7 @@
 
 - (BOOL)openWithDecoder:(id<CogDecoder>) d
 {
-	NSLog(@"Opening with old decoder: %@", d);
+	DLog(@"Opening with old decoder: %@", d);
 	decoder = d;
 	[decoder retain];
 
@@ -58,14 +72,14 @@
 	shouldContinue = YES;
 	shouldSeek = NO;
 	
-	NSLog(@"DONES: %@", decoder);
+	DLog(@"DONES: %@", decoder);
 	return YES;
 }
 
 
 - (void)registerObservers
 {
-	NSLog(@"REGISTERING OBSERVERS");
+	DLog(@"REGISTERING OBSERVERS");
 	[decoder addObserver:self
 			  forKeyPath:@"properties" 
 				 options:(NSKeyValueObservingOptionNew)
@@ -82,11 +96,11 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-	NSLog(@"SOMETHING CHANGED!");
+	DLog(@"SOMETHING CHANGED!");
 	if ([keyPath isEqual:@"properties"]) {
 		//Setup converter!
 		//Inform something of properties change
-		//Disable support until it is properly implimented.
+		//Disable support until it is properly implemented.
 		//[controller inputFormatDidChange: propertiesToASBD([decoder properties])];
 	}
 	else if ([keyPath isEqual:@"metadata"]) {
@@ -105,14 +119,14 @@
 	{
 		if (shouldSeek == YES)
 		{
-			NSLog(@"SEEKING!");
+			DLog(@"SEEKING!");
 			[decoder seek:seekFrame];
 			shouldSeek = NO;
-			NSLog(@"Seeked! Resetting Buffer");
+			DLog(@"Seeked! Resetting Buffer");
 			
 			[self resetBuffer];
 			
-			NSLog(@"Reset buffer!");
+			DLog(@"Reset buffer!");
 			initialBufferFilled = NO;
 		}
 
@@ -127,35 +141,60 @@
 					[controller initialBufferFilled:self];
 				}
 				
-				NSLog(@"End of stream? %@", [self properties]);
+				DLog(@"End of stream? %@", [self properties]);
+
 				endOfStream = YES;
 				shouldClose = [controller endOfInputReached]; //Lets us know if we should keep going or not (occassionally, for track changes within a file)
-				NSLog(@"closing? is %i", shouldClose);
-				break; 
+				DLog(@"closing? is %i", shouldClose);
+
+                // wait before exiting, as we might still get seeking request
+                DLog("InputNode: Before wait")
+                [exitAtTheEndOfTheStream waitIndefinitely];
+                DLog("InputNode: After wait, should seek = %d", shouldSeek)
+                if (shouldSeek)
+                {
+                    endOfStream = NO;
+                    shouldClose = NO;
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
 			}
 		
 			[self writeData:inputBuffer amount:amountInBuffer];
 			amountInBuffer = 0;
 		}
 	}
+
 	if (shouldClose)
 		[decoder close];
-	
-	free(inputBuffer);
+
+    free(inputBuffer);
+
+    [exitAtTheEndOfTheStream signal];
+
+    DLog("Input node thread stopping");
 }
 
 - (void)seek:(long)frame
 {
 	seekFrame = frame;
 	shouldSeek = YES;
-	NSLog(@"Should seek!");
+	DLog(@"Should seek!");
 	[semaphore signal];
+
+    if (endOfStream)
+    {
+        [exitAtTheEndOfTheStream signal];
+    }
 }
 
 - (BOOL)setTrack:(NSURL *)track
 {
 	if ([decoder respondsToSelector:@selector(setTrack:)] && [decoder setTrack:track]) {
-		NSLog(@"SET TRACK!");
+		DLog(@"SET TRACK!");
 		
 		return YES;
 	}
@@ -165,14 +204,14 @@
 
 - (void)dealloc
 {
-	NSLog(@"Input Node dealloc");
-
+	DLog(@"Input Node dealloc");
 	[decoder removeObserver:self forKeyPath:@"properties"];
 	[decoder removeObserver:self forKeyPath:@"metadata"];
 
 	[decoder release];
-	
-	[super dealloc];
+
+    [exitAtTheEndOfTheStream release];
+    [super dealloc];
 }
 
 - (NSDictionary *) properties

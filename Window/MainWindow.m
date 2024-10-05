@@ -18,21 +18,10 @@
 	{
 		[self setExcludedFromWindowsMenu:YES];
 		[self setContentBorderThickness:24.0 forEdge:NSMinYEdge];
+        [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 	}
 	
 	return self;
 }
-
-- (void)awakeFromNib
-{
-	if ([self hiddenDefaultsKey]) {
-		[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:[self hiddenDefaultsKey]]];
-	}
-	
-	[super awakeFromNib];
-}
-
-
-
 
 @end

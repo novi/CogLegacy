@@ -14,18 +14,28 @@
 
 - (IBAction)addToPlaylist:(id)sender
 {
-	unsigned int index;
-	NSIndexSet *selectedIndexes = [outlineView selectedRowIndexes];
-	NSMutableArray *urls = [[NSMutableArray alloc] init];
+	[self doAddToPlaylist:sender origin:URLOriginInternal];
+}
 
-	for (index = [selectedIndexes firstIndex];
-		 index != NSNotFound; index = [selectedIndexes indexGreaterThanIndex: index])  
-	{
-		[urls addObject:[[outlineView itemAtRow:index] URL]];
-	}
-	
-	[controller addToPlaylist:urls];
-	[urls release];
+- (void)doAddToPlaylist:(id)sender origin:(URLOrigin)origin
+{
+    NSUInteger index;
+    NSIndexSet *selectedIndexes = [outlineView selectedRowIndexes];
+    NSMutableArray *urls = [[NSMutableArray alloc] init];
+
+    for (index = [selectedIndexes firstIndex];
+         index != NSNotFound; index = [selectedIndexes indexGreaterThanIndex: index])
+    {
+        [urls addObject:[[outlineView itemAtRow:index] URL]];
+    }
+
+    [controller doAddToPlaylist:urls origin:origin];
+    [urls release];
+}
+
+- (void)addToPlaylistExternal:(id)sender
+{
+    [self doAddToPlaylist:sender origin:URLOriginExternal];
 }
 
 - (IBAction)setAsPlaylist:(id)sender
@@ -41,7 +51,7 @@
 
 - (IBAction)showEntryInFinder:(id)sender
 {
-	unsigned int index;
+	NSUInteger index;
 	NSWorkspace* ws = [NSWorkspace sharedWorkspace];
 	NSIndexSet *selectedIndexes = [outlineView selectedRowIndexes];
 	
@@ -55,7 +65,7 @@
 
 - (IBAction)setAsRoot:(id)sender
 {
-	unsigned int index = [[outlineView selectedRowIndexes] firstIndex];
+	NSUInteger index = [[outlineView selectedRowIndexes] firstIndex];
 	
 	if (index != NSNotFound)
 	{

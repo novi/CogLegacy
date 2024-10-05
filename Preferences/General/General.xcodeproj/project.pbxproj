@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,18 +19,36 @@
 		17E41DB80C130AA500AC744D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 17E41DB70C130AA500AC744D /* Localizable.strings */; };
 		17E78A7E0D68BE3C005C5A59 /* file_tree.png in Resources */ = {isa = PBXBuildFile; fileRef = 17E78A7D0D68BE3C005C5A59 /* file_tree.png */; };
 		17E78B6A0D68C1E3005C5A59 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17E78B680D68C1E3005C5A59 /* Preferences.xib */; };
+		3257BD6B15CE907D00A5FE05 /* appearance.png in Resources */ = {isa = PBXBuildFile; fileRef = 3257BD6A15CE907D00A5FE05 /* appearance.png */; };
+		327BD5221527126A00800728 /* growl.png in Resources */ = {isa = PBXBuildFile; fileRef = 327BD5211527126A00800728 /* growl.png */; };
+		32F1618C14E6BDC700D6AB2F /* NDHotKey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32F1618614E6BCE300D6AB2F /* NDHotKey.framework */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		8E07AA880AAC8EA200A4B32F /* HotKeyPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E07AA810AAC8EA200A4B32F /* HotKeyPane.m */; };
 		8E07AA890AAC8EA200A4B32F /* GeneralPreferencePane.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E07AA830AAC8EA200A4B32F /* GeneralPreferencePane.m */; };
 		8E07AA8A0AAC8EA200A4B32F /* GeneralPreferencesPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E07AA850AAC8EA200A4B32F /* GeneralPreferencesPlugin.m */; };
 		8E07ABDD0AAC95BC00A4B32F /* hot_keys.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E07ABDB0AAC95BC00A4B32F /* hot_keys.png */; };
 		8E15A86C0B894768006DC802 /* updates.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E15A86B0B894768006DC802 /* updates.png */; };
-		8E6C12160AACAE4100819171 /* NDHotKeyControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6C12130AACAE4100819171 /* NDHotKeyControl.m */; };
-		8E6C12170AACAE4100819171 /* NDHotKeyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6C12150AACAE4100819171 /* NDHotKeyEvent.m */; };
 		8E6C123A0AACAEF200819171 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E6C12390AACAEF200819171 /* Carbon.framework */; };
 		8E6C13A00AACBAB500819171 /* HotKeyControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6C139F0AACBAB500819171 /* HotKeyControl.m */; };
 		99F1813F0DE01D7A00FD5FFB /* PlaylistBehaviorArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99F1813E0DE01D7A00FD5FFB /* PlaylistBehaviorArrayController.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		32F1618514E6BCE300D6AB2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32F1618114E6BCE300D6AB2F /* NDHotKey.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 32F1615614E6BB3B00D6AB2F;
+			remoteInfo = NDHotKey;
+		};
+		32F1618A14E6BDB700D6AB2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32F1618114E6BCE300D6AB2F /* NDHotKey.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 32F1615514E6BB3B00D6AB2F;
+			remoteInfo = NDHotKey;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -52,7 +70,10 @@
 		17E41DB50C130A9D00AC744D /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		17E78A7D0D68BE3C005C5A59 /* file_tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = file_tree.png; path = Icons/file_tree.png; sourceTree = "<group>"; };
 		17E78B690D68C1E3005C5A59 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
+		3257BD6A15CE907D00A5FE05 /* appearance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = appearance.png; path = Icons/appearance.png; sourceTree = "<group>"; };
+		327BD5211527126A00800728 /* growl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = growl.png; path = Icons/growl.png; sourceTree = "<group>"; };
 		32DBCF630370AF2F00C91783 /* General_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = General_Prefix.pch; sourceTree = "<group>"; };
+		32F1618114E6BCE300D6AB2F /* NDHotKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = NDHotKey.xcodeproj; path = ../../Frameworks/NDHotKey/NDHotKey.xcodeproj; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* General.preferencePane */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = General.preferencePane; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E07AA800AAC8EA200A4B32F /* HotKeyPane.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HotKeyPane.h; sourceTree = "<group>"; };
@@ -63,10 +84,6 @@
 		8E07AA850AAC8EA200A4B32F /* GeneralPreferencesPlugin.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GeneralPreferencesPlugin.m; sourceTree = "<group>"; };
 		8E07ABDB0AAC95BC00A4B32F /* hot_keys.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hot_keys.png; path = Icons/hot_keys.png; sourceTree = "<group>"; };
 		8E15A86B0B894768006DC802 /* updates.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = updates.png; path = Icons/updates.png; sourceTree = "<group>"; };
-		8E6C12120AACAE4100819171 /* NDHotKeyControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NDHotKeyControl.h; sourceTree = "<group>"; };
-		8E6C12130AACAE4100819171 /* NDHotKeyControl.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NDHotKeyControl.m; sourceTree = "<group>"; };
-		8E6C12140AACAE4100819171 /* NDHotKeyEvent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NDHotKeyEvent.h; sourceTree = "<group>"; };
-		8E6C12150AACAE4100819171 /* NDHotKeyEvent.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NDHotKeyEvent.m; sourceTree = "<group>"; };
 		8E6C12390AACAEF200819171 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8E6C139E0AACBAB500819171 /* HotKeyControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotKeyControl.h; sourceTree = "<group>"; };
 		8E6C139F0AACBAB500819171 /* HotKeyControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotKeyControl.m; sourceTree = "<group>"; };
@@ -79,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32F1618C14E6BDC700D6AB2F /* NDHotKey.framework in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				8E6C123A0AACAEF200819171 /* Carbon.framework in Frameworks */,
 				17C644330B8A791D00C53518 /* CoreAudio.framework in Frameworks */,
@@ -136,6 +154,7 @@
 		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32F1618114E6BCE300D6AB2F /* NDHotKey.xcodeproj */,
 				8E6C12390AACAEF200819171 /* Carbon.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
 			);
@@ -170,10 +189,6 @@
 			children = (
 				170744AB0BFF3938002475C9 /* AppcastArrayController.h */,
 				170744AC0BFF3938002475C9 /* AppcastArrayController.m */,
-				8E6C12120AACAE4100819171 /* NDHotKeyControl.h */,
-				8E6C12130AACAE4100819171 /* NDHotKeyControl.m */,
-				8E6C12140AACAE4100819171 /* NDHotKeyEvent.h */,
-				8E6C12150AACAE4100819171 /* NDHotKeyEvent.m */,
 				8E6C139E0AACBAB500819171 /* HotKeyControl.h */,
 				8E6C139F0AACBAB500819171 /* HotKeyControl.m */,
 				17C643370B8A77CC00C53518 /* OutputsArrayController.h */,
@@ -200,9 +215,19 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
+		32F1618214E6BCE300D6AB2F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				32F1618614E6BCE300D6AB2F /* NDHotKey.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8E07ABD90AAC95AF00A4B32F /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				3257BD6A15CE907D00A5FE05 /* appearance.png */,
+				327BD5211527126A00800728 /* growl.png */,
 				17C7E5AF0DCCC30A003CBCF7 /* playlist.png */,
 				17E78A7D0D68BE3C005C5A59 /* file_tree.png */,
 				1766C7A70B912A71004A7AE4 /* lastfm.png */,
@@ -228,6 +253,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				32F1618B14E6BDB700D6AB2F /* PBXTargetDependency */,
 			);
 			name = General;
 			productInstallPath = "$(HOME)/Library/Bundles";
@@ -240,8 +266,12 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0410;
+			};
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "General" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -255,12 +285,28 @@
 			);
 			mainGroup = 089C166AFE841209C02AAC07 /* General */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 32F1618214E6BCE300D6AB2F /* Products */;
+					ProjectRef = 32F1618114E6BCE300D6AB2F /* NDHotKey.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8D5B49AC048680CD000E48DA /* General */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		32F1618614E6BCE300D6AB2F /* NDHotKey.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = NDHotKey.framework;
+			remoteRef = 32F1618514E6BCE300D6AB2F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D5B49AF048680CD000E48DA /* Resources */ = {
@@ -277,6 +323,8 @@
 				17E78A7E0D68BE3C005C5A59 /* file_tree.png in Resources */,
 				17E78B6A0D68C1E3005C5A59 /* Preferences.xib in Resources */,
 				17C7E5B00DCCC30A003CBCF7 /* playlist.png in Resources */,
+				327BD5221527126A00800728 /* growl.png in Resources */,
+				3257BD6B15CE907D00A5FE05 /* appearance.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,8 +338,6 @@
 				8E07AA880AAC8EA200A4B32F /* HotKeyPane.m in Sources */,
 				8E07AA890AAC8EA200A4B32F /* GeneralPreferencePane.m in Sources */,
 				8E07AA8A0AAC8EA200A4B32F /* GeneralPreferencesPlugin.m in Sources */,
-				8E6C12160AACAE4100819171 /* NDHotKeyControl.m in Sources */,
-				8E6C12170AACAE4100819171 /* NDHotKeyEvent.m in Sources */,
 				8E6C13A00AACBAB500819171 /* HotKeyControl.m in Sources */,
 				17C643380B8A77CC00C53518 /* OutputsArrayController.m in Sources */,
 				17C6433F0B8A783F00C53518 /* OutputPane.m in Sources */,
@@ -301,6 +347,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		32F1618B14E6BDB700D6AB2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NDHotKey;
+			targetProxy = 32F1618A14E6BDB700D6AB2F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		178E386D0C3DA64500EE6711 /* InfoPlist.strings */ = {
@@ -333,9 +387,10 @@
 		1DEB913B08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -351,10 +406,8 @@
 		1DEB913C08733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -369,10 +422,14 @@
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
 				SYMROOT = ../../build;
 			};
 			name = Debug;
@@ -380,10 +437,13 @@
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
 				SYMROOT = ../../build;
 			};
 			name = Release;

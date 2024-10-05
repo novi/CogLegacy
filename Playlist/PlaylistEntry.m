@@ -140,6 +140,12 @@
 	return [[self.URL path] lastPathComponent];
 }
 
+@dynamic absoluteUrlStr;
+- (NSString *)absoluteUrlStr
+{
+    return [self.URL absoluteString];
+}
+
 @dynamic status;
 - (NSString *)status
 {
@@ -188,17 +194,22 @@
 
 - (void)setMetadata:(NSDictionary *)metadata
 {
-    if (metadata == nil)
+    @synchronized(self) // support for reading and setting metadata from different threads
+                        // see readEntryInfo and loadInfoForEntires in PlaylistLoader and
+                        // setCurrentEntry in playlistController
     {
-        self.error = YES;
-        self.errorMessage = @"Unable to retrieve metadata.";
-    }
-    else
-    {
-		[self setValuesForKeysWithDictionary:metadata];
-    }
+        if (metadata == nil)
+        {
+            self.error = YES;
+            self.errorMessage = @"Unable to retrieve metadata.";
+        }
+        else
+        {
+            [self setValuesForKeysWithDictionary:metadata];
+        }
 	
-	metadataLoaded = YES;
+        metadataLoaded = YES;
+    }
 }
 
 @end

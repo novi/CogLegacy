@@ -15,6 +15,8 @@
 #import "NSNumber+CogSort.h"
 #import "SpotlightTransformers.h"
 
+#import "Logging.h"
+
 // Minimum length of a search string (searching for very small strings gets ugly)
 #define MINIMUM_SEARCH_STRING_LENGTH 3
 
@@ -77,16 +79,15 @@ static NSPredicate * musicOnlyPredicate = nil;
 
 		[self registerDefaults];
 
-		// We want to bind the query's search scope to the user default that is
-		// set from the NSPathControl.
-		NSDictionary *bindOptions = 
-			[NSDictionary dictionaryWithObject:@"StringToSearchScopeTransformer"
-										forKey:NSValueTransformerNameBindingOption];
-		
-		[self.query     bind:@"searchScopes"
-					toObject:[NSUserDefaultsController sharedUserDefaultsController]
-				 withKeyPath:@"values.spotlightSearchPath"
-					 options:bindOptions];
+        // TODO: spotlightSearchPath is bound via IB, is the below needed?
+//		NSDictionary *bindOptions = 
+//			[NSDictionary dictionaryWithObject:@"StringToSearchScopeTransformer"
+//										forKey:NSValueTransformerNameBindingOption];
+//        
+//		[self.query     bind:@"searchScopes"
+//					toObject:[NSUserDefaultsController sharedUserDefaultsController]
+//				 withKeyPath:@"values.spotlightSearchPath"
+//					 options:bindOptions];
 	}
 
     return self;
@@ -108,7 +109,7 @@ static NSPredicate * musicOnlyPredicate = nil;
 {
     NSPredicate *searchPredicate;
     // Process the search string into a compound predicate. If Nil is returned do nothing
-    if(searchPredicate = [self processSearchString])
+    if((searchPredicate = [self processSearchString]))
     {
         // spotlightPredicate, which is what will finally be used for the spotlight search
         // is the union of the (potentially) compound searchPredicate and the static 
@@ -129,7 +130,7 @@ static NSPredicate * musicOnlyPredicate = nil;
             // Set scope to contents of pathControl
             self.query.searchScopes = [NSArray arrayWithObjects:pathControl.URL, nil];
             [self.query startQuery];
-            NSLog(@"Started query: %@", [self.query.predicate description]);
+            DLog(@"Started query: %@", [self.query.predicate description]);
         }
     }
 }
@@ -281,6 +282,16 @@ static NSPredicate * musicOnlyPredicate = nil;
     [playlistLoader didInsertURLs:[playlistLoader addURLs:[tracks valueForKey:@"URL"] sort:NO] origin:URLOriginExternal];
 	[self.query enableUpdates];
 }
+
+// If pop-up styled NSPathControl is set to /a/b/c path, then selecting either 'a' or 'b'
+// from its pop-up menu won't do anything by default (while we'd like it to select /a and 
+// /a/b respectively). So here we set url of NSPathControl to be that of clicked cell.
+- (IBAction)pathComponentClicked:(id)sender
+{
+    NSPathComponentCell *pcc = [sender clickedPathComponentCell];
+    DLog(@"%@", pcc);
+    [sender setURL:[pcc URL]];
+} 
 
 #pragma mark NSMetadataQuery delegate methods
 

@@ -7,6 +7,9 @@
 //
 
 #import "ShuffleTransformers.h"
+
+#import "Logging.h"
+
 @implementation ShuffleImageTransformer
 
 + (Class)transformedValueClass { return [NSImage class]; }
@@ -14,20 +17,20 @@
 
 // Convert from string to RepeatMode
 - (id)transformedValue:(id)value {
-	NSLog(@"Transforming value: %@", value);
+	DLog(@"Transforming value: %@", value);
 	
     if (value == nil) return nil;
 	
 	ShuffleMode mode = [value integerValue];
 	
 	if (mode == ShuffleOff) {
-		return [NSImage imageNamed:@"shuffle_off"];
+		return [NSImage imageNamed:@"shuffleOffTemplate"];
 	}
 	else if (mode == ShuffleAlbums) {
-		return [NSImage imageNamed:@"shuffle_albums"];
+		return [NSImage imageNamed:@"shuffleAlbumTemplate"];
 	}
 	else if (mode == ShuffleAll) {
-		return [NSImage imageNamed:@"shuffle_on"];
+		return [NSImage imageNamed:@"shuffleOnTemplate"];
 	}
 	
 	return nil;
@@ -54,7 +57,7 @@
 
 // Convert from RepeatMode to BOOL
 - (id)transformedValue:(id)value {
-	NSLog(@"Transforming value: %@", value);
+	DLog(@"Transforming value: %@", value);
 	
     if (value == nil) return nil;
 	

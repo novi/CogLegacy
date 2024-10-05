@@ -9,9 +9,10 @@
 #import "TagLibMetadataReader.h"
 #import <TagLib/fileref.h>
 #import <TagLib/tag.h>
-#import <Taglib/mpegfile.h>
-#import <Taglib/id3v2tag.h>
-#import <Taglib/attachedpictureframe.h>
+#import <TagLib/mpegfile.h>
+#import <TagLib/mp4file.h>
+#import <TagLib/id3v2tag.h>
+#import <TagLib/attachedpictureframe.h>
 
 @implementation TagLibMetadataReader
 
@@ -57,114 +58,56 @@
 			if (!genre.isNull())
 				[dict setObject:[NSString stringWithUTF8String:genre.toCString(true)] forKey:@"genre"];
 		}
-		
-		NSString *imageCacheTag = [NSString stringWithFormat:@"%@-%@-%@-%@", [dict objectForKey:@"album"], [dict objectForKey:@"artist"], [dict objectForKey:@"genre"], [dict objectForKey:@"year"]];
-		NSImage *image = [NSImage imageNamed:imageCacheTag];
-		
-		if (nil == image) {
-			// Try to load the image.
-		
-			// WARNING: HACK
-			TagLib::MPEG::File *mf = dynamic_cast<TagLib::MPEG::File *>(f.file());
-			if (mf) {
-				TagLib::ID3v2::Tag *tag = mf->ID3v2Tag();
-				if (tag) {
-					TagLib::ID3v2::FrameList pictures = mf->ID3v2Tag()->frameListMap()["APIC"];
-					if (!pictures.isEmpty()) {
-						TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(pictures.front());
-						
-						NSData *data = [[NSData alloc] initWithBytes:pic->picture().data() length:pic->picture().size()];
-						image = [[[NSImage alloc] initWithData:data] autorelease];
-						[data release];
-					}
-				}
-			}
-			
-			if (nil != image) {
-				[image setName:imageCacheTag];
-			}
-		}
 
-		if (nil == image) {
-			// Try to load image from external file
+        NSImage *image = nil;
 
-			// If we find an appropriately-named image in this directory, it will
-			// be tagged with the first image cache tag. Subsequent directory entries
-			// may have a different tag, but an image search would result in the same
-			// artwork.
-			
-			static NSString *lastImagePath = nil;
-			static NSString *lastCacheTag = nil;
-						
-			NSString *path = [[url path] stringByDeletingLastPathComponent];
+		// Try to load the image.
+		// WARNING: HACK
+		TagLib::MPEG::File *mf = dynamic_cast<TagLib::MPEG::File *>(f.file());
+		if (mf) {
+			TagLib::ID3v2::Tag *tag = mf->ID3v2Tag();
+			if (tag) {
+				TagLib::ID3v2::FrameList pictures = mf->ID3v2Tag()->frameListMap()["APIC"];
+				if (!pictures.isEmpty()) {
+					TagLib::ID3v2::AttachedPictureFrame *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(pictures.front());
 
-			if ([path isEqualToString:lastImagePath]) {
-				// Use whatever image may have been stored with the initial tag for the path
-				// (might be nil but no point scanning again)
-				
-				image = [NSImage imageNamed:lastCacheTag];
-			} else {
-				// Book-keeping...
-				
-				if (nil != lastImagePath)
-					[lastImagePath release];
-				
-				lastImagePath = [path retain];
-
-				if (nil != lastCacheTag)
-					[lastCacheTag release];
-				
-				lastCacheTag = [imageCacheTag retain];
-				
-				// Gather list of candidate image files
-				
-				NSArray *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-				NSArray *imageFileNames = [fileNames pathsMatchingExtensions:[NSImage imageFileTypes]];
-				
-				NSEnumerator *imageEnumerator = [imageFileNames objectEnumerator];
-				NSString *fileName;
-				
-				while (fileName = [imageEnumerator nextObject]) {
-					if ([TagLibMetadataReader isCoverFile:fileName]) {
-						image = [[[NSImage alloc] initByReferencingFile:[path stringByAppendingPathComponent:fileName]] autorelease];
-						[image setName:imageCacheTag];
-						break;
-					}
+					NSData *data = [[NSData alloc] initWithBytes:pic->picture().data() length:pic->picture().size()];
+					image = [[[NSImage alloc] initWithData:data] autorelease];
+					[data release];
 				}
 			}
 		}
-		
-		if (nil != image) {
-			[dict setObject:image forKey:@"albumArt"];
+
+        // D-D-D-DOUBLE HACK!
+        TagLib::MP4::File *m4f = dynamic_cast<TagLib::MP4::File *>(f.file());
+        if (m4f) {
+            TagLib::MP4::Tag *tag = m4f->tag();
+            if (tag) {
+                TagLib::MP4::ItemListMap itemsListMap = tag->itemListMap();
+                if (itemsListMap.contains("covr")) {
+                    TagLib::MP4::Item coverItem = itemsListMap["covr"];
+                    TagLib::MP4::CoverArtList coverArtList = coverItem.toCoverArtList();
+                    if (!coverArtList.isEmpty()) {
+                        TagLib::MP4::CoverArt coverArt = coverArtList.front();
+                        NSData *data = [[NSData alloc] initWithBytes:coverArt.data().data() length:coverArt.data().size()];
+                        image = [[[NSImage alloc] initWithData:data] autorelease];
+                    }
+                }
+            }
+        }
+
+        if (nil != image) {
+            [dict setObject:image forKey:@"albumArt"];		    
 		}
-	}
+    }
 
 	return [dict autorelease];
-}
-
-+ (BOOL)isCoverFile:(NSString *)fileName
-{
-	NSEnumerator *coverEnumerator = [[TagLibMetadataReader coverNames] objectEnumerator];
-	NSString *coverFileName;
-	
-	while (coverFileName = [coverEnumerator nextObject]) {
-		if ([[[[fileName lastPathComponent] stringByDeletingPathExtension] lowercaseString] hasSuffix:coverFileName]) {
-			return true;
-		}
-	}
-	return false;
-			
-}
-
-+ (NSArray *)coverNames
-{
-	return [NSArray arrayWithObjects:@"cover", @"folder", @"album", @"front", nil];
 }
 
 + (NSArray *)fileTypes
 {
 	//May be a way to get a list of supported formats
-	return [NSArray arrayWithObjects:@"ogg", @"mpc", @"flac", @"m4a", @"mp3", nil];
+	return [NSArray arrayWithObjects:@"ogg", @"mpc", @"flac", @"m4a", @"mp3", @"aiff", @"aif", nil];
 }
 
 + (NSArray *)mimeTypes

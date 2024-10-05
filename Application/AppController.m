@@ -2,13 +2,19 @@
 #import "PlaybackController.h"
 #import "PlaylistController.h"
 #import "PlaylistView.h"
-#import "NDHotKeyEvent.h"
+#import "NDHotKey/NDHotKeyEvent.h"
 #import "AppleRemote.h"
 #import "PlaylistLoader.h"
 #import "OpenURLPanel.h"
 #import "SpotlightWindowController.h"
 #import "StringToURLTransformer.h"
 #import "FontSizetoLineHeightTransformer.h"
+#import "PathNode.h"
+
+#import "Logging.h"
+#import "MiniModeMenuTitleTransformer.h"
+#import "PlaylistEntry.h"
+#import "Status.h"
 
 @implementation AppController
 
@@ -23,6 +29,10 @@
         [[[FontSizetoLineHeightTransformer alloc] init]autorelease];
     [NSValueTransformer setValueTransformer:fontSizetoLineHeightTransformer
                                     forName:@"FontSizetoLineHeightTransformer"];
+
+    NSValueTransformer *miniModeMenuTitleTransformer = [[[MiniModeMenuTitleTransformer alloc] init] autorelease];
+    [NSValueTransformer setValueTransformer:miniModeMenuTitleTransformer
+                                    forName:@"MiniModeMenuTitleTransformer"];
 }
 
 
@@ -38,13 +48,14 @@
 		
         queue = [[NSOperationQueue alloc]init];
 	}
-	
+    
 	return self; 
 }
 
 - (void)dealloc
 {
     [queue release];
+    [expandedNodes release];
     [super dealloc];
 }
 
@@ -55,7 +66,7 @@
 		[remote startListening: self];
 	}
 }
-- (void)applicationDidResignActive:(NSNotification *)motification
+- (void)applicationDidResignActive:(NSNotification *)mortification
 {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"remoteEnabled"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"remoteOnlyOnActive"]) {
 		[remote stopListening: self];
@@ -116,6 +127,7 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 {
     switch( buttonIdentifier )
     {
+        case k2009RemoteButtonPlay:
         case kRemoteButtonPlay:
 			[self clickPlay];
 
@@ -146,6 +158,9 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
             }
 				break;
         case kRemoteButtonMenu:
+            break;
+        case k2009RemoteButtonFullscreen:
+            [mainWindow toggleFullScreen:nil];
             break;
         default:
             /* Add here whatever you want other buttons to do */
@@ -222,9 +237,33 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	return [playlistController currentEntry];
 }
 
+// for use with apple scripting
+- (NSArray *)entries
+{
+	return [playlistController arrangedObjects];
+}
+
+// for use with apple scripting
+- (NSString *)status
+{
+	int st = [playbackController playbackStatus];
+	if (kCogStatusPlaying == st) {
+		return @"playing";
+	} else if (kCogStatusPaused == st) {
+		return @"paused";
+	} else if (kCogStatusStopped == st) {
+		return @"stopped";
+	} else {
+		return @"werid";
+	}
+}
+
 - (BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
 {
-	return [key isEqualToString:@"currentEntry"] ||  [key isEqualToString:@"play"];
+	return [key isEqualToString:@"currentEntry"] ||
+			[key isEqualToString:@"play"] ||
+			[key isEqualToString:@"entries"] ||
+			[key isEqualToString:@"status"];
 }
 
 - (void)awakeFromNib
@@ -252,10 +291,94 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	NSString *filename = @"~/Library/Application Support/Cog/Default.m3u";
 	[playlistLoader addURL:[NSURL fileURLWithPath:[filename stringByExpandingTildeInPath]]];
 	[[playlistController undoManager] enableUndoRegistration];
+
+    // Restore playlist position
+    int peIdx = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastPlayedPlaylistEntry"];
+    NSUInteger playlistSize = [[playlistController arrangedObjects] count];
+    if ( 0 < peIdx && peIdx < playlistSize) {
+        PlaylistEntry *pe = [playlistController entryAtIndex:peIdx];
+        DLog(@"Restoring playlist entry: %@", [pe description]);
+        [playlistController setCurrentEntry:pe];
+        [playlistView selectRow:peIdx byExtendingSelection:NO];
+    } else {
+        DLog(@"Invalid playlist position to restore (pos=%d, playlist size=%d)", peIdx, playlistSize);
+    }
+
+    // Restore mini mode
+    [self setMiniMode:[[NSUserDefaults standardUserDefaults] boolForKey:@"miniMode"]];
+
+    // Restore file tree state
+    
+    // We need file tree view to restore its state here
+    // so attempt to access file tree view controller's root view
+    // to force it to read nib and create file tree view for us
+    //
+    // TODO: there probably is a more elegant way to do all this
+    //       but i'm too stupid/tired to figure it out now
+    [fileTreeViewController view];
+    
+    FileTreeOutlineView* outlineView = [fileTreeViewController outlineView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeExpanded:) name:NSOutlineViewItemDidExpandNotification object:outlineView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeCollapsed:) name:NSOutlineViewItemDidCollapseNotification object:outlineView];
+    
+    NSArray *expandedNodesArray = [[NSUserDefaults standardUserDefaults] valueForKey:@"fileTreeViewExpandedNodes"];
+    
+    if (expandedNodesArray)
+    {
+        expandedNodes = [[NSMutableSet alloc] initWithArray:expandedNodesArray];
+    }
+    else
+    {
+        expandedNodes = [[NSMutableSet alloc] init];
+    }
+    
+    DLog(@"Nodes to expand: %@", [expandedNodes description]);
+    
+    DLog(@"Num of rows: %ld", [outlineView numberOfRows]);
+    
+    if (!outlineView) 
+    {
+        DLog(@"outlineView is NULL!");
+    }
+    
+    [outlineView reloadData];
+    
+    for (NSInteger i=0; i<[outlineView numberOfRows]; i++)
+    {
+        PathNode *pn = [outlineView itemAtRow:i];
+        NSString *str = [[pn URL] absoluteString];
+        
+        if ([expandedNodes containsObject:str])
+        {
+            [outlineView expandItem:pn];
+        }
+    }
+}
+
+- (void)nodeExpanded:(NSNotification*)notification
+{
+    PathNode* node = [[notification userInfo] objectForKey:@"NSObject"];
+    NSString* url = [[node URL] absoluteString];
+
+    [expandedNodes addObject:url];
+}
+
+- (void)nodeCollapsed:(NSNotification*)notification
+{
+    PathNode* node = [[notification userInfo] objectForKey:@"NSObject"];
+    NSString* url = [[node URL] absoluteString];
+
+    [expandedNodes removeObject:url];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
+    // Save playlist position
+    PlaylistEntry *pe = [playlistController currentEntry];
+    int peIdx = [pe index];
+    DLog(@"Saving playlist position: idx = %d, %@", peIdx, [pe description]);
+    [[NSUserDefaults standardUserDefaults] setInteger:peIdx forKey:@"lastPlayedPlaylistEntry"];
+    
 	[playbackController stop:self];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -271,12 +394,19 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	NSString *fileName = @"Default.m3u";
 	
 	[playlistLoader saveM3u:[folder stringByAppendingPathComponent: fileName]];
-	
+    
+    //
+    DLog(@"Saving expanded nodes: %@", [expandedNodes description]);
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[expandedNodes allObjects] forKey:@"fileTreeViewExpandedNodes"];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
-	if (flag == NO)
+    BOOL miniaturized = [mainWindow isMiniaturized];
+	if (flag == NO || miniaturized == YES)
 		[mainWindow makeKeyAndOrderFront:self];
 	
 	return NO;
@@ -341,20 +471,17 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:35] forKey:@"hotKeyPlayKeyCode"];
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:(NSControlKeyMask|NSCommandKeyMask)] forKey:@"hotKeyPlayModifiers"];
-	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:'P'] forKey:@"hotKeyPlayCharacter"];
 	
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:45] forKey:@"hotKeyNextKeyCode"];
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:(NSControlKeyMask|NSCommandKeyMask)] forKey:@"hotKeyNextModifiers"];
-	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:'N'] forKey:@"hotKeyNextCharacter"];
 	
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:15] forKey:@"hotKeyPreviousKeyCode"];
 	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:(NSControlKeyMask|NSCommandKeyMask)] forKey:@"hotKeyPreviousModifiers"];
-	[userDefaultsValuesDict setObject:[NSNumber numberWithInt:'R'] forKey:@"hotKeyPreviousCharacter"];
 
 	[userDefaultsValuesDict setObject:[NSNumber numberWithBool:YES] forKey:@"remoteEnabled"];
 	[userDefaultsValuesDict setObject:[NSNumber numberWithBool:YES] forKey:@"remoteOnlyOnActive"];
 
-	[userDefaultsValuesDict setObject:@"http://cogx.org/appcast/stable.xml" forKey:@"SUFeedURL"];
+	[userDefaultsValuesDict setObject:@"http://mamburu.net/cog/stable.xml" forKey:@"SUFeedURL"];
 
 
 	[userDefaultsValuesDict setObject:@"clearAndPlay" forKey:@"openingFilesBehavior"];
@@ -408,21 +535,18 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	[playHotKey release];
 	playHotKey = [[NDHotKeyEvent alloc]
 		initWithKeyCode: [[[[NSUserDefaultsController sharedUserDefaultsController] defaults] objectForKey:@"hotKeyPlayKeyCode"] intValue]
-			  character: [[[[NSUserDefaultsController sharedUserDefaultsController] defaults] objectForKey:@"hotKeyPlayCharacter"] intValue]
 		  modifierFlags: [[[[NSUserDefaultsController sharedUserDefaultsController] defaults] objectForKey:@"hotKeyPlayModifiers"] intValue]
 		];
 	
 	[prevHotKey release];
 	prevHotKey = [[NDHotKeyEvent alloc]
 		  initWithKeyCode: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyPreviousKeyCode"]
-				character: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyPreviousCharacter"]
 			modifierFlags: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyPreviousModifiers"]
 		];
 	
 	[nextHotKey release];
 	nextHotKey = [[NDHotKeyEvent alloc]
 		initWithKeyCode: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyNextKeyCode"]
-				character: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyNextCharacter"]
 			modifierFlags: [[NSUserDefaults standardUserDefaults] integerForKey:@"hotKeyNextModifiers"]
 		];
 	
@@ -434,7 +558,51 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	[prevHotKey setEnabled:YES];
 	[nextHotKey setEnabled:YES];
 }
+     
+- (void)windowDidEnterFullScreen:(NSNotification *)notification
+{
+    DLog(@"Entering fullscreen");
+    if (nil == nowPlaying)
+    {
+        nowPlaying = [[NowPlayingBarController alloc] init];
+        [nowPlaying retain];
+        
+        NSView *contentView = [mainWindow contentView];
+        NSRect contentRect = [contentView frame];
+        const NSSize windowSize = [contentView convertSize:[mainWindow frame].size fromView: nil];
+        
+        NSRect nowPlayingFrame = [[nowPlaying view] frame];
+        nowPlayingFrame.size.width = windowSize.width;
+        [[nowPlaying view] setFrame: nowPlayingFrame];
+        
+        [contentView addSubview: [nowPlaying view]];
+        [[nowPlaying view] setFrameOrigin: NSMakePoint(0.0, NSMaxY(contentRect) - nowPlayingFrame.size.height)];
+        
+        NSRect mainViewFrame = [mainView frame];
+        mainViewFrame.size.height -= nowPlayingFrame.size.height;
+        [mainView setFrame:mainViewFrame];
 
+        [[nowPlaying text] bind:@"value" toObject:currentEntryController withKeyPath:@"content.display" options:nil];
+    }
+}
+
+- (void)windowDidExitFullScreen:(NSNotification *)notification
+{
+    DLog(@"Exiting fullscreen");
+    if (nowPlaying) 
+    {
+        NSRect nowPlayingFrame = [[nowPlaying view] frame];
+        NSRect mainViewFrame = [mainView frame];
+        mainViewFrame.size.height += nowPlayingFrame.size.height;
+        [mainView setFrame:mainViewFrame];
+//        [mainView setFrameOrigin:NSMakePoint(0.0, 0.0)];
+        
+        [[nowPlaying view] removeFromSuperview];
+        [nowPlaying release];
+        nowPlaying = nil;
+    }
+}
+     
 - (void)clickPlay
 {
 	[playbackController playPauseResume:self];
@@ -466,7 +634,27 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 - (IBAction)decreaseFontSize:(id)sender
 {
 	[self changeFontSize:-1];
-	
-} 
+}
 
+- (IBAction)toggleMiniMode:(id)sender
+{
+    [self setMiniMode:(!miniMode)];
+}
+
+- (BOOL)miniMode
+{
+    return miniMode;
+}
+
+- (void)setMiniMode:(BOOL)newMiniMode
+{
+    miniMode = newMiniMode;
+    [[NSUserDefaults standardUserDefaults] setBool:miniMode forKey:@"miniMode"];
+
+    NSWindow *windowToShow = miniMode ? miniWindow : mainWindow;
+    NSWindow *windowToHide = miniMode ? mainWindow : miniWindow;
+
+    [windowToHide close];
+    [windowToShow makeKeyAndOrderFront:self];
+}
 @end

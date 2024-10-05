@@ -3,6 +3,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CogAudio/AudioPlayer.h"
+#import "CogAudio/SingleThreadPlayer.h"
 #import "TrackingSlider.h"
 #import "AudioScrobbler.h"
 
@@ -18,7 +19,7 @@ extern NSString *CogPlaybackDidStopNotficiation;
 @class PlaylistController;
 @class PlaylistView;
 
-@interface PlaybackController : NSObject
+@interface PlaybackController : NSObject <AudioPlayerDelegate>
 {
     IBOutlet PlaylistController *playlistController;
 	IBOutlet PlaylistView *playlistView;

@@ -18,19 +18,10 @@
 	{
 		[self setShowsResizeIndicator:NO];
 		[self setExcludedFromWindowsMenu:YES];
+        [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenAuxiliary];
 	}
 	
 	return self;
-}
-
-- (void)awakeFromNib
-{
-	if ([self hiddenDefaultsKey]) {
-		// Hide the mini window by default.
-		[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:[self hiddenDefaultsKey]]];
-	}
-	
-	[super awakeFromNib];
 }
 
 - (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)proposedFrameSize {
@@ -39,5 +30,11 @@
 	
 	return proposedFrameSize;
 }
+
+- (void)toggleToolbarShown:(id)sender {
+    // Mini window IS the toolbar, no point in hiding it.
+    // Do nothing!
+}
+
 
 @end

@@ -2,22 +2,27 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "NDHotKeyEvent.h"
-
-@class PlaybackController;
-@class PlaylistController;
-@class PlaylistView;
-@class AppleRemote;
-@class PlaylistLoader;
+#import "NDHotKey/NDHotKeyEvent.h"
+#import "NowPlayingBarController.h"
+#import "FileTreeViewController.h"
+#import "PlaybackController.h"
+#import "PlaylistController.h"
+#import "PlaylistView.h"
+#import "AppleRemote.h"
+#import "PlaylistLoader.h"
 
 @interface AppController : NSObject
 {
+    IBOutlet NSObjectController *currentEntryController;
+    
 	IBOutlet PlaybackController *playbackController;
 
     IBOutlet PlaylistController *playlistController;
 	IBOutlet PlaylistLoader *playlistLoader;
-	
+    
 	IBOutlet NSWindow *mainWindow;
+    IBOutlet NSWindow *miniWindow;
+    IBOutlet NSSplitView *mainView;
 	
 	IBOutlet NSSegmentedControl *playbackButtons;
 	IBOutlet NSButton *infoButton;
@@ -42,14 +47,22 @@
 	
     IBOutlet NSWindowController *spotlightWindowController;
 	
+    IBOutlet FileTreeViewController *fileTreeViewController;
+    
 	NDHotKeyEvent *playHotKey;
 	NDHotKeyEvent *prevHotKey;
 	NDHotKeyEvent *nextHotKey;
 	
+    NowPlayingBarController *nowPlaying;
+    
 	AppleRemote *remote;
 	BOOL remoteButtonHeld; /* true as long as the user holds the left,right,plus or minus on the remote control */
 	
     NSOperationQueue *queue; // Since we are the app delegate, we take care of the op queue
+    
+    NSMutableSet* expandedNodes;
+
+    BOOL miniMode;
 }
 
 - (IBAction)openURL:(id)sender;
@@ -82,5 +95,15 @@ OSStatus handleHotKey(EventHandlerCallRef nextHandler,EventRef theEvent,void *us
 - (IBAction)increaseFontSize:(id)sender;
 - (IBAction)decreaseFontSize:(id)sender;
 - (void)changeFontSize:(float)size;
+
+- (void)nodeExpanded:(NSNotification*)notification;
+- (void)nodeCollapsed:(NSNotification*)notification;
+
+- (void)windowDidEnterFullScreen:(NSNotification *)notification;
+- (void)windowDidExitFullScreen:(NSNotification *)notification;
+
+- (IBAction)toggleMiniMode:(id)sender;
+
+@property BOOL miniMode;
 
 @end

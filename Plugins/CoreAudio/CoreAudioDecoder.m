@@ -19,6 +19,7 @@
  */
 
 #include <unistd.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 #import "CoreAudioDecoder.h"
 
@@ -69,9 +70,11 @@
 {
 	OSStatus						err;
 	UInt32							size;
+    UInt32                          layoutTagSize;
 	AudioStreamBasicDescription		asbd;
-	
-	// Get input file information
+    AudioChannelLayout*             channelLayout;
+
+            // Get input file information
 	size	= sizeof(asbd);
 	err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
 	if(err != noErr) {
@@ -87,7 +90,38 @@
 		return NO;
 	}
 	totalFrames = total;
-	
+
+    size = 0;
+    err = ExtAudioFileGetPropertyInfo(_in, kExtAudioFileProperty_FileChannelLayout, &size, NULL);
+    if(err != noErr) {
+        err = ExtAudioFileDispose(_in);
+        return NO;
+    }
+
+    channelLayout = malloc(size);
+    err = ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileChannelLayout, &size, channelLayout);
+    if(err != noErr) {
+        err = ExtAudioFileDispose(_in);
+        free(channelLayout);
+        return NO;
+    }
+
+    layoutTagSize = sizeof(AudioChannelLayoutTag);
+    err = AudioFormatGetProperty(kAudioFormatProperty_TagForChannelLayout,
+                                 size,
+                                 channelLayout,
+                                 &layoutTagSize,
+                                 &channelLayoutTag);
+    if(err != noErr) {
+        // FIXME: theoretically we should just use channel layout
+        //        but i'm too lazy to do that now, as it'll require
+        //        figuring out how to pass variable-sized AudioChannelLayout around
+        err = ExtAudioFileDispose(_in);
+        free(channelLayout);
+        return NO;
+    }
+    free(channelLayout);
+
 	//Is there a way to get bitrate with extAudioFile?
 	bitrate				= 0;
 	
@@ -187,6 +221,7 @@
 {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSNumber numberWithInt:channels],@"channels",
+        [NSNumber numberWithLong:channelLayoutTag], @"channelLayoutTag",
 		[NSNumber numberWithInt:bitsPerSample],@"bitsPerSample",
 		[NSNumber numberWithInt:bitrate],@"bitrate",
 		[NSNumber numberWithFloat:frequency],@"sampleRate",

@@ -11,6 +11,8 @@
 #import "GameContainer.h"
 #import "GameDecoder.h"
 
+#import "Logging.h"
+
 @implementation GameContainer
 
 + (NSArray *)fileTypes
@@ -30,11 +32,16 @@
 	if (![url isFileURL]) {
 		return nil;
 	}
+    
+    if ([url fragment]) {
+        // input url already has fragment defined - no need to expand further
+        return [NSMutableArray arrayWithObject:url];
+    }
 	
 	Music_Emu *emu;
 	gme_err_t error = gme_open_file([[url path] UTF8String], &emu, 44100);
 	if (NULL != error) {
-		NSLog(@"GME: Error loading file: %@ %s", [url path], error);
+		ALog(@"GME: Error loading file: %@ %s", [url path], error);
 		return [NSArray arrayWithObject:url];
 	}
 	int track_count = gme_track_count(emu);

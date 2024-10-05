@@ -8,28 +8,34 @@
 
 #import "ConverterNode.h"
 
+#import "Logging.h"
+
 void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
 {
 	if (!inDesc) {
 		printf ("Can't print a NULL desc!\n");
 		return;
 	}
-	printf ("- - - - - - - - - - - - - - - - - - - -\n");
-	printf ("  Sample Rate:%f\n", inDesc->mSampleRate);
-	printf ("  Format ID:%s\n", (char*)&inDesc->mFormatID);
-	printf ("  Format Flags:%lX\n", inDesc->mFormatFlags);
-	printf ("  Bytes per Packet:%ld\n", inDesc->mBytesPerPacket);
-	printf ("  Frames per Packet:%ld\n", inDesc->mFramesPerPacket);
-	printf ("  Bytes per Frame:%ld\n", inDesc->mBytesPerFrame);
-	printf ("  Channels per Frame:%ld\n", inDesc->mChannelsPerFrame);
-	printf ("  Bits per Channel:%ld\n", inDesc->mBitsPerChannel);
-	printf ("- - - - - - - - - - - - - - - - - - - -\n");
+	DLog(@"- - - - - - - - - - - - - - - - - - - -\n");
+	DLog(@"  Sample Rate:%f\n", inDesc->mSampleRate);
+	DLog(@"  Format ID:%s\n", (char*)&inDesc->mFormatID);
+	DLog(@"  Format Flags:%X\n", inDesc->mFormatFlags);
+	DLog(@"  Bytes per Packet:%u\n", inDesc->mBytesPerPacket);
+	DLog(@"  Frames per Packet:%u\n", inDesc->mFramesPerPacket);
+	DLog(@"  Bytes per Frame:%u\n", inDesc->mBytesPerFrame);
+	DLog(@"  Channels per Frame:%u\n", inDesc->mChannelsPerFrame);
+	DLog(@"  Bits per Channel:%u\n", inDesc->mBitsPerChannel);
+	DLog(@"- - - - - - - - - - - - - - - - - - - -\n");
 }
 
 @implementation ConverterNode
 
 //called from the complexfill when the audio is converted...good clean fun
-static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumberDataPackets, AudioBufferList* ioData, AudioStreamPacketDescription** outDataPacketDescription, void* inUserData)
+static OSStatus ACInputProc(AudioConverterRef inAudioConverter,
+                            UInt32* ioNumberDataPackets,
+                            AudioBufferList* ioData,
+                            AudioStreamPacketDescription** outDataPacketDescription,
+                            void* inUserData)
 {
 	ConverterNode *converter = (ConverterNode *)inUserData;
 	OSStatus err = noErr;
@@ -47,7 +53,9 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 	amountToWrite = (*ioNumberDataPackets)*(converter->inputFormat.mBytesPerPacket);
 
 	if (converter->callbackBuffer != NULL)
+    {
 		free(converter->callbackBuffer);
+    }
 	converter->callbackBuffer = malloc(amountToWrite);
 
 	amountRead = [converter readData:converter->callbackBuffer amount:amountToWrite];
@@ -94,11 +102,11 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 	int amountRead = ioData.mBuffers[0].mDataByteSize;
 	if (err == kAudioConverterErr_InvalidInputSize) //It returns insz at EOS at times...so run it again to make sure all data is converted
 	{
-		NSLog(@"INSIZE: %i", amountRead);
+		DLog(@"INSIZE: %i", amountRead);
 		amountRead += [self convert:dest + amountRead amount:amount - amountRead];
 	}
 	else if (err != noErr && err != 100) {
-		NSLog(@"Error: %i", err);
+		DLog(@"Error: %i", err);
 	}
 	
 	return amountRead;
@@ -115,7 +123,7 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 	stat = AudioConverterNew ( &inputFormat, &outputFormat, &converter);
 	if (stat != noErr)
 	{
-		NSLog(@"Error creating converter %i", stat);
+		ALog(@"Error creating converter %i", stat);
 	}	
 	
 	if (inputFormat.mChannelsPerFrame == 1)
@@ -125,7 +133,7 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 		stat = AudioConverterSetProperty(converter,kAudioConverterChannelMap,sizeof(channelMap),channelMap);
 		if (stat != noErr)
 		{
-			NSLog(@"Error mapping channels %i", stat);
+			ALog(@"Error mapping channels %i", stat);
 		}	
 	}
 	
@@ -137,7 +145,7 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 
 - (void)dealloc
 {
-	NSLog(@"Decoder dealloc");
+	DLog(@"Decoder dealloc");
 	[self cleanUp];
 	[super dealloc];
 }
@@ -145,13 +153,13 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 
 - (void)setOutputFormat:(AudioStreamBasicDescription)format
 {
-	NSLog(@"SETTING OUTPUT FORMAT!");
+	DLog(@"SETTING OUTPUT FORMAT!");
 	outputFormat = format;
 }
 
 - (void)inputFormatDidChange:(AudioStreamBasicDescription)format
 {
-	NSLog(@"FORMAT CHANGED");
+	DLog(@"FORMAT CHANGED");
 	[self cleanUp];
 	[self setupWithInputFormat:format outputFormat:outputFormat];
 }

@@ -1,0 +1,6 @@
+repo: 0ef9ba85ed35a88eb0ee0ad0d3e8f9f8b9689970
+node: 0a6448e1625d70d49fc22f6fefded324997fc7d1
+branch: cog
+latesttag: 0.08rc1
+latesttagdistance: 89
+changessincelatesttag: 91

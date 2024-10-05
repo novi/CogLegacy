@@ -16,10 +16,20 @@
 	return [super initWithNibName:@"FileTree" bundle:[NSBundle mainBundle]];
 }
 
-- (void)addToPlaylist:(NSArray *)urls
+- (void)addToPlaylistInternal:(NSArray *)urls
 {
-	[playlistLoader willInsertURLs:urls origin:URLOriginExternal];
-	[playlistLoader didInsertURLs:[playlistLoader addURLs:urls sort:YES] origin:URLOriginExternal];
+	[self doAddToPlaylist:urls origin:URLOriginInternal];
+}
+
+- (void)addToPlaylistExternal:(NSArray *)urls
+{
+    [self doAddToPlaylist:urls origin:URLOriginExternal];
+}
+
+- (void)doAddToPlaylist:(NSArray *)urls origin:(URLOrigin)origin
+{
+    [playlistLoader willInsertURLs:urls origin:origin];
+    [playlistLoader didInsertURLs:[playlistLoader addURLs:urls sort:YES] origin:origin];
 }
 
 - (void)clear:(id)sender
@@ -30,6 +40,11 @@
 - (void)playPauseResume:(NSObject *)id
 {
 	[playbackController playPauseResume:id];
+}
+
+- (FileTreeOutlineView*)outlineView
+{
+    return fileTreeOutlineView;
 }
 
 @end

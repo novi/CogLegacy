@@ -11,6 +11,8 @@
 #import "AudioSource.h"
 #import "CoreAudioUtils.h"
 
+#import "Logging.h"
+
 @implementation BufferChain
 
 - (id)initWithController:(id)c
@@ -47,10 +49,10 @@
 	[self buildChain];
 	
 	id<CogSource> source = [AudioSource audioSourceForURL:url];
-	NSLog(@"Opening: %@", url);
+	DLog(@"Opening: %@", url);
 	if (![source open:url])
 	{
-		NSLog(@"Couldn't open source...");
+		DLog(@"Couldn't open source...");
 		return NO;
 	}
 
@@ -67,13 +69,13 @@
 
 - (BOOL)openWithInput:(InputNode *)i withOutputFormat:(AudioStreamBasicDescription)outputFormat
 {
-	NSLog(@"New buffer chain!");
+	DLog(@"New buffer chain!");
 	[self buildChain];
 
 	if (![inputNode openWithDecoder:[i decoder]])
 		return NO;
 	
-	NSLog(@"Input Properties: %@", [inputNode properties]);
+	DLog(@"Input Properties: %@", [inputNode properties]);
 	if (![converterNode setupWithInputFormat:propertiesToASBD([inputNode properties]) outputFormat:outputFormat])
 		return NO;
 		
@@ -82,7 +84,7 @@
 
 - (void)launchThreads
 {
-	NSLog(@"Properties: %@", [inputNode properties]);
+	DLog(@"Properties: %@", [inputNode properties]);
 
 	[inputNode launchThread];
 	[converterNode launchThread];
@@ -102,20 +104,25 @@
 
 - (void)dealloc
 {
+    [inputNode setShouldContinue:NO];
+    [[inputNode exitAtTheEndOfTheStream] signal];
+    [[inputNode semaphore] signal];
+    [[inputNode exitAtTheEndOfTheStream] wait]; // wait for decoder to be closed (see InputNode's -(void)process )
+
 	[userInfo release];
 	[streamURL release];
-	
+
 	[inputNode release];
 	[converterNode release];
 
-	NSLog(@"Bufferchain dealloc");
+	DLog(@"Bufferchain dealloc");
 	
 	[super dealloc];
 }
 
 - (void)seek:(double)time
 {
-	long frame = time * [[[inputNode properties] objectForKey:@"sampleRate"] floatValue];
+	long frame = (long) round(time * [[[inputNode properties] objectForKey:@"sampleRate"] floatValue]);
 
 	[inputNode seek:frame];
 }
@@ -132,13 +139,13 @@
 
 - (void)initialBufferFilled:(id)sender
 {
-	NSLog(@"INITIAL BUFFER FILLED");
+	DLog(@"INITIAL BUFFER FILLED");
 	[controller launchOutputThread];
 }
 
 - (void)inputFormatDidChange:(AudioStreamBasicDescription)format
 {
-	NSLog(@"FORMAT DID CHANGE!");
+	DLog(@"FORMAT DID CHANGE!");
 }
 
 
@@ -169,6 +176,15 @@
 {
 	[inputNode setShouldContinue:s];
 	[converterNode setShouldContinue:s];
+}
+
+- (BOOL)isRunning
+{
+    InputNode *node = [self inputNode];
+    if (nil != node && [node shouldContinue] && ![node endOfStream])
+    {
+        return YES;
+    }
 }
 
 @end

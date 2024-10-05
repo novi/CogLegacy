@@ -16,6 +16,8 @@
 #import "Node.h"
 #import "Plugin.h"
 
+#define INPUT_NODE_SEEK
+
 @interface InputNode : Node {
 	id<CogDecoder> decoder;
 	
@@ -23,7 +25,10 @@
 	
 	BOOL shouldSeek;
 	long seekFrame;
+
+    Semaphore *exitAtTheEndOfTheStream;
 }
+@property(readonly) Semaphore *exitAtTheEndOfTheStream;
 
 - (BOOL)openWithSource:(id<CogSource>)source;
 - (BOOL)openWithDecoder:(id<CogDecoder>) d;
