@@ -171,7 +171,9 @@
 - (void)resetNextStreams
 {
 	@synchronized (chainQueue) {
-		for (id anObject in chainQueue) {
+        NSEnumerator* enumerator = [chainQueue objectEnumerator];
+        id anObject;
+		while (anObject = [enumerator nextObject]) {
 			[anObject setShouldContinue:NO];
 		}
 		[chainQueue removeAllObjects];

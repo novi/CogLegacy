@@ -31,7 +31,9 @@
 		preferencePaneOrder = [[NSMutableArray alloc] init];
 		preferencePanes = [[NSMutableDictionary alloc] init];
 		
-		for (id<PreferencePane> pane in panes) {
+        NSEnumerator* enumerator = [panes objectEnumerator];
+        id<PreferencePane> pane;
+		while (pane = [enumerator nextObject]) {
 			[preferencePaneOrder addObject:[pane title]];
 			[preferencePanes setObject:pane forKey:[pane title]];
 		}
@@ -112,7 +114,9 @@
 - (void)createToolbar
 {
 	toolbarItems = [[NSMutableDictionary alloc] init];
-	for (NSString *name in preferencePaneOrder) {
+    NSEnumerator* enumerator = [preferencePaneOrder objectEnumerator];
+    NSString *name;
+	while (name = [enumerator nextObject]) {
 		id<PreferencePane> pane = [preferencePanes objectForKey:name];
 		
 		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:name];

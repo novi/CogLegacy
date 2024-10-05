@@ -20,17 +20,27 @@
 	BOOL configured;
 }
 
-@property(retain) NSMutableDictionary *sources;
-@property(retain) NSMutableDictionary *containers;
-@property(retain) NSMutableDictionary *metadataReaders;
+- (NSDictionary *)sources;
+- (NSDictionary *)containers;
+- (NSDictionary *)metadataReaders;
 
-@property(retain) NSMutableDictionary *propertiesReadersByExtension;
-@property(retain) NSMutableDictionary *propertiesReadersByMimeType;
+- (NSDictionary *)propertiesReadersByExtension;
+- (NSDictionary *)propertiesReadersByMimeType;
 
-@property(retain) NSMutableDictionary *decodersByExtension;
-@property(retain) NSMutableDictionary *decodersByMimeType;
+- (NSDictionary *)decodersByExtension;
+- (NSDictionary *)decodersByMimeType;
 
-@property BOOL configured;
+//@property(retain) NSMutableDictionary *sources;
+//@property(retain) NSMutableDictionary *containers;
+//@property(retain) NSMutableDictionary *metadataReaders;
+//
+//@property(retain) NSMutableDictionary *propertiesReadersByExtension;
+//@property(retain) NSMutableDictionary *propertiesReadersByMimeType;
+//
+//@property(retain) NSMutableDictionary *decodersByExtension;
+//@property(retain) NSMutableDictionary *decodersByMimeType;
+
+//@property BOOL configured;
 
 - (void)setup;
 - (void)printPluginInfo;

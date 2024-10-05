@@ -3,17 +3,17 @@
 
 @implementation PluginController
 
-@synthesize sources;
-@synthesize containers;
-@synthesize metadataReaders;
+//@synthesize sources;
+//@synthesize containers;
+//@synthesize metadataReaders;
+//
+//@synthesize propertiesReadersByExtension;
+//@synthesize propertiesReadersByMimeType;
+//
+//@synthesize decodersByExtension;
+//@synthesize decodersByMimeType;
 
-@synthesize propertiesReadersByExtension;
-@synthesize propertiesReadersByMimeType;
-
-@synthesize decodersByExtension;
-@synthesize decodersByMimeType;
-
-@synthesize configured;
+//@synthesize configured;
 
 static PluginController *sharedPluginController = nil;
 
@@ -32,16 +32,16 @@ static PluginController *sharedPluginController = nil;
 - (id)init {
 	self = [super init];
 	if (self) {
-        self.sources = [[[NSMutableDictionary alloc] init] autorelease];
-        self.containers = [[[NSMutableDictionary alloc] init] autorelease];
+        sources = [[NSMutableDictionary alloc] init];
+        containers = [[NSMutableDictionary alloc] init];
  
-        self.metadataReaders = [[[NSMutableDictionary alloc] init] autorelease];
+        metadataReaders = [[NSMutableDictionary alloc] init];
  
-        self.propertiesReadersByExtension = [[[NSMutableDictionary alloc] init] autorelease];
-        self.propertiesReadersByMimeType = [[[NSMutableDictionary alloc] init] autorelease];
+        propertiesReadersByExtension = [[NSMutableDictionary alloc] init];
+        propertiesReadersByMimeType = [[NSMutableDictionary alloc] init];
  
-        self.decodersByExtension = [[[NSMutableDictionary alloc] init] autorelease];
-        self.decodersByMimeType = [[[NSMutableDictionary alloc] init] autorelease];
+        decodersByExtension = [[NSMutableDictionary alloc] init];
+        decodersByMimeType = [[NSMutableDictionary alloc] init];
 
         [self setup];
 	}
@@ -49,10 +49,45 @@ static PluginController *sharedPluginController = nil;
 	return self;
 }
 
+-(NSDictionary *)sources
+{
+    return sources;
+}
+
+-(NSDictionary *)containers
+{
+    return containers;
+}
+
+-(NSDictionary *)metadataReaders
+{
+    return metadataReaders;
+}
+
+-(NSDictionary *)propertiesReadersByExtension
+{
+    return propertiesReadersByExtension;
+}
+
+-(NSDictionary *)propertiesReadersByMimeType
+{
+    return propertiesReadersByMimeType;
+}
+
+-(NSDictionary *)decodersByExtension
+{
+    return decodersByExtension;
+}
+
+-(NSDictionary *)decodersByMimeType
+{
+    return decodersByMimeType;
+}
+
 - (void)setup
 {
-	if (self.configured == NO) {
-		self.configured = YES;
+	if (configured == NO) {
+		configured = YES;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bundleDidLoad:) name:NSBundleDidLoadNotification object:nil];
 
@@ -64,7 +99,9 @@ static PluginController *sharedPluginController = nil;
 - (void)bundleDidLoad:(NSNotification *)notification
 {
 	NSArray *classNames = [[notification userInfo] objectForKey:@"NSLoadedClasses"];
-	for (NSString *className in classNames)
+    NSEnumerator* enumerator = [classNames objectEnumerator];
+    NSString *className;
+	while (className = [enumerator nextObject])
 	{
 		NSLog(@"Class loaded: %@", className);
 		Class bundleClass = NSClassFromString(className);
@@ -90,8 +127,9 @@ static PluginController *sharedPluginController = nil;
 {
 
 	NSArray *dirContents = [[NSFileManager defaultManager] directoryContentsAtPath:path];
-
-	for (NSString *pname in dirContents)
+    NSEnumerator* enumerator = [dirContents objectEnumerator];
+    NSString *pname;
+	while (pname = [enumerator nextObject])
 	{
 		NSString *ppath;
 		ppath = [NSString pathWithComponents:[NSArray arrayWithObjects:path,pname,nil]];
@@ -114,7 +152,9 @@ static PluginController *sharedPluginController = nil;
 {
 	Class container = NSClassFromString(className);
 	if (container && [container respondsToSelector:@selector(fileTypes)]) {
-		for (id fileType in [container fileTypes])
+        NSEnumerator* enumerator = [[container fileTypes] objectEnumerator];
+        id fileType;
+		while (fileType = [enumerator nextObject])
 		{
 			[containers setObject:className forKey:[fileType lowercaseString]];
 		}
@@ -125,14 +165,18 @@ static PluginController *sharedPluginController = nil;
 {
 	Class decoder = NSClassFromString(className);
 	if (decoder && [decoder respondsToSelector:@selector(fileTypes)]) {
-		for (id fileType in [decoder fileTypes])
+        NSEnumerator* enumerator = [[decoder fileTypes] objectEnumerator];
+        id fileType;
+		while (fileType = [enumerator nextObject])
 		{
 			[decodersByExtension setObject:className forKey:[fileType lowercaseString]];
 		}
 	}
 	
 	if (decoder && [decoder respondsToSelector:@selector(mimeTypes)]) {
-		for (id mimeType in [decoder mimeTypes]) 
+        NSEnumerator* enumerator = [[decoder mimeTypes] objectEnumerator];
+        id mimeType;
+		while (mimeType = [enumerator nextObject])
 		{
 			[decodersByMimeType setObject:className forKey:[mimeType lowercaseString]];
 		}
@@ -143,7 +187,9 @@ static PluginController *sharedPluginController = nil;
 {
 	Class metadataReader = NSClassFromString(className);
 	if (metadataReader && [metadataReader respondsToSelector:@selector(fileTypes)]) {
-		for (id fileType in [metadataReader fileTypes])
+        NSEnumerator* enumerator = [[metadataReader fileTypes] objectEnumerator];
+        id fileType;
+		while (fileType = [enumerator nextObject])
 		{
 			[metadataReaders setObject:className forKey:[fileType lowercaseString]];
 		}
@@ -154,14 +200,18 @@ static PluginController *sharedPluginController = nil;
 {
 	Class propertiesReader = NSClassFromString(className);
 	if (propertiesReader && [propertiesReader respondsToSelector:@selector(fileTypes)]) {
-		for (id fileType in [propertiesReader fileTypes])
+        NSEnumerator* enumerator = [[propertiesReader fileTypes] objectEnumerator];
+        id fileType;
+		while (fileType = [enumerator nextObject])
 		{
 			[propertiesReadersByExtension setObject:className forKey:[fileType lowercaseString]];
 		}
 	}
 
 	if (propertiesReader && [propertiesReader respondsToSelector:@selector(mimeTypes)]) {
-		for (id mimeType in [propertiesReader mimeTypes])
+        NSEnumerator* enumerator = [[propertiesReader mimeTypes] objectEnumerator];
+        id mimeType;
+		while (mimeType = [enumerator nextObject])
 		{
 			[propertiesReadersByMimeType setObject:className forKey:[mimeType lowercaseString]];
 		}
@@ -172,7 +222,9 @@ static PluginController *sharedPluginController = nil;
 {
 	Class source = NSClassFromString(className);
 	if (source && [source respondsToSelector:@selector(schemes)]) {
-		for (id scheme in [source schemes])
+        NSEnumerator* enumerator = [[source schemes] objectEnumerator];
+        id scheme;
+		while (scheme = [enumerator nextObject])
 		{
 			[sources setObject:className forKey:scheme];
 		}
