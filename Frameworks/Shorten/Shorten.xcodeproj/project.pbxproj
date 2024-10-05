@@ -288,6 +288,7 @@
 					../../include,
 					include,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SYMROOT = ../../build;
@@ -306,6 +307,7 @@
 					../../include,
 					include,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SYMROOT = ../../build;
