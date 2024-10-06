@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "SideViewController.h"
 
+// TODO: 10.4
+/*
 @class PlaylistLoader;
 @class PlaybackController;
 @interface FileTreeViewController : SideViewController {
@@ -17,3 +19,4 @@
 }
 
 @end
+*/

@@ -13,6 +13,7 @@
 
 - (id)init
 {
+    // TODO: 10.4 xib
 	return [super initWithNibName:@"FileTree" bundle:[NSBundle mainBundle]];
 }
 

@@ -18,7 +18,6 @@
 		171B57E00C091F2B00F6AFAF /* ogg.icns in Resources */ = {isa = PBXBuildFile; fileRef = 171B57DC0C091F2B00F6AFAF /* ogg.icns */; };
 		171CB3DC0F63670D0047EF0A /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 171CB3DB0F63670D0047EF0A /* PreferencesWindow.m */; };
 		171EFE8C0F59FEAE000ADC42 /* DockIconController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171EFE8B0F59FEAE000ADC42 /* DockIconController.m */; };
-		17211A7E0D68B7C500911CA9 /* FileTree.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17211A7C0D68B7C500911CA9 /* FileTree.xib */; };
 		17249F0F0D82E17700F33392 /* ToggleQueueTitleTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 17249F0E0D82E17700F33392 /* ToggleQueueTitleTransformer.m */; };
 		172A12330F5911D20078EF0C /* RepeatTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 172A12320F5911D20078EF0C /* RepeatTransformers.m */; };
 		172A123C0F5912AE0078EF0C /* ShuffleTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 172A123B0F5912AE0078EF0C /* ShuffleTransformers.m */; };
@@ -62,9 +61,6 @@
 		17818A990C0B27AC001C4916 /* shn.icns in Resources */ = {isa = PBXBuildFile; fileRef = 17818A920C0B27AC001C4916 /* shn.icns */; };
 		17818A9A0C0B27AC001C4916 /* wav.icns in Resources */ = {isa = PBXBuildFile; fileRef = 17818A930C0B27AC001C4916 /* wav.icns */; };
 		17818A9B0C0B27AC001C4916 /* wv.icns in Resources */ = {isa = PBXBuildFile; fileRef = 17818A940C0B27AC001C4916 /* wv.icns */; };
-		1784560F0F631E24007E8021 /* FileTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1784560E0F631E24007E8021 /* FileTreeViewController.m */; };
-		178456120F631E31007E8021 /* SideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 178456110F631E31007E8021 /* SideViewController.m */; };
-		178456C30F6320B5007E8021 /* SpotlightPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 178456C00F6320B5007E8021 /* SpotlightPanel.xib */; };
 		178BAB990CD4E1B700B33D47 /* GCOneShotEffectTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 178BAB940CD4E1B700B33D47 /* GCOneShotEffectTimer.m */; };
 		178BAB9A0CD4E1B700B33D47 /* GCWindowMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 178BAB960CD4E1B700B33D47 /* GCWindowMenu.m */; };
 		178BAB9B0CD4E1B700B33D47 /* PopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 178BAB980CD4E1B700B33D47 /* PopupButton.m */; };
@@ -80,7 +76,6 @@
 		179D03230E0CB2500064A77A /* FileTreeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 179D03130E0CB2500064A77A /* FileTreeDataSource.m */; };
 		179D03240E0CB2500064A77A /* FileTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 179D03150E0CB2500064A77A /* FileTreeController.m */; };
 		179D03260E0CB2500064A77A /* PathNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 179D03190E0CB2500064A77A /* PathNode.m */; };
-		179D03270E0CB2500064A77A /* PathWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 179D031B0E0CB2500064A77A /* PathWatcher.m */; };
 		179D03280E0CB2500064A77A /* SmartFolderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 179D031D0E0CB2500064A77A /* SmartFolderNode.m */; };
 		17A140E90D88B954004852F9 /* FilePlaylistEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 17A140E80D88B954004852F9 /* FilePlaylistEntry.m */; };
 		17A8F6850D6A7FCA0095DA13 /* repeat_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 17A8F6820D6A7FCA0095DA13 /* repeat_all.png */; };
@@ -141,6 +136,7 @@
 		17F562390C3BD91B0019975C /* General.preferencePane in Resources */ = {isa = PBXBuildFile; fileRef = 17F5622E0C3BD8FB0019975C /* General.preferencePane */; };
 		17F6C8070F603701000D9DA9 /* PlaybackEventController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17F6C8060F603701000D9DA9 /* PlaybackEventController.m */; };
 		17FAEBAC0F662985007C8707 /* ToolTipTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FAEBAB0F662985007C8707 /* ToolTipTextField.m */; };
+		523822EA2CB2DFF700990800 /* NSOperation-compat.m in Sources */ = {isa = PBXBuildFile; fileRef = 523822E92CB2DFF400990800 /* NSOperation-compat.m */; };
 		5604D45B0D60349B004F5C5D /* SpotlightWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5604D4590D60349B004F5C5D /* SpotlightWindowController.m */; };
 		5604D4F60D60726E004F5C5D /* SpotlightPlaylistEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5604D4F50D60726E004F5C5D /* SpotlightPlaylistEntry.m */; };
 		56462EAF0D6341F6000AB68C /* SpotlightTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 56462EAE0D6341F6000AB68C /* SpotlightTransformers.m */; };
@@ -725,6 +721,9 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Cog_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cog_Prefix.pch; sourceTree = "<group>"; };
+		523822E72CB2DFF400990800 /* NSInteger-compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSInteger-compat.h"; sourceTree = "<group>"; };
+		523822E82CB2DFF400990800 /* NSOperation-compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSOperation-compat.h"; sourceTree = "<group>"; };
+		523822E92CB2DFF400990800 /* NSOperation-compat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSOperation-compat.m"; sourceTree = "<group>"; };
 		5604D4590D60349B004F5C5D /* SpotlightWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpotlightWindowController.m; path = Spotlight/SpotlightWindowController.m; sourceTree = "<group>"; };
 		5604D45A0D60349B004F5C5D /* SpotlightWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpotlightWindowController.h; path = Spotlight/SpotlightWindowController.h; sourceTree = "<group>"; };
 		5604D4F40D60726E004F5C5D /* SpotlightPlaylistEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpotlightPlaylistEntry.h; path = Spotlight/SpotlightPlaylistEntry.h; sourceTree = "<group>"; };
@@ -947,6 +946,9 @@
 				07E18DF20D62B38400BB0E11 /* NSArray+ShuffleUtils.m */,
 				17FAEBAA0F662985007C8707 /* ToolTipTextField.h */,
 				17FAEBAB0F662985007C8707 /* ToolTipTextField.m */,
+				523822E72CB2DFF400990800 /* NSInteger-compat.h */,
+				523822E82CB2DFF400990800 /* NSOperation-compat.h */,
+				523822E92CB2DFF400990800 /* NSOperation-compat.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1841,7 +1843,6 @@
 				17D1B2830CF8B2830028F5B5 /* xm.icns in Resources */,
 				17342A9A0D5FD20B00E8D854 /* MainMenu.xib in Resources */,
 				17342ABF0D5FD36400E8D854 /* OpenURLPanel.xib in Resources */,
-				17211A7E0D68B7C500911CA9 /* FileTree.xib in Resources */,
 				17A8F6850D6A7FCA0095DA13 /* repeat_all.png in Resources */,
 				17A8F6860D6A7FCA0095DA13 /* repeat_none.png in Resources */,
 				17A8F6870D6A7FCA0095DA13 /* repeat_one.png in Resources */,
@@ -1850,7 +1851,6 @@
 				17B7CF5C0F5A05EE00A47027 /* pauseBadge.png in Resources */,
 				17B7CF5D0F5A05EE00A47027 /* playBadge.png in Resources */,
 				17B7CF5E0F5A05EE00A47027 /* stopBadge.png in Resources */,
-				178456C30F6320B5007E8021 /* SpotlightPanel.xib in Resources */,
 				17D1B0D20F6320EA00694C57 /* InfoInspector.xib in Resources */,
 				17D1B1DC0F6330D400694C57 /* Feedback.xib in Resources */,
 				1778D3B00F645A190037E7A0 /* missingArt.png in Resources */,
@@ -1912,7 +1912,6 @@
 				179D03230E0CB2500064A77A /* FileTreeDataSource.m in Sources */,
 				179D03240E0CB2500064A77A /* FileTreeController.m in Sources */,
 				179D03260E0CB2500064A77A /* PathNode.m in Sources */,
-				179D03270E0CB2500064A77A /* PathWatcher.m in Sources */,
 				179D03280E0CB2500064A77A /* SmartFolderNode.m in Sources */,
 				173855FF0E0CC81F00488CD4 /* FileTreeOutlineView.m in Sources */,
 				07D971E60ED1DAA800E7602E /* TagEditorController.m in Sources */,
@@ -1932,8 +1931,6 @@
 				1752C36C0F59E00100F85F28 /* PlaybackButtons.m in Sources */,
 				171EFE8C0F59FEAE000ADC42 /* DockIconController.m in Sources */,
 				17F6C8070F603701000D9DA9 /* PlaybackEventController.m in Sources */,
-				1784560F0F631E24007E8021 /* FileTreeViewController.m in Sources */,
-				178456120F631E31007E8021 /* SideViewController.m in Sources */,
 				17D1B1010F63255200694C57 /* InfoWindowController.m in Sources */,
 				17D1B1680F632ABB00694C57 /* BlankZeroFormatter.m in Sources */,
 				17D1B1690F632ABB00694C57 /* IndexFormatter.m in Sources */,
@@ -1943,6 +1940,7 @@
 				1778D3CA0F645BF00037E7A0 /* MissingAlbumArtTransformer.m in Sources */,
 				17FAEBAC0F662985007C8707 /* ToolTipTextField.m in Sources */,
 				F6F96719102C709000D2C9B4 /* NSString+FinderCompare.m in Sources */,
+				523822EA2CB2DFF700990800 /* NSOperation-compat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2218,7 +2216,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = macosx10.4;
 			};
 			name = Debug;
 		};
@@ -2230,7 +2228,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = macosx10.4;
 			};
 			name = Release;
 		};

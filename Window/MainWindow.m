@@ -7,6 +7,7 @@
 //
 
 #import "MainWindow.h"
+#import "NSInteger-compat.h"
 
 
 @implementation MainWindow
@@ -17,7 +18,8 @@
 	if (self)
 	{
 		[self setExcludedFromWindowsMenu:YES];
-		[self setContentBorderThickness:24.0 forEdge:NSMinYEdge];
+        // TODO: 10.4
+//		[self setContentBorderThickness:24.0 forEdge:NSMinYEdge];
 	}
 	
 	return self;

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Growl/GrowlApplicationBridge.h>
+#import "NSOperation-compat.h"
 
 @class PlaylistLoader;
 @class AudioScrobbler;

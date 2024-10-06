@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PlaylistController.h"
+#import "NSOperation-compat.h"
 
 @class PlaylistController;
 @class PlaybackController;

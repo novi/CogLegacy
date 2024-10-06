@@ -15,6 +15,8 @@
 #import "BlankZeroFormatter.h"
 #import "PlaylistEntry.h"
 
+#import "NSInteger-compat.h"
+
 #import "CogAudio/Status.h"
 
 @implementation PlaylistView
@@ -82,18 +84,20 @@
 		
 		[contextMenuItem setTarget:self];
 		[contextMenuItem setRepresentedObject:col];
-		[contextMenuItem setState:([col isHidden] ? NSOffState : NSOnState)];
+//		[contextMenuItem setState:([col isHidden] ? NSOffState : NSOnState)]; // TODO: 10.4
+        [contextMenuItem setState:NSOnState];
 
-		visibleTableColumns += ![col isHidden];
+//		visibleTableColumns += ![col isHidden]; // TODO: 10.4
 		menuIndex++;
 	}
-	
-	if (visibleTableColumns == 0) {
-        enumerator = [[self tableColumns] objectEnumerator];
-		while (col = [enumerator nextObject]) {
-			[col setHidden:NO];
-		}
-	}
+
+	// TODO: 10.4
+//	if (visibleTableColumns == 0) {
+//        enumerator = [[self tableColumns] objectEnumerator];
+//		while (col = [enumerator nextObject]) {
+//			[col setHidden:NO];
+//		}
+//	}
 	
 	[[self headerView] setMenu:headerContextMenu];
 }
@@ -107,13 +111,13 @@
 	{
 		[sender setState:NSOnState];
 
-		[tc setHidden: NO];
+//		[tc setHidden: NO]; // TODO: 10.4
 	}
 	else
 	{
 		[sender setState:NSOffState];
 		
-		[tc setHidden: YES];
+//		[tc setHidden: YES]; // TODO: 10.4
 	}
 }
 

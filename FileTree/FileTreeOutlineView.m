@@ -9,6 +9,7 @@
 #import "FileTreeOutlineView.h"
 #import "FileTreeViewController.h"
 #import "PlaybackController.h"
+#import "NSInteger-compat.h"
 
 @implementation FileTreeOutlineView
 

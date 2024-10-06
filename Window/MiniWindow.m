@@ -7,6 +7,7 @@
 //
 
 #import "MiniWindow.h"
+#import "NSInteger-compat.h"
 
 
 @implementation MiniWindow

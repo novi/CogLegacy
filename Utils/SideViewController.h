@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+// TODO: 10.4
+/*
 @interface SideViewController : NSViewController {
 	IBOutlet NSSplitView *splitView;
 	IBOutlet NSView *mainView;
@@ -25,3 +27,4 @@
 - (float)dividerPosition;
 
 @end
+*/

@@ -31,7 +31,7 @@
 	
     if (value == nil) return nil;
 	
-	RepeatMode mode = [value integerValue];
+	RepeatMode mode = [value intValue]; // integerValue
 	
 	if (repeatMode == mode) {
 		return [NSNumber numberWithBool:YES];
@@ -69,7 +69,7 @@
 	
     if (value == nil) return nil;
 
-	RepeatMode mode = [value integerValue];
+	RepeatMode mode = [value intValue]; // integerValue
 	
 	if (mode == RepeatNone) {
 		return [NSImage imageNamed:@"repeat_none"];

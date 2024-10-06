@@ -14,7 +14,8 @@
 @interface FileTreeDataSource : NSObject {
 	PathNode *rootNode;
 	
-	IBOutlet NSPathControl *pathControl;
+    // TODO: 10.4
+//	IBOutlet NSPathControl *pathControl;
 	IBOutlet PathWatcher *watcher;
 	IBOutlet NSOutlineView *outlineView;
 }

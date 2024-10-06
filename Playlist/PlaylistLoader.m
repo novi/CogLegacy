@@ -19,6 +19,13 @@
 #import "CogAudio/AudioPropertiesReader.h"
 #import "CogAudio/AudioMetadataReader.h"
 
+@interface PlaylistLoader(Private)
+
+- (void)loadInfoForEntries:(NSArray *)entries;
+
+
+@end
+
 @implementation PlaylistLoader
 
 - (id)init
@@ -314,7 +321,8 @@
 	
 	//Select the first entry in the group that was just added
 	[playlistController setSelectionIndex:index];
-	[self performSelectorInBackground:@selector(loadInfoForEntries:) withObject:entries];
+    // TODO: 10.4
+//	[self performSelectorInBackground:@selector(loadInfoForEntries:) withObject:entries];
 	return entries;
 }
 
@@ -368,7 +376,7 @@
                        context:(void *)context
 {
     // We finished reading the info for a playlist entry
-    if ([keyPath isEqualToString:@"isFinished"] && [object isFinished])
+    if ([keyPath isEqualToString:@"isFinished"] && [(NSInvocationOperation*)object isFinished])
     {
         // stop observing
         [object removeObserver:self forKeyPath:keyPath];
@@ -376,7 +384,7 @@
 		// get the playlist entry that the operation read for
 		PlaylistEntry *pe = nil;
 		[[object invocation] getArgument:&pe atIndex:2];
-        [pe performSelectorOnMainThread:@selector(setMetadata:) withObject:[object result] waitUntilDone:NO];  
+        [pe performSelectorOnMainThread:@selector(setMetadata:) withObject:[object result] waitUntilDone:NO];
 		
     }
     else

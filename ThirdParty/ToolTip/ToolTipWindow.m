@@ -104,7 +104,7 @@
     if (closeTimer) { [closeTimer invalidate]; [closeTimer release]; }
 	
     closeTimer = [[NSTimer timerWithTimeInterval:duration target:self selector:@selector(close) userInfo:nil repeats:NO] retain];
-	[[NSRunLoop currentRunLoop] addTimer:closeTimer forMode:NSRunLoopCommonModes];
+	[[NSRunLoop currentRunLoop] addTimer:closeTimer forMode:NSDefaultRunLoopMode]; // NSRunLoopCommonModes
 }
 
 - (void)orderFront

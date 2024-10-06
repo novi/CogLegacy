@@ -7,6 +7,7 @@
 //
 
 #import "DualWindow.h"
+#import "NSInteger-compat.h"
 
 
 @implementation DualWindow

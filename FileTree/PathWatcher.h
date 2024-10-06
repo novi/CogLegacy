@@ -9,7 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #include <CoreServices/CoreServices.h>
 
-
+// TODO: 10.4
+/*
 @interface PathWatcher : NSObject {
 	FSEventStreamRef stream;
     FSEventStreamContext *context;
@@ -29,3 +30,4 @@
 - (void)pathDidChange:(NSString *)path;
 
 @end
+*/

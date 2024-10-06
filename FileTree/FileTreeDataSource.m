@@ -30,8 +30,9 @@
 	
 	[self setRootURL: [NSURL URLWithString:[[[NSUserDefaultsController sharedUserDefaultsController] defaults] objectForKey:@"fileTreeRootURL"]]]; 
 
-	[pathControl setTarget:self];
-    [pathControl setAction:@selector(pathControlAction:)];
+    // TODO: 10.4
+//	[pathControl setTarget:self];
+//    [pathControl setAction:@selector(pathControlAction:)];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath
@@ -55,10 +56,11 @@
 
 - (void)pathControlAction:(id)sender
 {
-	if ([pathControl clickedPathComponentCell] != nil && [[pathControl clickedPathComponentCell] URL] != nil)
-	{
-		[self changeURL:[[pathControl clickedPathComponentCell] URL]];
-	}
+    // TODO: 10.4
+//	if ([pathControl clickedPathComponentCell] != nil && [[pathControl clickedPathComponentCell] URL] != nil)
+//	{
+//		[self changeURL:[[pathControl clickedPathComponentCell] URL]];
+//	}
 }
 
 - (NSURL *)rootURL

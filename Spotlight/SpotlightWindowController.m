@@ -48,7 +48,8 @@ static NSPredicate * musicOnlyPredicate = nil;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString * homeDir = @"~";
     homeDir = [homeDir stringByExpandingTildeInPath];
-    homeDir = [[NSURL fileURLWithPath:homeDir isDirectory:YES] absoluteString];
+//    homeDir = [[NSURL fileURLWithPath:homeDir isDirectory:YES] absoluteString]; // TODO: 10.4
+    homeDir = [[NSURL fileURLWithPath:homeDir] absoluteString];
     NSDictionary *searchDefault = 
                         [NSDictionary dictionaryWithObject:homeDir
                                                     forKey:@"spotlightSearchPath"];
@@ -57,6 +58,7 @@ static NSPredicate * musicOnlyPredicate = nil;
 
 - (id)init
 {
+    // TODO: 10.4 xib
 	if (self = [super initWithWindowNibName:@"SpotlightPanel"]) {
         self.query = [[[NSMetadataQuery alloc]init]autorelease];
         [self.query setDelegate:self];
@@ -119,6 +121,9 @@ static NSPredicate * musicOnlyPredicate = nil;
                                                                 searchPredicate,
                                                                 nil]];
         // Only preform a new search if the predicate has changed or there is a new path
+        
+        // TODO: 10.4
+        /*
         if(![self.query.predicate isEqual:spotlightPredicate]
             || ![self.query.searchScopes isEqualToArray:
                 [NSArray arrayWithObjects:pathControl.URL, nil]])
@@ -130,7 +135,7 @@ static NSPredicate * musicOnlyPredicate = nil;
             self.query.searchScopes = [NSArray arrayWithObjects:pathControl.URL, nil];
             [self.query startQuery];
             NSLog(@"Started query: %@", [self.query.predicate description]);
-        }
+        }*/
     }
 }
 

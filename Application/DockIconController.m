@@ -8,6 +8,7 @@
 
 #import "DockIconController.h"
 #import <CogAudio/Status.h>
+#import "NSInteger-compat.h"
 
 @implementation DockIconController
 
@@ -15,7 +16,10 @@ static NSString *DockIconPlaybackStatusObservationContext = @"DockIconPlaybackSt
 
 - (void)startObserving
 {
-	[playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial) context:DockIconPlaybackStatusObservationContext];
+//	[playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial) context:DockIconPlaybackStatusObservationContext];
+    // TODO: 10.4
+    
+    [playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew) context:DockIconPlaybackStatusObservationContext];
 }
 
 - (void)stopObserving
@@ -27,7 +31,7 @@ static NSString *DockIconPlaybackStatusObservationContext = @"DockIconPlaybackSt
 {
 	if ([DockIconPlaybackStatusObservationContext isEqual:context])
 	{
-		NSInteger playbackStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+		NSInteger playbackStatus = [[change objectForKey:NSKeyValueChangeNewKey] intValue]; // integerValue
 		
 		NSImage *badgeImage = nil;
 		

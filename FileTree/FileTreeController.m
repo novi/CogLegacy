@@ -8,6 +8,7 @@
 
 #import "PlaylistController.h"
 #import "FileTreeController.h"
+#import "NSInteger-compat.h"
 
 
 @implementation FileTreeController

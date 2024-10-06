@@ -64,7 +64,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 
 - (void)awakeFromNib
 {
-	double volume = [[NSUserDefaults standardUserDefaults] doubleForKey:@"volume"];
+	double volume = [[NSUserDefaults standardUserDefaults] floatForKey:@"volume"]; // double
 
 	[volumeSlider setDoubleValue:logarithmicToLinear(volume)];
 	[audioPlayer setVolume:volume];
@@ -230,7 +230,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 
 	[audioPlayer setVolume:linearToLogarithmic([sender doubleValue])];
 
-	[[NSUserDefaults standardUserDefaults] setDouble:[audioPlayer volume] forKey:@"volume"];
+	[[NSUserDefaults standardUserDefaults] setFloat:[audioPlayer volume] forKey:@"volume"]; // double
 }
 
 /* selector for NSTimer - gets passed the Timer object itself
@@ -303,7 +303,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 											   selector:@selector(audioFadeDown:) 
 											   userInfo:originalVolume
 												repeats:YES];
-		[[NSRunLoop currentRunLoop] addTimer:fadeTimer forMode:NSRunLoopCommonModes];
+		[[NSRunLoop currentRunLoop] addTimer:fadeTimer forMode:NSDefaultRunLoopMode]; // NSRunLoopCommonModes
 	}
 	else
 	{
@@ -313,7 +313,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 												   selector:@selector(audioFadeUp:) 
 												   userInfo:originalVolume
 													repeats:YES];
-		[[NSRunLoop currentRunLoop] addTimer:fadeTimer forMode:NSRunLoopCommonModes];
+		[[NSRunLoop currentRunLoop] addTimer:fadeTimer forMode:NSDefaultRunLoopMode]; // NSRunLoopCommonModes
 		[self pauseResume:self];
 	}
 }
@@ -417,7 +417,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 	double newVolume = [audioPlayer volumeDown:DEFAULT_VOLUME_DOWN];
 	[volumeSlider setDoubleValue:logarithmicToLinear(newVolume)];
 	
-	[[NSUserDefaults standardUserDefaults] setDouble:[audioPlayer volume] forKey:@"volume"];
+	[[NSUserDefaults standardUserDefaults] setFloat:[audioPlayer volume] forKey:@"volume"];
 
 }
 
@@ -427,7 +427,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 	newVolume = [audioPlayer volumeUp:DEFAULT_VOLUME_UP];
 	[volumeSlider setDoubleValue:logarithmicToLinear(newVolume)];
 
-	[[NSUserDefaults standardUserDefaults] setDouble:[audioPlayer volume] forKey:@"volume"];
+	[[NSUserDefaults standardUserDefaults] setFloat:[audioPlayer volume] forKey:@"volume"];
 }
 
 - (void)audioPlayer:(AudioPlayer *)player willEndStream:(id)userInfo
@@ -481,7 +481,7 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 	{
 		if (!positionTimer) {
 			positionTimer = [NSTimer timerWithTimeInterval:1.00 target:self selector:@selector(updatePosition:) userInfo:nil repeats:YES];
-			[[NSRunLoop currentRunLoop] addTimer:positionTimer forMode:NSRunLoopCommonModes];
+			[[NSRunLoop currentRunLoop] addTimer:positionTimer forMode:NSDefaultRunLoopMode]; // NSRunLoopCommonModes
 		}
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:CogPlaybackDidResumeNotficiation object:nil];

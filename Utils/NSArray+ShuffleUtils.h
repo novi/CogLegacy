@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "NSInteger-compat.h"
 
 @interface NSArray (ShuffleUtils)
 

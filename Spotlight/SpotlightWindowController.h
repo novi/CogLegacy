@@ -13,7 +13,10 @@
 @interface SpotlightWindowController : NSWindowController {
     IBOutlet PlaylistLoader *playlistLoader;
     IBOutlet NSArrayController *playlistController;
-    IBOutlet NSPathControl *pathControl;
+    
+    // TODO: 10.4
+    // IBOutlet NSPathControl *pathControl;
+    
     IBOutlet NSSearchField *searchField;
     NSMetadataQuery *query;
     NSString *searchString;

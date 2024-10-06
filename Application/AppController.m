@@ -36,7 +36,7 @@
 		remote = [[AppleRemote alloc] init];
 		[remote setDelegate: self];
 		
-        queue = [[NSOperationQueue alloc]init];
+//        queue = [[NSOperationQueue alloc]init];
 	}
 	
 	return self; 
@@ -44,7 +44,7 @@
 
 - (void)dealloc
 {
-    [queue release];
+//    [queue release];
     [super dealloc];
 }
 
@@ -229,7 +229,8 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 
 - (void)awakeFromNib
 {
-	[[totalTimeField cell] setBackgroundStyle:NSBackgroundStyleRaised];
+    // TODO: 10.4
+//	[[totalTimeField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	
 	[[playbackButtons cell] setToolTip:NSLocalizedString(@"PlayButtonTooltip", @"") forSegment: 1];
 	[[playbackButtons cell] setToolTip:NSLocalizedString(@"PrevButtonTooltip", @"") forSegment: 0];

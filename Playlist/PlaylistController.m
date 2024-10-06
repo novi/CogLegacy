@@ -18,6 +18,7 @@
 #import "StatusImageTransformer.h"
 #import "ToggleQueueTitleTransformer.h"
 #import "TagEditorController.h"
+#import "NSArray+ShuffleUtils.h" // NSInteger
 
 #import "CogAudio/AudioPlayer.h"
 
@@ -96,8 +97,8 @@
 - (void)initDefaults
 {
 	NSDictionary *defaultsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithInteger:RepeatNone], @"repeat",
-										[NSNumber numberWithInteger:ShuffleOff],  @"shuffle",
+										[NSNumber numberWithInt:RepeatNone], @"repeat", // withInteger
+										[NSNumber numberWithInt:ShuffleOff],  @"shuffle", // withInteger
 										nil];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];

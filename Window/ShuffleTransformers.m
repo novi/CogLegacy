@@ -18,7 +18,7 @@
 	
     if (value == nil) return nil;
 	
-	ShuffleMode mode = [value integerValue];
+	ShuffleMode mode = [value intValue]; // integerValue
 	
 	if (mode == ShuffleOff) {
 		return [NSImage imageNamed:@"shuffle_off"];
@@ -58,7 +58,7 @@
 	
     if (value == nil) return nil;
 	
-	ShuffleMode mode = [value integerValue];
+	ShuffleMode mode = [value intValue]; // integerValue
 	
 	if (shuffleMode == mode) {
 		return [NSNumber numberWithBool:YES];

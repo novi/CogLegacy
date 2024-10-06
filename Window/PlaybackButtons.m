@@ -9,6 +9,8 @@
 #import "PlaybackButtons.h"
 #import "PlaybackController.h"
 
+#import "NSInteger-compat.h"
+
 #import <CogAudio/Status.h>
 
 @implementation PlaybackButtons
@@ -29,7 +31,10 @@ static NSString *PlaybackButtonsPlaybackStatusObservationContext = @"PlaybackBut
 
 - (void)startObserving
 {
-	[playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial) context:PlaybackButtonsPlaybackStatusObservationContext];
+    // TODO: 10.4
+//	[playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial) context:PlaybackButtonsPlaybackStatusObservationContext];
+    
+    [playbackController addObserver:self forKeyPath:@"playbackStatus" options:(NSKeyValueObservingOptionNew) context:PlaybackButtonsPlaybackStatusObservationContext];
 }
 
 - (void)stopObserving
@@ -41,7 +46,7 @@ static NSString *PlaybackButtonsPlaybackStatusObservationContext = @"PlaybackBut
 {
 	if ([PlaybackButtonsPlaybackStatusObservationContext isEqual:context])
 	{
-		NSInteger playbackStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+		NSInteger playbackStatus = [[change objectForKey:NSKeyValueChangeNewKey] intValue]; // integerValue
 
 		NSImage *image = nil;
 
