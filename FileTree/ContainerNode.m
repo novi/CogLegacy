@@ -23,7 +23,9 @@
 	NSArray *urls = [AudioContainer urlsForContainerURL:url];
 	
 	NSMutableArray *paths = [[NSMutableArray alloc] init];
-	for (NSURL *u in urls)
+    NSEnumerator* enumerator = [urls objectEnumerator];
+    NSURL *u;
+	while (u = [enumerator nextObject])
 	{
 		ContainedNode *node = [[ContainedNode alloc] initWithDataSource:dataSource url:u];
 		NSLog(@"Node: %@", u);

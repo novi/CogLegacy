@@ -10,40 +10,289 @@
 
 @implementation PlaylistEntry
 
-@synthesize index;
-@synthesize shuffleIndex;
+//@synthesize index;
+//@synthesize shuffleIndex;
+- (void)setIndex:(int)anIndex
+{
+    index = anIndex;
+}
 
-@synthesize current;
-@synthesize removed;
+- (int)index
+{
+    return index;
+}
 
-@synthesize stopAfter;
 
-@synthesize queued;
-@synthesize queuePosition;
+- (void)setShuffleIndex:(int)anIndex
+{
+    shuffleIndex = anIndex;
+}
 
-@synthesize error;
-@synthesize errorMessage;
+- (int)shuffleIndex
+{
+    return shuffleIndex;
+}
 
-@synthesize URL;
+//@synthesize current;
+//@synthesize removed;
+- (void)setCurrent:(BOOL)aCurrent
+{
+    current = aCurrent;
+}
 
-@synthesize artist;
-@synthesize album;
-@synthesize genre;
-@synthesize year;
-@synthesize track;
-@synthesize albumArt;
+- (BOOL)current
+{
+    return current;
+}
 
-@synthesize totalFrames;
-@synthesize bitrate;
-@synthesize channels;
-@synthesize bitsPerSample;
-@synthesize sampleRate;
+- (void)setRemoved:(BOOL)aRemoved
+{
+    removed = aRemoved;
+}
 
-@synthesize endian;
+- (BOOL)removed
+{
+    return removed;
+}
 
-@synthesize seekable;
 
-@synthesize metadataLoaded;
+//@synthesize stopAfter;
+- (void)setStopAfter:(BOOL)aStopAfter
+{
+    stopAfter = aStopAfter;
+}
+
+- (BOOL)stopAfter
+{
+    return stopAfter;
+}
+
+
+//@synthesize queued;
+//@synthesize queuePosition;
+- (void)setQueued:(BOOL)aQueued
+{
+    queued = aQueued;
+}
+
+- (BOOL)queued
+{
+    return queued;
+}
+
+- (void)setQueuePosition:(int)aQueuePosition
+{
+    queuePosition = aQueuePosition;
+}
+
+- (int)queuePosition
+{
+    return queuePosition;
+}
+
+//@synthesize error;
+//@synthesize errorMessage;
+
+//@synthesize URL;
+
+- (void)setError:(BOOL)anError
+{
+    error = anError;
+}
+
+- (BOOL)error
+{
+    return error;
+}
+
+- (void)setErrorMessage:(NSString*)aMessage
+{
+    [errorMessage release];
+    errorMessage = [aMessage copy];
+}
+
+- (NSString*)errorMessage
+{
+    return errorMessage;
+}
+
+- (void)setURL:(NSURL*)anURL
+{
+    [URL release];
+    URL = [anURL retain];
+}
+
+- (NSURL*)URL
+{
+    return URL;
+}
+
+//@synthesize artist;
+//@synthesize album;
+//@synthesize genre;
+//@synthesize year;
+//@synthesize track;
+//@synthesize albumArt;
+
+- (void)setAlbum:(NSString *)anAlbum
+{
+    [album release];
+    album = [anAlbum copy];
+}
+
+- (NSString*)album
+{
+    return album;
+}
+
+- (void)setArtist:(NSString *)anArtist
+{
+    [artist release];
+    artist = [anArtist copy];
+}
+
+- (NSString*)artist
+{
+    return artist;
+}
+
+- (void)setGenre:(NSString *)aGenre
+{
+    [genre release];
+    genre = [aGenre copy];
+}
+
+- (NSString *)genre
+{
+    return genre;
+}
+
+- (void)setYear:(NSNumber *)aYear
+{
+    [year release];
+    year = [aYear retain];
+}
+
+- (NSNumber *)year
+{
+    return year;
+}
+
+- (void)setTrack:(NSNumber *)aTrack
+{
+    [track release];
+    track = aTrack;
+}
+
+- (NSNumber *)track
+{
+    return track;
+}
+
+- (void)setAlbumArt:(NSImage *)anAlbumArt
+{
+    [albumArt release];
+    albumArt = [anAlbumArt retain];
+}
+
+- (NSImage *)albumArt
+{
+    return albumArt;
+}
+
+//@synthesize totalFrames;
+//@synthesize bitrate;
+//@synthesize channels;
+//@synthesize bitsPerSample;
+//@synthesize sampleRate;
+
+- (void)setTotalFrames:(long long)aTotalFrames
+{
+    totalFrames = aTotalFrames;
+}
+
+- (long long)totalFrames
+{
+    return totalFrames;
+}
+
+- (void)setBitrate:(int)aBitrate
+{
+    bitrate = aBitrate;
+}
+
+- (int)bitrate
+{
+    return bitrate;
+}
+
+- (void)setChannels:(int)aChannels
+{
+    channels = aChannels;
+}
+
+- (int)channels
+{
+    return channels;
+}
+
+- (void)setBitsPerSample:(int)aBitsPerSample
+{
+    bitsPerSample = aBitsPerSample;
+}
+
+- (int)bitsPerSample
+{
+    return bitsPerSample;
+}
+
+- (void)setSampleRate:(float)aSampleRate
+{
+    sampleRate = aSampleRate;
+}
+
+- (float)sampleRate
+{
+    return sampleRate;
+}
+
+//@synthesize endian;
+
+//@synthesize seekable;
+
+- (void)setEndian:(NSString*)anEndian
+{
+    [endian release];
+    endian = [anEndian copy];
+}
+
+- (NSString*)endian
+{
+    return endian;
+}
+
+
+- (void)setSeekable:(BOOL)aSeekable
+{
+    seekable = aSeekable;
+}
+
+- (BOOL)seekable
+{
+    return seekable;
+}
+
+- (void)setMetadataLoaded:(BOOL)aMetadataLoaded
+{
+    metadataLoaded = aMetadataLoaded;
+}
+
+- (BOOL)metadataLoaded
+{
+    return metadataLoaded;
+}
+
+//@synthesize metadataLoaded;
 
 // The following read-only keys depend on the values of other properties
 
@@ -102,7 +351,13 @@
 }
 
 // Get the URL if the title is blank
-@synthesize title;
+//@synthesize title;
+- (void)setTitle:(NSString*)aTitle
+{
+    [title release];
+    title = [aTitle copy];
+}
+
 - (NSString *)title
 {
     if((title == nil || [title isEqualToString:@""]) && self.URL)
@@ -112,7 +367,6 @@
     return title;
 }
 
-@dynamic display;
 - (NSString *)display
 {
 	if ((self.artist == NULL) || ([self.artist isEqualToString:@""]))
@@ -122,25 +376,21 @@
 	}
 }
 
-@dynamic length;
 - (NSNumber *)length
 {
     return [NSNumber numberWithDouble:((double)self.totalFrames / self.sampleRate)];
 }
 
-@dynamic path;
 - (NSString *)path
 {
 	return [[self.URL path] stringByAbbreviatingWithTildeInPath];
 }
 
-@dynamic filename;
 - (NSString *)filename
 {
 	return [[self.URL path] lastPathComponent];
 }
 
-@dynamic status;
 - (NSString *)status
 {
 	if (self.stopAfter)
@@ -163,7 +413,6 @@
 	return nil;
 }
 
-@dynamic statusMessage;
 - (NSString *)statusMessage
 {
 	if (self.stopAfter)

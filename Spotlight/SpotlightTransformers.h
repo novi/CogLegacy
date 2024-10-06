@@ -15,7 +15,10 @@
 
 + (void)setSearchController:(SpotlightWindowController *)aSearchController;
 
-@property(copy) NSArray *oldResults;
+//@property(copy) NSArray *oldResults;
+-(void)setOldResults:(NSArray*)anOldResults;
+-(NSArray*)oldResults;
+
 @end
 
 @interface AuthorToArtistTransformer: NSValueTransformer {}

@@ -23,7 +23,9 @@
 	NSArray *contents = [[[NSFileManager defaultManager] directoryContentsAtPath:[url path]] sortedArrayUsingSelector:@selector(finderCompare:)];
 	NSMutableArray *fullPaths = [[NSMutableArray alloc] init];
 
-	for (NSString *s in contents)
+    NSEnumerator* enumerator = [contents objectEnumerator];
+    NSString *s;
+	while (s = [enumerator nextObject])
 	{
 		if (![s hasPrefix:@"."])
 			[fullPaths addObject:[[url path] stringByAppendingPathComponent: s]];

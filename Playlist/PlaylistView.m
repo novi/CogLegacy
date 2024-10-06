@@ -28,7 +28,9 @@
 	NSFont *f = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:s]];
     // NSFont *bf = [[NSFontManager sharedFontManager] convertFont:f toHaveTrait:NSBoldFontMask];
 			 
-	for (NSTableColumn *col in [self tableColumns]) {
+    NSEnumerator* enumerator = [[self tableColumns] objectEnumerator];
+    NSTableColumn *col;
+	while (col = [enumerator nextObject]) {
         [[col dataCell] setControlSize:s];
         [[col dataCell] setFont:f];
 	}
@@ -59,7 +61,8 @@
 	
 	int visibleTableColumns = 0;
 	int menuIndex = 0;
-	for (NSTableColumn *col in [[self tableColumns] sortedArrayUsingDescriptors: sortDescriptors]) 
+    enumerator = [[[self tableColumns] sortedArrayUsingDescriptors: sortDescriptors] objectEnumerator];
+	while (col = [enumerator nextObject])
 	{
 		NSString *title;
 		if ([[col identifier]  isEqualToString:@"status"])
@@ -86,7 +89,8 @@
 	}
 	
 	if (visibleTableColumns == 0) {
-		for (NSTableColumn *col in [self tableColumns]) {
+        enumerator = [[self tableColumns] objectEnumerator];
+		while (col = [enumerator nextObject]) {
 			[col setHidden:NO];
 		}
 	}

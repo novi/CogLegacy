@@ -38,7 +38,18 @@ static SpotlightWindowController * searchController;
     [super dealloc];
 }
 
-@synthesize oldResults;
+//@synthesize oldResults;
+
+-(void)setOldResults:(NSArray *)anOldResults
+{
+    [oldResults release];
+    oldResults = [anOldResults copy];
+}
+
+-(NSArray *)oldResults
+{
+    return oldResults;
+}
 
 @end
 

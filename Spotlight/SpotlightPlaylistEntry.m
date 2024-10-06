@@ -46,7 +46,9 @@ static NSDictionary *importKeys;
     SpotlightPlaylistEntry *entry = [[[SpotlightPlaylistEntry alloc]init]autorelease];
     
     // loop through the keys we want to extract
-    for (NSString *mdKey in importKeys) {
+    NSEnumerator* enumerator = [importKeys objectEnumerator];
+    NSString *mdKey;
+    while (mdKey = [enumerator nextObject]) {
         id importTarget = [importKeys objectForKey:mdKey];
         // Just copy the object from metadata
         if ([importTarget isKindOfClass:[NSString class]])
@@ -90,7 +92,29 @@ static NSDictionary *importKeys;
 }
 
 
-@synthesize length;
-@synthesize spotlightTrack;
+//@synthesize length;
+//@synthesize spotlightTrack;
+
+-(void)setLength:(NSNumber *)aLength
+{
+    [length release];
+    length = [aLength retain];
+}
+
+-(NSNumber *)length
+{
+    return length;
+}
+
+-(void)setSpotlightTrack:(NSString *)aTrack
+{
+    [spotlightTrack release];
+    spotlightTrack = [aTrack copy];
+}
+
+-(NSString *)spotlightTrack
+{
+    return spotlightTrack;
+}
 
 @end

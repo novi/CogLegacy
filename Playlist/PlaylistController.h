@@ -49,8 +49,14 @@ typedef enum {
 	PlaylistEntry *currentEntry;
 }
 
-@property(retain) PlaylistEntry *currentEntry;
-@property(retain) NSString *totalTime;
+//@property(retain) PlaylistEntry *currentEntry;
+//@property(retain) NSString *totalTime;
+
+- (void)setCurrentEntry:(PlaylistEntry*)anEntry;
+- (PlaylistEntry*)currentEntry;
+- (void)setTotalTime:(NSString*)aTime;
+- (NSString*)totalTime;
+
 
 //Private Methods
 - (void)updateTotalTime;

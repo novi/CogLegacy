@@ -85,11 +85,15 @@
 							   ] stringByStandardizingPath];
 	PathNode *node = rootNode;
 	NSLog(@"Root | Relative | Path: %@ | %@ | %@",[[self rootURL] path], relativePath, path);
-	for (NSString *c in [relativePath pathComponents])
+    NSEnumerator* enumerator = [[relativePath pathComponents] objectEnumerator];
+    NSString *c;
+	while (c = [enumerator nextObject])
 	{
 		NSLog(@"COMPONENT: %@", c);
 		BOOL found = NO;
-		for (PathNode *subnode in [node subpaths]) {
+        NSEnumerator* enumerator = [[node subpaths] objectEnumerator];
+        PathNode *subnode;
+		while (subnode = [enumerator nextObject]) {
 			if ([[[[subnode URL] path] lastPathComponent] isEqualToString:c]) {
 				node = subnode;
 				found = YES;
@@ -151,7 +155,9 @@
 	NSMutableArray *urls = [NSMutableArray arrayWithCapacity:[items count]];
 	NSMutableArray *paths = [NSMutableArray arrayWithCapacity:[items count]];
 
-	for (id p in items) {
+    NSEnumerator* enumerator = [items objectEnumerator];
+    id p;
+	while (p = [enumerator nextObject]) {
 		[urls addObject:[p URL]];
 		[paths addObject:[[p URL] path]];
 	}

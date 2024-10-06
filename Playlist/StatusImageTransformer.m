@@ -12,10 +12,54 @@
 
 @implementation StatusImageTransformer
 
-@synthesize playImage;
-@synthesize queueImage;
-@synthesize errorImage;
-@synthesize stopAfterImage;
+//@synthesize playImage;
+//@synthesize queueImage;
+//@synthesize errorImage;
+//@synthesize stopAfterImage;
+
+- (void)setPlayImage:(NSImage*)anImage
+{
+    [playImage release];
+    playImage = [anImage retain];
+}
+
+- (NSImage*)playImage
+{
+    return playImage;
+}
+
+- (void)setQueueImage:(NSImage*)anImage
+{
+    [queueImage release];
+    queueImage = [anImage retain];
+}
+
+- (NSImage*)queueImage
+{
+    return queueImage;
+}
+
+- (void)setErrorImage:(NSImage*)anImage
+{
+    [errorImage release];
+    errorImage = [anImage retain];
+}
+
+- (NSImage*)errorImage
+{
+    return errorImage;
+}
+
+- (void)setStopAfterImage:(NSImage*)anImage
+{
+    [stopAfterImage release];
+    stopAfterImage = [anImage retain];
+}
+
+- (NSImage*)stopAfterImage
+{
+    return stopAfterImage;
+}
 
 + (Class)transformedValueClass { return [NSImage class]; }
 + (BOOL)allowsReverseTransformation { return NO; }

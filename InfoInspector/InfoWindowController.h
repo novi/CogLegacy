@@ -13,7 +13,8 @@
 	IBOutlet id playlistSelectionController;
 }
 
-@property(readonly) id playlistSelectionController;
+//@property(readonly) id playlistSelectionController;
+- (id)playlistSelectionController;
 
 - (IBAction)toggleWindow:(id)sender;
 

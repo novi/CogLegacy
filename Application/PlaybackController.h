@@ -37,7 +37,9 @@ extern NSString *CogPlaybackDidStopNotficiation;
 	BOOL fading;
  }
 
-@property int playbackStatus;
+//@property int playbackStatus;
+- (void)setPlaybackStatus:(int)aStatus;
+- (int)playbackStatus;
 
 - (IBAction)changeVolume:(id)sender;
 - (IBAction)volumeDown:(id)sender;

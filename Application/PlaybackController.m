@@ -16,7 +16,17 @@ NSString *CogPlaybackDidPauseNotficiation = @"CogPlaybackDidPauseNotficiation";
 NSString *CogPlaybackDidResumeNotficiation = @"CogPlaybackDidResumeNotficiation";
 NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 
-@synthesize playbackStatus;
+//@synthesize playbackStatus;
+
+-(void)setPlaybackStatus:(int)aStatus
+{
+    playbackStatus = aStatus;
+}
+
+-(int)playbackStatus
+{
+    return playbackStatus;
+}
 
 + (NSSet *)keyPathsForValuesAffectingSeekable
 {

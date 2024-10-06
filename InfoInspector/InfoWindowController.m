@@ -11,7 +11,7 @@
 
 @implementation InfoWindowController
 
-@synthesize playlistSelectionController;
+//@synthesize playlistSelectionController;
 
 + (void)initialize
 {
@@ -23,6 +23,11 @@
 - (id)init
 {
 	return [super initWithWindowNibName:@"InfoInspector"];
+}
+
+-(id)playlistSelectionController
+{
+    return playlistSelectionController;
 }
 		
 - (IBAction)toggleWindow:(id)sender

@@ -48,8 +48,9 @@
 {
 	NSMutableArray* first = [NSMutableArray arrayWithCapacity:[pairs count]];
 	NSMutableArray* second = [NSMutableArray arrayWithCapacity:[pairs count]];
-
-	for (NSArray *pair in pairs)
+    NSEnumerator* enumerator = [pairs objectEnumerator];
+    NSArray *pair;
+	while (pair = [enumerator nextObject])
 	{
 		[first addObject:[pair first]];
 		[second addObject:[pair second]];

@@ -295,7 +295,9 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	//Need to convert to urls
 	NSMutableArray *urls = [NSMutableArray array];
 	
-	for (NSString *filename in filenames)
+    NSEnumerator* enumerator = [filenames objectEnumerator];
+    NSString *filename;
+	while (filename = [enumerator nextObject])
 	{
 		[urls addObject:[NSURL fileURLWithPath:filename]];
 	}

@@ -293,10 +293,28 @@ replacementObjectForResultObject:(NSMetadataItem*)result
 
 #pragma mark Getters and setters
 
-@synthesize query;
+//@synthesize query;
+//
+//@synthesize searchString;
 
-@synthesize searchString;
-- (void)setSearchString:(NSString *)aString 
+- (void)setQuery:(NSMetadataQuery*)aQuery
+{
+    [query release];
+    query = [aQuery retain];
+}
+
+- (NSMetadataQuery*)query
+{
+    return query;
+}
+
+- (NSString*)searchString
+{
+    return searchString;
+}
+
+
+- (void)setSearchString:(NSString *)aString
 {
 	// Make sure the string is changed
     if (![searchString isEqualToString:aString]) 

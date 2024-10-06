@@ -28,7 +28,13 @@
 - (void)searchForArtist:(NSString *)artist;
 - (void)searchForAlbum:(NSString *)album;
 
-@property(retain) NSMetadataQuery *query;
-@property(copy) NSString *searchString;
+//@property(retain) NSMetadataQuery *query;
+//@property(copy) NSString *searchString;
+
+- (void)setQuery:(NSMetadataQuery*)aQuery;
+- (NSMetadataQuery*)query;
+
+- (void)setSearchString:(NSString*)aString;
+- (NSString*)searchString;
 
 @end

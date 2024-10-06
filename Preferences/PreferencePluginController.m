@@ -34,7 +34,9 @@
 
 - (void)_searchForPlugins
 {
-	for (NSBundle *plugin in _plugins) {
+    NSEnumerator* enumerator = [_plugins objectEnumerator];
+    NSBundle *plugin;
+	while (plugin = [enumerator nextObject]) {
 		[plugin load];
 		
 		Class principalClass = [plugin principalClass];

@@ -16,8 +16,23 @@
 	NSImage *stopAfterImage;
 }
 
-@property(retain) NSImage *playImage;
-@property(retain) NSImage *queueImage;
-@property(retain) NSImage *errorImage;
-@property(retain) NSImage *stopAfterImage;
+//@property(retain) NSImage *playImage;
+//@property(retain) NSImage *queueImage;
+//@property(retain) NSImage *errorImage;
+//@property(retain) NSImage *stopAfterImage;
+
+- (void)setPlayImage:(NSImage*)anImage;
+- (NSImage*)playImage;
+
+- (void)setQueueImage:(NSImage*)anImage;
+- (NSImage*)queueImage;
+
+- (void)setErrorImage:(NSImage*)anImage;
+- (NSImage*)errorImage;
+
+- (void)setStopAfterImage:(NSImage*)anImage;
+- (NSImage*)stopAfterImage;
+
+
+
 @end

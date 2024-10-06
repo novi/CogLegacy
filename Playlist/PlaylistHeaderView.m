@@ -44,7 +44,9 @@
 			
 			//find the longest string display length in that column
 			float max_width = -1;
-			for (id row in boundArray) {
+            NSEnumerator* enumerator = [boundArray objectEnumerator];
+            id row;
+			while (row = [enumerator nextObject]) {
 			
 				[cell setObjectValue:row];
 				

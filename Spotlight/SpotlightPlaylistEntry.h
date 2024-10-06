@@ -17,6 +17,12 @@
 
 + (SpotlightPlaylistEntry *)playlistEntryWithMetadataItem:(NSMetadataItem *)metadataItem;
 
-@property(retain, readwrite) NSNumber *length;
-@property(retain) NSString *spotlightTrack;
+//@property(retain, readwrite) NSNumber *length;
+//@property(retain) NSString *spotlightTrack;
+
+- (void)setLength:(NSNumber*)length;
+- (NSNumber*)length;
+- (void)setSpotlightTrack:(NSString*)track;
+- (NSString*)spotlightTrack;
+
 @end

@@ -53,49 +53,114 @@
 + (NSSet *)keyPathsForValuesAffectingStatus;
 + (NSSet *)keyPathsForValuesAffectingStatusMessage;
 
-@property(readonly) NSString *display;
-@property(retain, readonly) NSNumber *length;
-@property(readonly) NSString *path;
-@property(readonly) NSString *filename;
+//@property(readonly) NSString *display;
+//@property(retain, readonly) NSNumber *length;
+//@property(readonly) NSString *path;
+//@property(readonly) NSString *filename;
 
-@property int index;
-@property int shuffleIndex;
+- (NSString*)display;
+- (NSNumber*)length;
+- (NSString*)path;
+- (NSString*)filename;
 
-@property(readonly) NSString *status;
-@property(readonly) NSString *statusMessage;
+//@property int index;
+//@property int shuffleIndex;
 
-@property BOOL current;
-@property BOOL removed;
+- (void)setIndex:(int)anIndex;
+- (int)index;
+- (void)setShuffleIndex:(int)anIndex;
+- (int)shuffleIndex;
 
-@property BOOL stopAfter;
+//@property(readonly) NSString *status;
+//@property(readonly) NSString *statusMessage;
 
-@property BOOL queued;
-@property int queuePosition;
+- (NSString*)status;
+- (NSString*)statusMessage;
 
-@property BOOL error;
-@property(retain) NSString *errorMessage;
+//@property BOOL current;
+//@property BOOL removed;
 
-@property(retain) NSURL *URL;
+- (void)setCurrent:(BOOL)aCurrent;
+- (BOOL)current;
+- (void)setRemoved:(BOOL)aRemoved;
+- (BOOL)removed;
 
-@property(retain) NSString *artist;
-@property(retain) NSString *album;
-@property(retain) NSString *title;
-@property(retain) NSString *genre;
-@property(retain) NSNumber *year;
-@property(retain) NSNumber *track;
-@property(retain) NSImage *albumArt;
+//@property BOOL stopAfter;
+- (void)setStopAfter:(BOOL)aStopAfter;
+- (BOOL)stopAfter;
 
-@property long long totalFrames;
-@property int bitrate;
-@property int channels;
-@property int bitsPerSample;
-@property float sampleRate;
+//@property BOOL queued;
+//@property int queuePosition;
+- (void)setQueued:(BOOL)aQueued;
+- (BOOL)queued;
+- (void)setQueuePosition:(int)aQueuePosition;
+- (int)queuePosition;
 
-@property(retain) NSString *endian;
+//@property BOOL error;
+//@property(retain) NSString *errorMessage;
+- (void)setError:(BOOL)anError;
+- (BOOL)error;
+- (void)setErrorMessage:(NSString*)aMessage;
+- (NSString*)errorMessage;
 
-@property BOOL seekable;
+//@property(retain) NSURL *URL;
+- (void)setURL:(NSURL*)anURL;
+- (NSURL*)URL;
 
-@property BOOL metadataLoaded;
+//@property(retain) NSString *artist;
+//@property(retain) NSString *album;
+//@property(retain) NSString *title;
+//@property(retain) NSString *genre;
+//@property(retain) NSNumber *year;
+//@property(retain) NSNumber *track;
+//@property(retain) NSImage *albumArt;
+- (void)setAlbum:(NSString *)anAlbum;
+- (NSString*)album;
+- (void)setArtist:(NSString *)anArtist;
+- (NSString*)artist;
+- (void)setTitle:(NSString*)aTitle;
+- (NSString*)title;
+- (void)setGenre:(NSString *)aGenre;
+- (NSString *)genre;
+- (void)setYear:(NSNumber *)aYear;
+- (NSNumber *)year;
+- (void)setTrack:(NSNumber *)aTrack;
+- (NSNumber *)track;
+- (void)setAlbumArt:(NSImage *)anAlbumArt;
+- (NSImage *)albumArt;
+
+//@property long long totalFrames;
+//@property int bitrate;
+//@property int channels;
+//@property int bitsPerSample;
+//@property float sampleRate;
+
+- (void)setTotalFrames:(long long)aTotalFrames;
+- (long long)totalFrames;
+- (void)setBitrate:(int)aBitrate;
+- (int)bitrate;
+- (void)setChannels:(int)aChannels;
+- (int)channels;
+- (void)setBitsPerSample:(int)aBitsPerSample;
+- (int)bitsPerSample;
+- (void)setSampleRate:(float)aSampleRate;
+- (float)sampleRate;
+
+
+//@property(retain) NSString *endian;
+- (void)setEndian:(NSString*)anEndian;
+- (NSString*)endian;
+
+//@property BOOL seekable;
+
+//@property BOOL metadataLoaded;
+
+- (void)setSeekable:(BOOL)aSeekable;
+- (BOOL)seekable;
+
+- (void)setMetadataLoaded:(BOOL)aMetadataLoaded;
+- (BOOL)metadataLoaded;
+
 
 - (void)setMetadata:(NSDictionary *)metadata;
 

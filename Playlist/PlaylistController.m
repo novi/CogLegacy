@@ -23,8 +23,25 @@
 
 @implementation PlaylistController
 
-@synthesize currentEntry;
-@synthesize totalTime;
+//@synthesize currentEntry;
+//@synthesize totalTime;
+
+- (PlaylistEntry*)currentEntry
+{
+    return currentEntry;
+}
+
+- (void)setTotalTime:(NSString*)aTime
+{
+    [totalTime release];
+    totalTime = [aTime copy];
+}
+
+- (NSString*)totalTime;
+{
+    return totalTime;
+}
+
 
 + (void)initialize {
 	NSValueTransformer *repeatNoneTransformer = [[[RepeatModeTransformer alloc] initWithMode:RepeatNone] autorelease];
@@ -143,7 +160,9 @@
 	double tt = 0;
 	ldiv_t hoursAndMinutes;
 	
-	for (PlaylistEntry *pe in [self arrangedObjects]) {
+    NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
+    PlaylistEntry *pe;
+	while (pe = [enumerator nextObject]) {
         if (!isnan([pe.length doubleValue]))
             tt += [pe.length doubleValue];
 	}
@@ -236,8 +255,10 @@
 	// Get files from a normal file drop (such as from Finder)
 	if ([bestType isEqualToString:NSFilenamesPboardType]) {
 		NSMutableArray *urls = [[NSMutableArray alloc] init];
-
-		for (NSString *file in [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType])
+        
+        NSEnumerator* enumerator = [[[info draggingPasteboard] propertyListForType:NSFilenamesPboardType] objectEnumerator];
+        NSString *file;
+		while (file = [enumerator nextObject])
 		{
 			[urls addObject:[NSURL fileURLWithPath:file]];
 		}
@@ -254,8 +275,9 @@
 
 		// Convert the iTunes URLs to URLs....MWAHAHAH!
 		NSMutableArray *urls = [[NSMutableArray alloc] init];
-
-		for (NSDictionary *trackInfo in [tracks allValues]) {
+        NSEnumerator* enumerator = [[tracks allValues] objectEnumerator];
+        NSDictionary *trackInfo;
+		while (trackInfo = [enumerator nextObject]) {
 			[urls addObject:[NSURL URLWithString:[trackInfo valueForKey:@"Location"]]];
 		}
 		
@@ -731,7 +753,9 @@
 
 - (IBAction)emptyQueueList:(id)sender
 {
-	for (PlaylistEntry *queueItem in queueList)
+    NSEnumerator* enumerator = [queueList objectEnumerator];
+    PlaylistEntry *queueItem;
+	while (queueItem = [enumerator nextObject])
 	{
 		queueItem.queued = NO;
 		[queueItem setQueuePosition:-1];
@@ -743,7 +767,9 @@
 
 - (IBAction)toggleQueued:(id)sender
 {
-	for (PlaylistEntry *queueItem in [self selectedObjects])
+    NSEnumerator* enumerator = [[self selectedObjects] objectEnumerator];
+    PlaylistEntry *queueItem;
+	while (queueItem = [enumerator nextObject])
 	{
 		if (queueItem.queued)
 		{
@@ -764,7 +790,9 @@
 	}
 
 	int i = 0;
-	for (PlaylistEntry *cur in queueList)
+    enumerator = [queueList objectEnumerator];
+    PlaylistEntry *cur;
+	while (cur = [enumerator nextObject])
 	{
 		cur.queuePosition = i++;
 	}
@@ -781,7 +809,9 @@
 	
 	if (action == @selector(removeFromQueue:))
 	{
-		for (PlaylistEntry *q in [self selectedObjects])
+        NSEnumerator* enumerator = [[self selectedObjects] objectEnumerator];
+        PlaylistEntry *q;
+		while (q = [enumerator nextObject])
 			if (q.queuePosition >= 0)
 				return YES;
 
