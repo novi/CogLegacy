@@ -8,6 +8,11 @@
 
 #import "FileSource.h"
 
+@interface FileSource(Private)
+
+- (void)setURL:(NSURL *)url;
+
+@end
 
 @implementation FileSource
 

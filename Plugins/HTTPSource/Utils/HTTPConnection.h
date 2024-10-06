@@ -31,6 +31,9 @@
 - (void)setValue:(NSString *)value forRequestHeader:(NSString *)header;
 - (NSString *)valueForResponseHeader:(NSString *)header;
 
-@property(copy) NSURL *URL;
+//@property(copy) NSURL *URL;
+
+-(void)setURL:(NSURL *)URL;
+-(NSURL *)URL;
 
 @end

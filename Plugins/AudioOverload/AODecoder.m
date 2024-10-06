@@ -155,8 +155,10 @@ int ao_get_lib(char *fn, uint8 **buf, uint64 *length)
 				
 				long totalSeconds = 0;
 				long multiplier = 1;
-				for (id component in [components reverseObjectEnumerator]) {
-					totalSeconds += [component integerValue] * multiplier;
+                NSEnumerator* enumerator = [components reverseObjectEnumerator];
+                id component;
+				while (component = [enumerator nextObject]) {
+					totalSeconds += [component longValue] * multiplier;
 					multiplier *=60;
 				}
 				
@@ -322,7 +324,7 @@ int ao_get_lib(char *fn, uint8 **buf, uint64 *length)
 			[NSNumber numberWithInt:2], @"channels",
 			[NSNumber numberWithInt:16], @"bitsPerSample",
 			[NSNumber numberWithFloat:44100], @"sampleRate",
-			[NSNumber numberWithInteger:totalFrames], @"totalFrames",
+			[NSNumber numberWithLong:totalFrames], @"totalFrames",
 			[NSNumber numberWithInt:0], @"bitrate",
 			[NSNumber numberWithBool:NO], @"seekable",
 			@"host", @"endian",

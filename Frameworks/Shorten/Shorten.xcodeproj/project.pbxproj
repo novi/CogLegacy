@@ -290,7 +290,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.4;
 				SYMROOT = ../../build;
 			};
 			name = Debug;
@@ -309,7 +309,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.4;
 				SYMROOT = ../../build;
 			};
 			name = Release;

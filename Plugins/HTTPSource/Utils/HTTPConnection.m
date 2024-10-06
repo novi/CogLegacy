@@ -13,7 +13,18 @@
 
 @implementation HTTPConnection
 
-@synthesize URL = _URL;
+//@synthesize URL = _URL;
+
+-(void)setURL:(NSURL *)URL
+{
+    [_URL release];
+    _URL = [URL retain];
+}
+
+-(NSURL *)URL
+{
+    return _URL;
+}
 
 - (id)initWithURL:(NSURL *)url
 {
@@ -193,7 +204,9 @@
 	[self setValue:host forRequestHeader:@"Host"];
 	
 	// Add the request headers
-	for (id header in _requestHeaders) {
+    NSEnumerator* enumerator = [_requestHeaders objectEnumerator];
+    id header;
+	while (header = [enumerator nextObject]) {
 		id value = [_requestHeaders objectForKey:header];
 		
 		[requestString appendFormat:@"%@: %@\r\n", header, value];

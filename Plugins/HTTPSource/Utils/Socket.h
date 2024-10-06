@@ -8,13 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+
 //Rediculously simple socket wrapper
 @interface Socket : NSObject {
 	int _socket;
 }
 
-+ (id)socketWithHost:(NSString *)host port:(int) port;
-- (id)initWithHost:(NSString *)host port:(int)port;
++ (id)socketWithHost:(NSString *)host port:(NSInteger) port;
+- (id)initWithHost:(NSString *)host port:(NSInteger)port;
 
 - (NSInteger)send:(const void *)data amount:(NSInteger)amount;
 - (NSInteger)receive:(void *)data amount:(NSInteger)amount;

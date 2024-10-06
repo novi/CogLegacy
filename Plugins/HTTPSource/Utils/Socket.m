@@ -8,6 +8,7 @@
 
 #import "Socket.h"
 #import <netdb.h>
+#include <unistd.h>
 
 @implementation Socket
 
