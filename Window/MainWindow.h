@@ -9,8 +9,10 @@
 #import <Cocoa/Cocoa.h>
 #import "DualWindow.h"
 
-@interface MainWindow : DualWindow {
+@class PositionSlider;
 
+@interface MainWindow : DualWindow {
+    PositionSlider* _positionSlider;
 }
 
 @end

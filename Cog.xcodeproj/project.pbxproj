@@ -2167,7 +2167,6 @@
 					CogAudio,
 				);
 				PRODUCT_NAME = Cog;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -2203,7 +2202,6 @@
 					CogAudio,
 				);
 				PRODUCT_NAME = Cog;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

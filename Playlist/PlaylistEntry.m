@@ -378,7 +378,11 @@
 
 - (NSNumber *)length
 {
-    return [NSNumber numberWithDouble:((double)self.totalFrames / self.sampleRate)];
+    if (totalFrames > 0 && sampleRate > 0) {
+        return [NSNumber numberWithDouble:((double)self.totalFrames / self.sampleRate)];
+    } else {
+        return 0;
+    }
 }
 
 - (NSString *)path

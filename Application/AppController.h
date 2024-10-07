@@ -10,6 +10,8 @@
 @class PlaylistView;
 @class AppleRemote;
 @class PlaylistLoader;
+@class InfoWindowController;
+@class FileTreeViewController;
 
 @interface AppController : NSObject
 {
@@ -17,6 +19,10 @@
 
     IBOutlet PlaylistController *playlistController;
 	IBOutlet PlaylistLoader *playlistLoader;
+    
+    IBOutlet InfoWindowController* infoWindowController;
+    IBOutlet FileTreeViewController* fileTreeViewController;
+    IBOutlet NSObjectController* currentEntryController;
 	
 	IBOutlet NSWindow *mainWindow;
 	
