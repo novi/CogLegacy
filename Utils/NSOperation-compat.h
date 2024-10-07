@@ -10,12 +10,20 @@
 #import "NSInteger-compat.h"
 
 @interface CogOperation : NSObject
-
+{
+    BOOL _isFinished;
+}
 - (BOOL)isFinished;
+- (void)main;
 
 @end
 
 @interface CogOperationQueue : NSObject
+{
+    NSConditionLock* _lock;
+    NSMutableArray* _queue;
+    NSUInteger _runningCount;
+}
 
 - (void)addOperation:(CogOperation *)op;
 
@@ -27,12 +35,17 @@
 @end
 
 @interface CogInvocationOperation : CogOperation
+{
+    NSInvocation* _inv;
+}
 
 - (id)initWithTarget:(id)target
                       selector:(SEL)sel
                         object:(id)arg;
 
 - (id)result;
+
+- (NSInvocation*)invocation;
 
 @end
 

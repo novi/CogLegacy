@@ -323,6 +323,7 @@
 	[playlistController setSelectionIndex:index];
     // TODO: 10.4
 //	[self performSelectorInBackground:@selector(loadInfoForEntries:) withObject:entries];
+    [self loadInfoForEntries:entries];
 	return entries;
 }
 
