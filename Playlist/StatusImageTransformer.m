@@ -70,8 +70,8 @@
 	if (self)
 	{
 		self.playImage = [NSImage imageNamed:@"play"];
-		self.queueImage = [NSImage imageNamed:@"NSAddTemplate"];
-		self.errorImage = [NSImage imageNamed:@"NSStopProgressTemplate"];
+		self.queueImage = [NSImage imageNamed:@"NSAddTemplate"]; // TODO: 10.4 icon
+		self.errorImage = [NSImage imageNamed:@"NSStopProgressTemplate"]; // TODO: 10.4 icon
 		self.stopAfterImage = [NSImage imageNamed:@"stop_current"];
 	}
 	

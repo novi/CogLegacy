@@ -71,8 +71,6 @@
 							<int key="NSvFlags">290</int>
 							<string key="NSFrame">{{17, 5}, {649, 15}}</string>
 							<reference key="NSSuperview" ref="955312553"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="14436359">
 								<int key="NSCellFlags">67108928</int>
@@ -126,7 +124,6 @@
 													<int key="NSvFlags">4370</int>
 													<string key="NSFrameSize">{691, 355}</string>
 													<reference key="NSSuperview" ref="561123847"/>
-													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="689304715"/>
 													<bool key="NSEnabled">YES</bool>
 													<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -136,7 +133,6 @@
 														<int key="NSvFlags">256</int>
 														<string key="NSFrameSize">{691, 17}</string>
 														<reference key="NSSuperview" ref="729711146"/>
-														<reference key="NSWindow"/>
 														<reference key="NSNextKeyView" ref="561123847"/>
 														<reference key="NSTableView" ref="1062907150"/>
 													</object>
@@ -145,7 +141,6 @@
 														<int key="NSvFlags">-2147483392</int>
 														<string key="NSFrame">{{-26, 0}, {16, 17}}</string>
 														<reference key="NSSuperview" ref="381323260"/>
-														<reference key="NSWindow"/>
 														<reference key="NSNextKeyView" ref="729711146"/>
 													</object>
 													<object class="NSMutableArray" key="NSTableColumns">
@@ -614,7 +609,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 											</object>
 											<string key="NSFrame">{{0, 17}, {691, 355}}</string>
 											<reference key="NSSuperview" ref="381323260"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="1062907150"/>
 											<reference key="NSDocView" ref="1062907150"/>
 											<reference key="NSBGColor" ref="103869092"/>
@@ -625,7 +619,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 											<int key="NSvFlags">-2147483392</int>
 											<string key="NSFrame">{{85, 17}, {15, 68}}</string>
 											<reference key="NSSuperview" ref="381323260"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="615484342"/>
 											<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 											<reference key="NSTarget" ref="381323260"/>
@@ -637,7 +630,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 											<int key="NSvFlags">-2147483392</int>
 											<string key="NSFrame">{{-100, -100}, {683, 15}}</string>
 											<reference key="NSSuperview" ref="381323260"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="67713463"/>
 											<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 											<int key="NSsFlags">1</int>
@@ -654,7 +646,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 											</object>
 											<string key="NSFrameSize">{691, 17}</string>
 											<reference key="NSSuperview" ref="381323260"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="367534576"/>
 											<reference key="NSDocView" ref="367534576"/>
 											<reference key="NSBGColor" ref="103869092"/>
@@ -664,7 +655,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 									</object>
 									<string key="NSFrameSize">{691, 372}</string>
 									<reference key="NSSuperview" ref="640589646"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="864291680"/>
 									<int key="NSsFlags">133648</int>
 									<reference key="NSVScroller" ref="689304715"/>
@@ -680,7 +670,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 							</object>
 							<string key="NSFrame">{{0, 25}, {691, 372}}</string>
 							<reference key="NSSuperview" ref="955312553"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="381323260"/>
 							<bool key="NSIsVertical">YES</bool>
 							<int key="NSDividerStyle">2</int>
@@ -688,7 +677,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					</object>
 					<string key="NSFrameSize">{691, 397}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="640589646"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
@@ -1979,7 +1967,7 @@ AAAAAAAAAAAAAAAAA</bytes>
 					</object>
 					<object class="NSMenuItem" id="927360553">
 						<reference key="NSMenu" ref="952259328"/>
-						<bool key="NSIsHidden">YES</bool>
+						<bool key="NSIsDisabled">YES</bool>
 						<string key="NSTitle">Information</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -6939,17 +6927,13 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>redo:</string>
 							<string>scrollToCurrentEntry:</string>
 							<string>shufflePlaylist:</string>
 							<string>sortByPath:</string>
 							<string>toggleColumn:</string>
-							<string>undo:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -6960,19 +6944,13 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>redo:</string>
 							<string>scrollToCurrentEntry:</string>
 							<string>shufflePlaylist:</string>
 							<string>sortByPath:</string>
 							<string>toggleColumn:</string>
-							<string>undo:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">redo:</string>
-								<string key="candidateClassName">id</string>
-							</object>
 							<object class="IBActionInfo">
 								<string key="name">scrollToCurrentEntry:</string>
 								<string key="candidateClassName">id</string>
@@ -6987,10 +6965,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">toggleColumn:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">undo:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

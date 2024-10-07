@@ -37,10 +37,10 @@
 //@synthesize removed;
 - (void)setCurrent:(BOOL)aCurrent
 {
-    current = aCurrent;
     [self willChangeValueForKey:@"status"];
-    [self didChangeValueForKey:@"status"];
     [self willChangeValueForKey:@"statusMessage"];
+    current = aCurrent;
+    [self didChangeValueForKey:@"status"];
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -63,10 +63,10 @@
 //@synthesize stopAfter;
 - (void)setStopAfter:(BOOL)aStopAfter
 {
-    stopAfter = aStopAfter;
     [self willChangeValueForKey:@"status"];
-    [self didChangeValueForKey:@"status"];
     [self willChangeValueForKey:@"statusMessage"];
+    stopAfter = aStopAfter;
+    [self didChangeValueForKey:@"status"];
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -80,10 +80,10 @@
 //@synthesize queuePosition;
 - (void)setQueued:(BOOL)aQueued
 {
-    queued = aQueued;
     [self willChangeValueForKey:@"status"];
-    [self didChangeValueForKey:@"status"];
     [self willChangeValueForKey:@"statusMessage"];
+    queued = aQueued;
+    [self didChangeValueForKey:@"status"];
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -94,8 +94,8 @@
 
 - (void)setQueuePosition:(int)aQueuePosition
 {
-    queuePosition = aQueuePosition;
     [self willChangeValueForKey:@"statusMessage"];
+    queuePosition = aQueuePosition;    
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -111,10 +111,10 @@
 
 - (void)setError:(BOOL)anError
 {
-    error = anError;
     [self willChangeValueForKey:@"status"];
-    [self didChangeValueForKey:@"status"];
     [self willChangeValueForKey:@"statusMessage"];
+    error = anError;
+    [self didChangeValueForKey:@"status"];
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -125,9 +125,9 @@
 
 - (void)setErrorMessage:(NSString*)aMessage
 {
-    [errorMessage release];
-    errorMessage = [aMessage copy];
     [self willChangeValueForKey:@"statusMessage"];
+    [errorMessage release];
+    errorMessage = [aMessage copy];    
     [self didChangeValueForKey:@"statusMessage"];
 }
 
@@ -138,11 +138,11 @@
 
 - (void)setURL:(NSURL*)anURL
 {
+    [self willChangeValueForKey:@"path"];
+    [self willChangeValueForKey:@"filename"];
     [URL release];
     URL = [anURL retain];
-    [self willChangeValueForKey:@"path"];
     [self didChangeValueForKey:@"path"];
-    [self willChangeValueForKey:@"filename"];
     [self didChangeValueForKey:@"filename"];
 }
 
@@ -171,9 +171,9 @@
 
 - (void)setArtist:(NSString *)anArtist
 {
+    [self willChangeValueForKey:@"display"];
     [artist release];
     artist = [anArtist copy];
-    [self willChangeValueForKey:@"display"];
     [self didChangeValueForKey:@"display"];
 }
 
@@ -234,8 +234,8 @@
 
 - (void)setTotalFrames:(long long)aTotalFrames
 {
-    totalFrames = aTotalFrames;
     [self willChangeValueForKey:@"length"];
+    totalFrames = aTotalFrames;
     [self didChangeValueForKey:@"length"];
 }
 
@@ -382,9 +382,9 @@
 //@synthesize title;
 - (void)setTitle:(NSString*)aTitle
 {
+    [self willChangeValueForKey:@"display"];
     [title release];
     title = [aTitle copy];
-    [self willChangeValueForKey:@"display"];
     [self didChangeValueForKey:@"display"];
 }
 
