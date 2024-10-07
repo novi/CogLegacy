@@ -38,6 +38,10 @@
 - (void)setCurrent:(BOOL)aCurrent
 {
     current = aCurrent;
+    [self willChangeValueForKey:@"status"];
+    [self didChangeValueForKey:@"status"];
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (BOOL)current
@@ -60,6 +64,10 @@
 - (void)setStopAfter:(BOOL)aStopAfter
 {
     stopAfter = aStopAfter;
+    [self willChangeValueForKey:@"status"];
+    [self didChangeValueForKey:@"status"];
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (BOOL)stopAfter
@@ -73,6 +81,10 @@
 - (void)setQueued:(BOOL)aQueued
 {
     queued = aQueued;
+    [self willChangeValueForKey:@"status"];
+    [self didChangeValueForKey:@"status"];
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (BOOL)queued
@@ -83,6 +95,8 @@
 - (void)setQueuePosition:(int)aQueuePosition
 {
     queuePosition = aQueuePosition;
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (int)queuePosition
@@ -98,6 +112,10 @@
 - (void)setError:(BOOL)anError
 {
     error = anError;
+    [self willChangeValueForKey:@"status"];
+    [self didChangeValueForKey:@"status"];
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (BOOL)error
@@ -109,6 +127,8 @@
 {
     [errorMessage release];
     errorMessage = [aMessage copy];
+    [self willChangeValueForKey:@"statusMessage"];
+    [self didChangeValueForKey:@"statusMessage"];
 }
 
 - (NSString*)errorMessage
@@ -120,6 +140,10 @@
 {
     [URL release];
     URL = [anURL retain];
+    [self willChangeValueForKey:@"path"];
+    [self didChangeValueForKey:@"path"];
+    [self willChangeValueForKey:@"filename"];
+    [self didChangeValueForKey:@"filename"];
 }
 
 - (NSURL*)URL
@@ -149,6 +173,8 @@
 {
     [artist release];
     artist = [anArtist copy];
+    [self willChangeValueForKey:@"display"];
+    [self didChangeValueForKey:@"display"];
 }
 
 - (NSString*)artist
@@ -209,6 +235,8 @@
 - (void)setTotalFrames:(long long)aTotalFrames
 {
     totalFrames = aTotalFrames;
+    [self willChangeValueForKey:@"length"];
+    [self didChangeValueForKey:@"length"];
 }
 
 - (long long)totalFrames
@@ -296,35 +324,35 @@
 
 // The following read-only keys depend on the values of other properties
 
-+ (NSSet *)keyPathsForValuesAffectingDisplay
-{
-    return [NSSet setWithObjects:@"artist",@"title",nil];
-}
+//+ (NSSet *)keyPathsForValuesAffectingDisplay
+//{
+//    return [NSSet setWithObjects:@"artist",@"title",nil];
+//}
 
-+ (NSSet *)keyPathsForValuesAffectingLength
-{
-    return [NSSet setWithObject:@"totalFrames"];
-}
+//+ (NSSet *)keyPathsForValuesAffectingLength
+//{
+//    return [NSSet setWithObject:@"totalFrames"];
+//}
 
-+ (NSSet *)keyPathsForValuesAffectingPath
-{
-    return [NSSet setWithObject:@"URL"];
-}
+//+ (NSSet *)keyPathsForValuesAffectingPath
+//{
+//    return [NSSet setWithObject:@"URL"];
+//}
 
-+ (NSSet *)keyPathsForValuesAffectingFilename
-{
-    return [NSSet setWithObject:@"URL"];
-}
+//+ (NSSet *)keyPathsForValuesAffectingFilename
+//{
+//    return [NSSet setWithObject:@"URL"];
+//}
 
-+ (NSSet *)keyPathsForValuesAffectingStatus
-{
-	return [NSSet setWithObjects:@"current",@"queued", @"error", @"stopAfter", nil];
-}
+//+ (NSSet *)keyPathsForValuesAffectingStatus
+//{
+//	return [NSSet setWithObjects:@"current",@"queued", @"error", @"stopAfter", nil];
+//}
 
-+ (NSSet *)keyPathsForValuesAffectingStatusMessage
-{
-	return [NSSet setWithObjects:@"current", @"queued", @"queuePosition", @"error", @"errorMessage", @"stopAfter", nil];
-}
+//+ (NSSet *)keyPathsForValuesAffectingStatusMessage
+//{
+//	return [NSSet setWithObjects:@"current", @"queued", @"queuePosition", @"error", @"errorMessage", @"stopAfter", nil];
+//}
 
 - (NSString *)description
 {
@@ -356,6 +384,8 @@
 {
     [title release];
     title = [aTitle copy];
+    [self willChangeValueForKey:@"display"];
+    [self didChangeValueForKey:@"display"];
 }
 
 - (NSString *)title

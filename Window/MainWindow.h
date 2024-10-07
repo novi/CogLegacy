@@ -11,7 +11,7 @@
 
 @class PositionSlider;
 
-@interface MainWindow : DualWindow {
+@interface MainWindow : NSWindow {
     PositionSlider* _positionSlider;
 }
 

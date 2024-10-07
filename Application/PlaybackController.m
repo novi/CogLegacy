@@ -28,10 +28,10 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
     return playbackStatus;
 }
 
-+ (NSSet *)keyPathsForValuesAffectingSeekable
-{
-    return [NSSet setWithObjects:@"playlistController.currentEntry",@"playlistController.currentEntry.seekable",nil];
-}
+//+ (NSSet *)keyPathsForValuesAffectingSeekable
+//{
+//    return [NSSet setWithObjects:@"playlistController.currentEntry",@"playlistController.currentEntry.seekable",nil];
+//}
 
 - (id)init
 {
@@ -70,6 +70,8 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 	[audioPlayer setVolume:volume];
 
 	[self setSeekable:NO];
+    [playlistController addObserver:self forKeyPath:@"currentEntry" options:(NSKeyValueObservingOptionNew) context:nil];
+    [playlistController addObserver:self forKeyPath:@"currentEntry.seekable" options:(NSKeyValueObservingOptionNew) context:nil];
 }
 	
 - (IBAction)playPauseResume:(id)sender
@@ -522,7 +524,23 @@ NSString *CogPlaybackDidStopNotficiation = @"CogPlaybackDidStopNotficiation";
 
 - (BOOL)seekable
 {
-	return seekable && [[playlistController currentEntry] seekable];
+	BOOL value = seekable && [[playlistController currentEntry] seekable];
+//    NSLog(@"load seekable %d", value);
+    return value;
+}
+
+// --- KVO
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+//    NSLog(@"observe key %@", keyPath);
+    if ([keyPath isEqualToString:@"currentEntry"] || [keyPath isEqualToString:@"currentEntry.seekable"]) {
+        [self willChangeValueForKey:@"seekable"];
+        [self didChangeValueForKey:@"seekable"];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+    
 }
 
 

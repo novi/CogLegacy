@@ -323,12 +323,15 @@
 	[playlistController setSelectionIndex:index];
     // TODO: 10.4
 //	[self performSelectorInBackground:@selector(loadInfoForEntries:) withObject:entries];
-    [self loadInfoForEntries:entries];
-	return entries;
+//    [self loadInfoForEntries:entries];
+    [NSThread detachNewThreadSelector:@selector(loadInfoForEntries:) toTarget:self withObject:entries];
+    return entries;
 }
 
 - (void)loadInfoForEntries:(NSArray *)entries
 {
+    NSAutoreleasePool *outerPool =[[NSAutoreleasePool alloc] init];
+    
     NSEnumerator* enumerator = [entries objectEnumerator];
     PlaylistEntry *pe;
     while (pe = [enumerator nextObject])
@@ -355,6 +358,8 @@
 	[queue waitUntilAllOperationsAreFinished];
 
 	[playlistController performSelectorOnMainThread:@selector(updateTotalTime) withObject:nil waitUntilDone:NO];
+    
+    [outerPool release];
 }
 
 - (NSDictionary *)readEntryInfo:(PlaylistEntry *)pe

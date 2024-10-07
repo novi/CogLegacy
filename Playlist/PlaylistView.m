@@ -111,13 +111,13 @@
 	{
 		[sender setState:NSOnState];
 
-//		[tc setHidden: NO]; // TODO: 10.4
+		[tc setHidden: NO];
 	}
 	else
 	{
 		[sender setState:NSOffState];
 		
-//		[tc setHidden: YES]; // TODO: 10.4
+		[tc setHidden: YES];
 	}
 }
 

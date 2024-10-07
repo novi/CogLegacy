@@ -72,6 +72,7 @@
 							<string key="NSFrame">{{17, 5}, {649, 15}}</string>
 							<reference key="NSSuperview" ref="955312553"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="14436359">
 								<int key="NSCellFlags">67108928</int>
@@ -705,11 +706,9 @@ AAAAAAAAAAAAAAAAA</bytes>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="292934259">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<string key="NSFrameSize">{481, 0}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
@@ -2114,7 +2113,7 @@ AAAAAAAAAAAAAAAAA</bytes>
 				<string key="NSName"/>
 			</object>
 			<object class="NSCustomView" id="109024969">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2123,7 +2122,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrame">{{43, 39}, {15, 120}}</string>
 						<reference key="NSSuperview" ref="109024969"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSSliderCell" key="NSCell" id="744949030">
 							<int key="NSCellFlags">67371264</int>
@@ -2144,8 +2142,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					</object>
 				</object>
 				<string key="NSFrameSize">{97, 177}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="964856847"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -6008,7 +6004,7 @@ AAAAAAAAAAAAAAAAA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{347, 94}, {691, 397}}</string>
-					<boolean value="NO"/>
+					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6543,7 +6539,7 @@ AAAAAAAAAAAAAAAAA</bytes>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">MainWindow</string>
-					<string key="superclassName">DualWindow</string>
+					<string key="superclassName">NSWindow</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/MainWindow.h</string>
@@ -6943,13 +6939,17 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>redo:</string>
 							<string>scrollToCurrentEntry:</string>
 							<string>shufflePlaylist:</string>
 							<string>sortByPath:</string>
 							<string>toggleColumn:</string>
+							<string>undo:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -6960,13 +6960,19 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>redo:</string>
 							<string>scrollToCurrentEntry:</string>
 							<string>shufflePlaylist:</string>
 							<string>sortByPath:</string>
 							<string>toggleColumn:</string>
+							<string>undo:</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">redo:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">scrollToCurrentEntry:</string>
 								<string key="candidateClassName">id</string>
@@ -6981,6 +6987,10 @@ AAAAAAAAAAAAAAAAA</bytes>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">toggleColumn:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">undo:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

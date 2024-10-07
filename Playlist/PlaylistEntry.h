@@ -46,12 +46,12 @@
 	BOOL metadataLoaded;
 }
 
-+ (NSSet *)keyPathsForValuesAffectingDisplay;
-+ (NSSet *)keyPathsForValuesAffectingLength;
-+ (NSSet *)keyPathsForValuesAffectingPath;
-+ (NSSet *)keyPathsForValuesAffectingFilename;
-+ (NSSet *)keyPathsForValuesAffectingStatus;
-+ (NSSet *)keyPathsForValuesAffectingStatusMessage;
+//+ (NSSet *)keyPathsForValuesAffectingDisplay;
+//+ (NSSet *)keyPathsForValuesAffectingLength;
+//+ (NSSet *)keyPathsForValuesAffectingPath;
+//+ (NSSet *)keyPathsForValuesAffectingFilename;
+//+ (NSSet *)keyPathsForValuesAffectingStatus;
+//+ (NSSet *)keyPathsForValuesAffectingStatusMessage;
 
 //@property(readonly) NSString *display;
 //@property(retain, readonly) NSNumber *length;

@@ -101,11 +101,11 @@ static NSSize PositionSliderSize = {96, 15};
 
 - (void)awakeFromNib
 {
-	if ([self hiddenDefaultsKey]) {
-		[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:[self hiddenDefaultsKey]]];
-	}
+//	if ([self hiddenDefaultsKey]) {
+//		[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:[self hiddenDefaultsKey]]];
+//	}
 	[self setupToolbar];
-	[super awakeFromNib];
+//	[super awakeFromNib];
 }
 
 @end

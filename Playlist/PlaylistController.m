@@ -84,11 +84,11 @@
 	
 	
 	
-	NSValueTransformer *statusImageTransformer = [[[StatusImageTransformer alloc] init] autorelease];
+	NSValueTransformer *statusImageTransformer = (id)[[[StatusImageTransformer alloc] init] autorelease];
     [NSValueTransformer setValueTransformer:statusImageTransformer
                                     forName:@"StatusImageTransformer"];
 									
-	NSValueTransformer *toggleQueueTitleTransformer = [[[ToggleQueueTitleTransformer alloc] init] autorelease];
+	NSValueTransformer *toggleQueueTitleTransformer = (id)[[[ToggleQueueTitleTransformer alloc] init] autorelease];
     [NSValueTransformer setValueTransformer:toggleQueueTitleTransformer
                                     forName:@"ToggleQueueTitleTransformer"];
 }
@@ -172,6 +172,19 @@
 	hoursAndMinutes = ldiv(sec/60, 60);
 	
 	[self setTotalTime:[NSString stringWithFormat:@"%ld hours %ld minutes %d seconds", hoursAndMinutes.quot, hoursAndMinutes.rem, sec%60]];
+}
+
+-(int)numberOfRowsInTableView:(NSTableView *)tableView
+{
+//    https://tredje.se/dev/trouble/post/illegal-nstableview-data-source-error-when-using-content-binding
+//    NSLog(@"numberOfRowsInTableView");
+    return 0;
+}
+
+-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
+{
+//    NSLog(@"objectValueForTableColumn row %d, col %@", row, [tableColumn identifier]);
+    return nil;
 }
 
 - (void)tableView:(NSTableView *)tableView
@@ -669,10 +682,12 @@
 		[tableView scrollRowToVisible:pe.index];
 	
 	[pe retain];
-	[currentEntry release];
 	
+    [self willChangeValueForKey:@"currentEntry"];
+    [currentEntry release];
 	currentEntry = pe;
-}	
+    [self didChangeValueForKey:@"currentEntry"];
+}
 
 - (void)setShuffle:(ShuffleMode)s
 {
