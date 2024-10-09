@@ -111,7 +111,6 @@
 		17D1B1680F632ABB00694C57 /* BlankZeroFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D1B1630F632ABB00694C57 /* BlankZeroFormatter.m */; };
 		17D1B1690F632ABB00694C57 /* IndexFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D1B1650F632ABB00694C57 /* IndexFormatter.m */; };
 		17D1B16A0F632ABB00694C57 /* SecondsFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D1B1670F632ABB00694C57 /* SecondsFormatter.m */; };
-		17D1B1DC0F6330D400694C57 /* Feedback.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17D1B1DA0F6330D400694C57 /* Feedback.xib */; };
 		17D1B25D0F633A4F00694C57 /* PreferencePluginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D1B25C0F633A4F00694C57 /* PreferencePluginController.m */; };
 		17D1B27D0CF8B2830028F5B5 /* cue.icns in Resources */ = {isa = PBXBuildFile; fileRef = 17D1B2760CF8B2830028F5B5 /* cue.icns */; };
 		17D1B27E0CF8B2830028F5B5 /* it.icns in Resources */ = {isa = PBXBuildFile; fileRef = 17D1B2770CF8B2830028F5B5 /* it.icns */; };
@@ -150,8 +149,6 @@
 		8E07AB790AAC930B00A4B32F /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E07AB770AAC930B00A4B32F /* PreferencesController.m */; };
 		8E1296DB0A2BA9CE00443124 /* PlaylistHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E1296D90A2BA9CE00443124 /* PlaylistHeaderView.m */; };
 		8E6889240AAA403C00AD3950 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E6889230AAA403C00AD3950 /* Carbon.framework */; };
-		8E75756E09F31D5A0080F1EE /* FeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E75752509F31D5A0080F1EE /* FeedbackController.m */; };
-		8E75756F09F31D5A0080F1EE /* FeedbackSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E75752709F31D5A0080F1EE /* FeedbackSocket.m */; };
 		8E75757109F31D5A0080F1EE /* DNDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E75752C09F31D5A0080F1EE /* DNDArrayController.m */; };
 		8E75757209F31D5A0080F1EE /* PlaylistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E75752E09F31D5A0080F1EE /* PlaylistController.m */; };
 		8E75757309F31D5A0080F1EE /* PlaylistEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E75753009F31D5A0080F1EE /* PlaylistEntry.m */; };
@@ -1852,7 +1849,6 @@
 				17B7CF5D0F5A05EE00A47027 /* playBadge.png in Resources */,
 				17B7CF5E0F5A05EE00A47027 /* stopBadge.png in Resources */,
 				17D1B0D20F6320EA00694C57 /* InfoInspector.xib in Resources */,
-				17D1B1DC0F6330D400694C57 /* Feedback.xib in Resources */,
 				1778D3B00F645A190037E7A0 /* missingArt.png in Resources */,
 				1745CBA50F661DBB00E513F7 /* shuffle_albums.png in Resources */,
 			);
@@ -1866,8 +1862,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				8E75756E09F31D5A0080F1EE /* FeedbackController.m in Sources */,
-				8E75756F09F31D5A0080F1EE /* FeedbackSocket.m in Sources */,
 				8E75757109F31D5A0080F1EE /* DNDArrayController.m in Sources */,
 				8E75757209F31D5A0080F1EE /* PlaylistController.m in Sources */,
 				8E75757309F31D5A0080F1EE /* PlaylistEntry.m in Sources */,

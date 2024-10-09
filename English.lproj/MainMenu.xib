@@ -2189,9 +2189,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 			<object class="NSCustomObject" id="895277152">
 				<string key="NSClassName">InfoWindowController</string>
 			</object>
-			<object class="NSCustomObject" id="242543650">
-				<string key="NSClassName">FeedbackController</string>
-			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
@@ -4282,14 +4279,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					<int key="connectionID">2426</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showWindow:</string>
-						<reference key="source" ref="242543650"/>
-						<reference key="destination" ref="296921596"/>
-					</object>
-					<int key="connectionID">2436</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: shuffle</string>
 						<reference key="source" ref="474556434"/>
@@ -5616,11 +5605,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 						<reference key="parent" ref="293114310"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2434</int>
-						<reference key="object" ref="242543650"/>
-						<reference key="parent" ref="293114310"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">2438</int>
 						<reference key="object" ref="2708"/>
 						<object class="NSMutableArray" key="children">
@@ -5817,7 +5801,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					<string>2405.IBPluginDependency</string>
 					<string>2417.IBPluginDependency</string>
 					<string>2422.IBPluginDependency</string>
-					<string>2434.IBPluginDependency</string>
 					<string>2438.IBPluginDependency</string>
 					<string>2439.IBPluginDependency</string>
 					<string>2440.IBPluginDependency</string>
@@ -6014,7 +5997,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{398, 631}, {481, 0}}</string>
 					<boolean value="NO"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6418,92 +6400,6 @@ AAAAAAAAAAAAAAAAA</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/EntriesController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">FeedbackController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>cancel:</string>
-							<string>sendFeedback:</string>
-						</object>
-						<object class="NSArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>cancel:</string>
-							<string>sendFeedback:</string>
-						</object>
-						<object class="NSArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">cancel:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">sendFeedback:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fromView</string>
-							<string>messageView</string>
-							<string>sendingIndicator</string>
-							<string>subjectView</string>
-						</object>
-						<object class="NSArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSTextField</string>
-							<string>NSTextView</string>
-							<string>NSProgressIndicator</string>
-							<string>NSTextField</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fromView</string>
-							<string>messageView</string>
-							<string>sendingIndicator</string>
-							<string>subjectView</string>
-						</object>
-						<object class="NSArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fromView</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">messageView</string>
-								<string key="candidateClassName">NSTextView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">sendingIndicator</string>
-								<string key="candidateClassName">NSProgressIndicator</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">subjectView</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/FeedbackController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
