@@ -28,9 +28,12 @@ static NSString* RepeatButtonToolbarItemIdentifier = @"Repeat";
 static NSString* InfoButtonToolbarItemIdentifier = @"Info";
 static NSString* FileTreeButtonToolbarItemIdentifier = @"FileTree";
 
+static NSString* SearchToolbarItemIdentifier = @"Search";
+
 static NSString* DummyButtonToolbarItemIdentifier = @"Dummy";
 
 static NSSize PositionSliderSize = {96, 15};
+static NSSize SearchFieldSize = {96, 22};
 
 @interface DummyView : NSView
 
@@ -77,6 +80,54 @@ static NSSize PositionSliderSize = {96, 15};
     [_positionSlider bind:@"enabled" toObject:[[self appController] valueForKey:@"playbackController"] withKeyPath:@"seekable" options:
      [NSDictionary dictionary]];
     
+    
+    NSSearchField* searchField = [[NSSearchField alloc] initWithFrame:NSMakeRect(0, 0, SearchFieldSize.width, SearchFieldSize.height)];
+    {
+        NSSearchFieldCell* cell = searchField.cell;
+        [searchField setContinuous:NO];
+        cell.sendsActionOnEndEditing = YES;
+        cell.sendsSearchStringImmediately = NO;
+        cell.sendsWholeSearchString = YES;
+    }
+    [searchField bind:@"predicate" toObject:[[self appController] valueForKey:@"playlistController"] withKeyPath:@"filterPredicate"
+              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                       @"All",
+                       NSDisplayNameBindingOption,
+                       @"(title contains[cd] $value) OR (artist contains[cd] $value) OR (album contains[cd] $value) OR (genre contains[cd] $value)",
+                       NSPredicateFormatBindingOption,
+                       //                           [NSNumber numberWithBool:NO],
+                       //                           NSValidatesImmediatelyBindingOption,
+                       nil ]];
+    [searchField bind:@"predicate2" toObject:[[self appController] valueForKey:@"playlistController"] withKeyPath:@"filterPredicate"
+              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                       @"Title",
+                       NSDisplayNameBindingOption,
+                       @"title contains[cd] $value",
+                       NSPredicateFormatBindingOption,
+                       nil ]];
+    [searchField bind:@"predicate3" toObject:[[self appController] valueForKey:@"playlistController"] withKeyPath:@"filterPredicate"
+              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                       @"Artist",
+                       NSDisplayNameBindingOption,
+                       @"artist contains[cd] $value",
+                       NSPredicateFormatBindingOption,
+                       nil ]];
+    [searchField bind:@"predicate4" toObject:[[self appController] valueForKey:@"playlistController"] withKeyPath:@"filterPredicate"
+              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                       @"Album",
+                       NSDisplayNameBindingOption,
+                       @"album contains[cd] $value",
+                       NSPredicateFormatBindingOption,
+                       nil ]];
+    [searchField bind:@"predicate5" toObject:[[self appController] valueForKey:@"playlistController"] withKeyPath:@"filterPredicate"
+              options:[NSDictionary dictionaryWithObjectsAndKeys:
+                       @"Genre",
+                       NSDisplayNameBindingOption,
+                       @"genre contains[cd] $value",
+                       NSPredicateFormatBindingOption,
+                       nil ]];
+    _searchField = searchField;
+    
     NSToolbar* toolbar = [[[NSToolbar alloc] initWithIdentifier:MainToolbarIdentifier] autorelease];
     toolbar.displayMode = NSToolbarDisplayModeIconOnly;
     toolbar.sizeMode = NSToolbarSizeModeRegular;
@@ -84,6 +135,11 @@ static NSSize PositionSliderSize = {96, 15};
     self.showsToolbarButton = NO;
     
     self.toolbar = toolbar;
+}
+
+- (IBAction)startSearch:(id)sender
+{
+    [_searchField becomeFirstResponder];
 }
 
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
@@ -128,6 +184,8 @@ static NSSize PositionSliderSize = {96, 15};
             NSToolbarSpaceItemIdentifier,
             InfoButtonToolbarItemIdentifier,
             FileTreeButtonToolbarItemIdentifier,
+            NSToolbarSpaceItemIdentifier,
+            SearchToolbarItemIdentifier,
 //            NSToolbarFlexibleSpaceItemIdentifier,
             nil];
 }
@@ -246,6 +304,11 @@ static NSSize PositionSliderSize = {96, 15};
         [item setView:button];
         [item setMinSize:buttonSize];
         [item setMaxSize:buttonSize];
+    } else if (itemIdentifier == SearchToolbarItemIdentifier) {
+        item.label = @"Search";
+        [item setView:_searchField];
+        [item setMinSize:SearchFieldSize];
+        [item setMaxSize:SearchFieldSize];
     }
     return item;
 }

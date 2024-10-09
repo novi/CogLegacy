@@ -13,6 +13,9 @@
 
 @interface MainWindow : NSWindow {
     PositionSlider* _positionSlider;
+    NSSearchField* _searchField;
 }
+
+- (IBAction)startSearch:(id)sender;
 
 @end
