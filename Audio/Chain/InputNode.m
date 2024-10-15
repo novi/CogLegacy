@@ -28,6 +28,8 @@
 		NSLog(@"Couldn't open decoder...");
 		return NO;
 	}
+    
+    NSLog(@"Input node open decoder %@", decoder);
 	
 	NSDictionary *properties = [decoder properties];
 	int bitsPerSample = [[properties objectForKey:@"bitsPerSample"] intValue];

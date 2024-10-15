@@ -128,6 +128,8 @@ static OSStatus ACInputProc(AudioConverterRef inAudioConverter, UInt32* ioNumber
 			NSLog(@"Error mapping channels %i", stat);
 		}	
 	}
+    
+    NSLog(@"Converter node setup. showing in to out format...");
 	
 	PrintStreamDesc(&inf);
 	PrintStreamDesc(&outf);

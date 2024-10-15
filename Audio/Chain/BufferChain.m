@@ -47,7 +47,7 @@
 	[self buildChain];
 	
 	id<CogSource> source = [AudioSource audioSourceForURL:url];
-	NSLog(@"Opening: %@", url);
+	NSLog(@"Opening: %@, source: %@", url, source);
 	if (![source open:url])
 	{
 		NSLog(@"Couldn't open source...");
@@ -82,7 +82,7 @@
 
 - (void)launchThreads
 {
-	NSLog(@"Properties: %@", [inputNode properties]);
+	NSLog(@"Input Properties: %@", [inputNode properties]);
 
 	[inputNode launchThread];
 	[converterNode launchThread];

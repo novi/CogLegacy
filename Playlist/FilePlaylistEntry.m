@@ -29,8 +29,10 @@
 		if ([URL fragment] != nil) {
 			after = [@"#" stringByAppendingString:[URL fragment]];
 		}
-		
-		[super setURL:[NSURL URLWithString:[[[NSURL fileURLWithPath: [NSString stringWithUTF8String:(const char *)path]] absoluteString] stringByAppendingString:after]]];
+        [self willChangeValueForKey:@"path"];
+		[URL release];
+		URL = [[NSURL URLWithString:[[[NSURL fileURLWithPath: [NSString stringWithUTF8String:(const char *)path]] absoluteString] stringByAppendingString:after]] retain];
+        [self willChangeValueForKey:@"path"];
 	}
 	
     return URL;

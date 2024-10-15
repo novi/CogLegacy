@@ -138,13 +138,10 @@
 
 - (void)setURL:(NSURL*)anURL
 {
-    // may cause infinite recursive loop
-//    [self willChangeValueForKey:@"path"];
-//    [self willChangeValueForKey:@"filename"];
-    [URL release];
-    URL = [anURL retain];
     [self willChangeValueForKey:@"path"];
     [self willChangeValueForKey:@"filename"];
+    [URL release];
+    URL = [anURL retain];
     [self didChangeValueForKey:@"path"];
     [self didChangeValueForKey:@"filename"];
 }
