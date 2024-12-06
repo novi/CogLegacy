@@ -22,10 +22,14 @@
 	id finalNode; //Final buffer in the chain.
 	
 	id controller;
+    
+    BOOL openSuccess; // for direct mode
 }
 
 - (id)initWithController:(id)c;
 - (void)buildChain;
+
+- (BOOL)openInMainThread:(NSURL *)url; // for direct mode
 
 - (BOOL)open:(NSURL *)url withOutputFormat:(AudioStreamBasicDescription)outputFormat;
 

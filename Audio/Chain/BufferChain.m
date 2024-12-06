@@ -46,6 +46,19 @@
     
 }
 
+- (void)openInMainThread_:(NSURL *)url
+{
+    AudioStreamBasicDescription desc;
+    openSuccess = [self open:url withOutputFormat:desc];
+}
+
+-(BOOL)openInMainThread:(NSURL *)url
+{
+    [self performSelectorOnMainThread:@selector(openInMainThread_:) withObject:url waitUntilDone:NO];
+    return openSuccess;
+}
+
+
 - (BOOL)open:(NSURL *)url withOutputFormat:(AudioStreamBasicDescription)outputFormat
 {	
 	[self setStreamURL:url];
@@ -82,6 +95,7 @@
     [[player output] setupWithInputFormat:*inputNodeOutputFormat];
     
 
+    [self launchThreads];
 //		return NO;
 
 	return YES;
@@ -89,7 +103,7 @@
 
 - (BOOL)openWithInput:(InputNode *)i withOutputFormat:(AudioStreamBasicDescription)outputFormat
 {
-    [[NSAlert alertWithMessageText:@"TODO: reuse is not supported." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:nil] runModal];
+    [[NSAlert alertWithMessageText:@"TODO: reuse is not supported." defaultButton:@"Dismiss" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
     return NO;
     
 	NSLog(@"New buffer chain!");

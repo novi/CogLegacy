@@ -104,7 +104,7 @@
 	
 	outputLaunched = NO;
 
-	[bufferChain launchThreads];
+//	[bufferChain launchThreads]; // TODO: not in direct mode
 }
 
 - (void)stop
@@ -223,7 +223,7 @@
 	[newChain setUserInfo: nextStreamUserInfo];
 	
 	[newChain setShouldContinue:YES];
-	[newChain launchThreads];
+//	[newChain launchThreads]; // TODO: not in direct mode
 	
 	[chainQueue insertObject:newChain atIndex:[chainQueue count]];
 }
@@ -265,19 +265,20 @@
 			}
 		}
 		
-		while (![newChain open:nextStream withOutputFormat:[output format]]) 
-		{
-			if (nextStream == nil)
-			{
-				[newChain release];
-				return YES;
-			}
-			
-			[newChain release];
-			[self requestNextStream: nextStreamUserInfo];
-
-			newChain = [[BufferChain alloc] initWithController:self];
-		}
+        // TODO: no in direct mode
+//		while (![newChain open:nextStream withOutputFormat:[output format]]) 
+//		{
+//			if (nextStream == nil)
+//			{
+//				[newChain release];
+//				return YES;
+//			}
+//			
+//			[newChain release];
+//			[self requestNextStream: nextStreamUserInfo];
+//
+//			newChain = [[BufferChain alloc] initWithController:self];
+//		}
 		
 		[self addChainToQueue:newChain];
 
@@ -307,7 +308,12 @@
 	
 		bufferChain = [chainQueue objectAtIndex:0];
 		[bufferChain retain];
-		
+        
+        // TODO: for direct mode
+        [self setShouldContinue:YES];
+		[bufferChain openInMainThread:nextStream];
+        //
+        
 		NSLog(@"New!!! %@ %@", bufferChain, [[bufferChain inputNode] decoder]);
 		
 		[chainQueue removeObjectAtIndex:0];

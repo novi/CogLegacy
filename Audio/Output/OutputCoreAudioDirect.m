@@ -13,11 +13,19 @@
 
 @interface OutputCoreAudioDirect (Private)
 
+- (void)stopCurrentForMainThread;
+- (BOOL)isPaused;
 - (BOOL)stopCurrent;
 
 @end
 
 @implementation OutputCoreAudioDirect
+
+
+-(BOOL)isPaused
+{
+    return isPaused;
+}
 
 #define FILE_STREAM_DEBUG 0
 
@@ -36,21 +44,29 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 	OutputCoreAudioDirect *output = (id)inClientData;
 	OSStatus err = noErr;
     
+    assert(outOutputData->mNumberBuffers == 1);
+    
 	void *readPointer = outOutputData->mBuffers[0].mData;
 	
 	int amountToRead, amountRead;
+    amountToRead = outOutputData->mBuffers[0].mDataByteSize;
+    
+    if (output->outputController == nil) {
+        NSLog(@"outputController is nil! %p", output);
+    }
+    
+    if ([output isPaused]) {
+        memset(readPointer, 0, amountToRead);
+        return noErr;
+    }
     
 	if ([output->outputController shouldContinue] == NO)
 	{
-//        AudioOutputUnitStop(output->outputUnit);
-        //		[output stop];
-		
+        memset(readPointer, 0, amountToRead);
+		[output performSelectorOnMainThread:@selector(stopCurrentForMainThread) withObject:nil waitUntilDone:NO];
 		return err;
 	}
-	
-    assert(outOutputData->mNumberBuffers == 1);
     
-	amountToRead = outOutputData->mBuffers[0].mDataByteSize;
 	amountRead = [output->outputController readData:(readPointer) amount:amountToRead];
 
 #if FILE_STREAM_DEBUG
@@ -115,7 +131,7 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
             debugFileOut = [fileHandle retain];
         }        
 #endif
-    
+        
         outputController = c;
         isRunning = NO;
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.outputDevice" options:0 context:NULL];
@@ -131,7 +147,7 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 - (BOOL)setOutputDevice:(AudioDeviceID)anOutputDevice
 {
     if (isRunning) {
-        [[NSAlert alertWithMessageText:@"Output Device already started." defaultButton:@"Dismiss" alternateButton:nil otherButton:nil informativeTextWithFormat:nil] runModal];
+        [[NSAlert alertWithMessageText:@"Output Device already started." defaultButton:@"Dismiss" alternateButton:nil otherButton:nil informativeTextWithFormat:@""] runModal];
         return NO;
     }
     outputDevice = anOutputDevice;
@@ -145,12 +161,12 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 
 - (void)pause
 {
-    
+    isPaused = YES;
 }
 
 - (void)resume
 {
-    
+    isPaused = NO;
 }
 
 - (void)stop
@@ -161,6 +177,11 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 - (void)setVolume:(double) v
 {
     // no volume supported
+}
+
+- (void)stopCurrentForMainThread
+{
+    [self stopCurrent];
 }
 
 - (BOOL)stopCurrent
@@ -186,8 +207,8 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
         return NO;
     }
     
-    outputController = nil;
     isRunning = NO;
+    NSLog(@"Output stopped. %p", self);
     return YES;
 }
 
@@ -257,7 +278,17 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
         return NO;
     }
     isRunning = YES;
+    NSLog(@"Output started. %p", self);
     return YES;
+}
+
+- (void)dealloc
+{
+	[self stopCurrent];
+	
+	[[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.outputDevice"];
+    
+	[super dealloc];
 }
 
 #pragma mark - KVO

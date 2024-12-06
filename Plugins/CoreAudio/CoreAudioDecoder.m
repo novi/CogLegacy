@@ -182,7 +182,14 @@ AudioDeviceID getCurrentOutputDevice();
     assert(result == bufferList.mBuffers[0].mDataByteSize);
 #endif
     
+    
+    
 //	return frameCount; // TODO: not direct mode
+    
+    // for direct mode
+    if (frameCount <= 0) {
+        return 0;
+    }
     return frames;
 }
 

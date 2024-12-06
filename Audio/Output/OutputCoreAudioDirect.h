@@ -19,6 +19,7 @@
     
     AudioStreamBasicDescription deviceFormat;
     BOOL isRunning;
+    BOOL isPaused;
 }
 
 - (OutputCoreAudioDirect*)initWithController:(OutputNode *)c;
