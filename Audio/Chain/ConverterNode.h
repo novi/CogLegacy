@@ -14,6 +14,8 @@
 
 #import "Node.h"
 
+void PrintStreamDesc (AudioStreamBasicDescription *inDesc);
+
 @interface ConverterNode : Node {
 	AudioConverterRef converter;
 	void *callbackBuffer;

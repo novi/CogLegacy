@@ -35,9 +35,15 @@
 	[converterNode release];
 	
 	inputNode = [[InputNode alloc] initWithController:self previous:nil];
-	converterNode = [[ConverterNode alloc] initWithController:self previous:inputNode];
-	
-	finalNode = converterNode;
+	BOOL useConverterNode = NO; // TODO: only in non direct mode
+    if (useConverterNode) {
+        converterNode = [[ConverterNode alloc] initWithController:self previous:inputNode];
+        finalNode = converterNode;
+    } else {
+        converterNode = nil;
+        finalNode = inputNode;
+    }
+    
 }
 
 - (BOOL)open:(NSURL *)url withOutputFormat:(AudioStreamBasicDescription)outputFormat
@@ -57,8 +63,24 @@
 	if (![inputNode openWithSource:source])
 		return NO;
 
-	if (![converterNode setupWithInputFormat:propertiesToASBD([inputNode properties]) outputFormat:outputFormat])
-		return NO;
+	if (converterNode) {
+        if (![converterNode setupWithInputFormat:propertiesToASBD([inputNode properties]) outputFormat:outputFormat])
+            return NO;
+    }
+    
+    // TODO: only in direct mode
+    // setup output node with
+    AudioPlayer* player = controller;
+    AudioStreamBasicDescription* inputNodeOutputFormat = NULL;
+    if ([[inputNode decoder] respondsToSelector:@selector(outputFormatForDirectMode)]) {
+        inputNodeOutputFormat = [[[inputNode decoder] outputFormatForDirectMode] pointerValue];
+    }
+    if (!inputNodeOutputFormat) {
+        NSLog(@"not supported direct mode");
+        return NO;
+    }
+    [[player output] setupWithInputFormat:*inputNodeOutputFormat];
+    
 
 //		return NO;
 
@@ -67,6 +89,9 @@
 
 - (BOOL)openWithInput:(InputNode *)i withOutputFormat:(AudioStreamBasicDescription)outputFormat
 {
+    [[NSAlert alertWithMessageText:@"TODO: reuse is not supported." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:nil] runModal];
+    return NO;
+    
 	NSLog(@"New buffer chain!");
 	[self buildChain];
 
@@ -82,7 +107,7 @@
 
 - (void)launchThreads
 {
-	NSLog(@"Input Properties: %@", [inputNode properties]);
+	NSLog(@"LaunchThreads, Input Properties: %@", [inputNode properties]);
 
 	[inputNode launchThread];
 	[converterNode launchThread];

@@ -28,6 +28,8 @@
 @interface CoreAudioDecoder : NSObject <CogDecoder>
 {
 	ExtAudioFileRef			_in;
+    AudioStreamBasicDescription fileFormat;
+    AudioStreamBasicDescription outputFormat;
 
 	int bitrate;
 	int bitsPerSample;
@@ -35,5 +37,7 @@
 	float frequency;
 	long totalFrames;
 }
+
+-(NSValue*)outputFormatForDirectMode;
 
 @end

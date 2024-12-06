@@ -136,6 +136,7 @@
 		17F6C8070F603701000D9DA9 /* PlaybackEventController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17F6C8060F603701000D9DA9 /* PlaybackEventController.m */; };
 		17FAEBAC0F662985007C8707 /* ToolTipTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FAEBAB0F662985007C8707 /* ToolTipTextField.m */; };
 		523822EA2CB2DFF700990800 /* NSOperation-compat.m in Sources */ = {isa = PBXBuildFile; fileRef = 523822E92CB2DFF400990800 /* NSOperation-compat.m */; };
+		527DB50F2D0309D100F62F5A /* CoreAudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DB50E2D0309D100F62F5A /* CoreAudioUtils.m */; };
 		5604D45B0D60349B004F5C5D /* SpotlightWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5604D4590D60349B004F5C5D /* SpotlightWindowController.m */; };
 		5604D4F60D60726E004F5C5D /* SpotlightPlaylistEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5604D4F50D60726E004F5C5D /* SpotlightPlaylistEntry.m */; };
 		56462EAF0D6341F6000AB68C /* SpotlightTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 56462EAE0D6341F6000AB68C /* SpotlightTransformers.m */; };
@@ -721,6 +722,8 @@
 		523822E72CB2DFF400990800 /* NSInteger-compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSInteger-compat.h"; sourceTree = "<group>"; };
 		523822E82CB2DFF400990800 /* NSOperation-compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSOperation-compat.h"; sourceTree = "<group>"; };
 		523822E92CB2DFF400990800 /* NSOperation-compat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSOperation-compat.m"; sourceTree = "<group>"; };
+		527DB50D2D0309D100F62F5A /* CoreAudioUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioUtils.h; sourceTree = "<group>"; };
+		527DB50E2D0309D100F62F5A /* CoreAudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioUtils.m; sourceTree = "<group>"; };
 		5604D4590D60349B004F5C5D /* SpotlightWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpotlightWindowController.m; path = Spotlight/SpotlightWindowController.m; sourceTree = "<group>"; };
 		5604D45A0D60349B004F5C5D /* SpotlightWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpotlightWindowController.h; path = Spotlight/SpotlightWindowController.h; sourceTree = "<group>"; };
 		5604D4F40D60726E004F5C5D /* SpotlightPlaylistEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpotlightPlaylistEntry.h; path = Spotlight/SpotlightPlaylistEntry.h; sourceTree = "<group>"; };
@@ -946,6 +949,8 @@
 				523822E72CB2DFF400990800 /* NSInteger-compat.h */,
 				523822E82CB2DFF400990800 /* NSOperation-compat.h */,
 				523822E92CB2DFF400990800 /* NSOperation-compat.m */,
+				527DB50D2D0309D100F62F5A /* CoreAudioUtils.h */,
+				527DB50E2D0309D100F62F5A /* CoreAudioUtils.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1935,6 +1940,7 @@
 				17FAEBAC0F662985007C8707 /* ToolTipTextField.m in Sources */,
 				F6F96719102C709000D2C9B4 /* NSString+FinderCompare.m in Sources */,
 				523822EA2CB2DFF700990800 /* NSOperation-compat.m in Sources */,
+				527DB50F2D0309D100F62F5A /* CoreAudioUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

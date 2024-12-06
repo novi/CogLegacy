@@ -41,4 +41,7 @@
 - (void)pause;
 - (void)resume;
 
+// for direct mode
+- (void)setupWithInputFormat:(AudioStreamBasicDescription)f;
+
 @end

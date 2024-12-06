@@ -9,6 +9,7 @@
 #import "SpotlightWindowController.h"
 #import "StringToURLTransformer.h"
 #import "FontSizetoLineHeightTransformer.h"
+#import "CoreAudioUtils.h"
 
 @implementation AppController
 
@@ -253,6 +254,8 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	NSString *filename = @"~/Library/Application Support/Cog/Default.m3u";
 	[playlistLoader addURL:[NSURL fileURLWithPath:[filename stringByExpandingTildeInPath]]];
 	[[playlistController undoManager] enableUndoRegistration];
+    
+    [CoreAudioUtils printAllAudioDevices];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification

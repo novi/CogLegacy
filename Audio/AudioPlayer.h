@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <CoreAudio/CoreAudioTypes.h>
 
 @class BufferChain;
 @class OutputNode;
@@ -88,4 +89,8 @@
 - (void)audioPlayer:(AudioPlayer *)player didBeginStream:(id)userInfo;
 - (void)audioPlayer:(AudioPlayer *)player didChangeStatus:(id)status;
 @end
+
+// --- Public
+
+extern void PrintStreamDesc (AudioStreamBasicDescription *inDesc); // ConverterNode.h
 

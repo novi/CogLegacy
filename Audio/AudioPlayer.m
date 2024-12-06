@@ -50,6 +50,7 @@
 {
 	if (output)
 	{
+        [output close]; // TODO: only in direct mode
 		[output release];
 	}
 	output = [[OutputNode alloc] initWithController:self previous:nil];

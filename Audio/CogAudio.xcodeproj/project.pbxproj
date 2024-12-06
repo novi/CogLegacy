@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		07DB5F3E0ED353A900C2E3EF /* AudioMetadataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 07DB5F3C0ED353A900C2E3EF /* AudioMetadataWriter.h */; };
-		07DB5F3F0ED353A900C2E3EF /* AudioMetadataWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DB5F3D0ED353A900C2E3EF /* AudioMetadataWriter.m */; };
 		17A2D3C50B8D1D37000778C4 /* AudioDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 17A2D3C30B8D1D37000778C4 /* AudioDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17A2D3C60B8D1D37000778C4 /* AudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 17A2D3C40B8D1D37000778C4 /* AudioDecoder.m */; };
 		17ADB13C0B97926D00257CA2 /* AudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 17ADB13A0B97926D00257CA2 /* AudioSource.h */; };
@@ -43,6 +42,8 @@
 		17F94DD50B8D0F7000A34E87 /* PluginController.h in Headers */ = {isa = PBXBuildFile; fileRef = 17F94DD30B8D0F7000A34E87 /* PluginController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17F94DD60B8D0F7000A34E87 /* PluginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17F94DD40B8D0F7000A34E87 /* PluginController.m */; };
 		17F94DDD0B8D101100A34E87 /* Plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 17F94DDC0B8D101100A34E87 /* Plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		527DB50B2D01F9E800F62F5A /* OutputCoreAudioDirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 527DB5092D01F9E800F62F5A /* OutputCoreAudioDirect.h */; };
+		527DB50C2D01F9E800F62F5A /* OutputCoreAudioDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DB50A2D01F9E800F62F5A /* OutputCoreAudioDirect.m */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 		8E8D3D2F0CBAEE6E00135C1B /* AudioContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E8D3D2D0CBAEE6E00135C1B /* AudioContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8E8D3D300CBAEE6E00135C1B /* AudioContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D3D2E0CBAEE6E00135C1B /* AudioContainer.m */; };
@@ -105,6 +106,8 @@
 		17F94DD40B8D0F7000A34E87 /* PluginController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PluginController.m; sourceTree = "<group>"; };
 		17F94DDC0B8D101100A34E87 /* Plugin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Plugin.h; sourceTree = "<group>"; };
 		32DBCF5E0370ADEE00C91783 /* CogAudio_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CogAudio_Prefix.pch; sourceTree = "<group>"; };
+		527DB5092D01F9E800F62F5A /* OutputCoreAudioDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputCoreAudioDirect.h; sourceTree = "<group>"; };
+		527DB50A2D01F9E800F62F5A /* OutputCoreAudioDirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputCoreAudioDirect.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* CogAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CogAudio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E8D3D2D0CBAEE6E00135C1B /* AudioContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioContainer.h; sourceTree = "<group>"; };
@@ -244,6 +247,8 @@
 			children = (
 				17D21C9C0B8BE4BA00D1EBDE /* OutputCoreAudio.h */,
 				17D21C9D0B8BE4BA00D1EBDE /* OutputCoreAudio.m */,
+				527DB5092D01F9E800F62F5A /* OutputCoreAudioDirect.h */,
+				527DB50A2D01F9E800F62F5A /* OutputCoreAudioDirect.m */,
 			);
 			path = Output;
 			sourceTree = "<group>";
@@ -319,6 +324,7 @@
 				8E8D3D2F0CBAEE6E00135C1B /* AudioContainer.h in Headers */,
 				B0575F2D0D687A0800411D77 /* Helper.h in Headers */,
 				07DB5F3E0ED353A900C2E3EF /* AudioMetadataWriter.h in Headers */,
+				527DB50B2D01F9E800F62F5A /* OutputCoreAudioDirect.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,7 +405,7 @@
 				8EC122600B993BD500C5B3AD /* ConverterNode.m in Sources */,
 				8E8D3D300CBAEE6E00135C1B /* AudioContainer.m in Sources */,
 				B0575F300D687A4000411D77 /* Helper.m in Sources */,
-				07DB5F3F0ED353A900C2E3EF /* AudioMetadataWriter.m in Sources */,
+				527DB50C2D01F9E800F62F5A /* OutputCoreAudioDirect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

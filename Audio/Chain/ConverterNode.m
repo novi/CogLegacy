@@ -15,14 +15,45 @@ void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
 		return;
 	}
 	printf ("- - - - - - - - - - - - - - - - - - - -\n");
-	printf ("  Sample Rate:%f\n", inDesc->mSampleRate);
-	printf ("  Format ID:%s\n", (char*)&inDesc->mFormatID);
-	printf ("  Format Flags:%lX\n", inDesc->mFormatFlags);
-	printf ("  Bytes per Packet:%ld\n", inDesc->mBytesPerPacket);
-	printf ("  Frames per Packet:%ld\n", inDesc->mFramesPerPacket);
-	printf ("  Bytes per Frame:%ld\n", inDesc->mBytesPerFrame);
-	printf ("  Channels per Frame:%ld\n", inDesc->mChannelsPerFrame);
-	printf ("  Bits per Channel:%ld\n", inDesc->mBitsPerChannel);
+	printf ("  Sample Rate: %ld\n", (unsigned long)inDesc->mSampleRate);
+	if (inDesc->mFormatID == kAudioFormatLinearPCM) {
+        printf ("  Format ID: LPCM\n");
+    } else {
+        printf ("  Format ID: %ld\n", inDesc->mFormatID);
+    }
+	printf ("  Format Flags: 0x%lx", inDesc->mFormatFlags);
+    
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsFloat) {
+        printf(", float");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsBigEndian) {
+        printf(", big endian");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsSignedInteger) {
+        printf(", signed integer");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsPacked) {
+        printf(", packed");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsAlignedHigh) {
+        printf(", aligned high");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsNonInterleaved) {
+        printf(", non interleaved");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagIsNonMixable) {
+        printf(", non mixable");
+    }
+    if (inDesc->mFormatFlags & kAudioFormatFlagsAreAllClear) {
+        printf(", all clear");
+    }
+    
+    printf("\n");
+	printf ("  Bytes per Packet: %ld\n", inDesc->mBytesPerPacket);
+	printf ("  Frames per Packet: %ld\n", inDesc->mFramesPerPacket);
+	printf ("  Bytes per Frame: %ld\n", inDesc->mBytesPerFrame);
+	printf ("  Channels per Frame: %ld\n", inDesc->mChannelsPerFrame);
+	printf ("  Bits per Channel: %ld\n", inDesc->mBitsPerChannel);
 	printf ("- - - - - - - - - - - - - - - - - - - -\n");
 }
 

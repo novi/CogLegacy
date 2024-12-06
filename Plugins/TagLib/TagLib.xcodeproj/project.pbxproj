@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07CACE8B0ED1AD1000C0F1E8 /* TagLibMetadataWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CACE8A0ED1AD1000C0F1E8 /* TagLibMetadataWriter.m */; };
 		177FCFA50B90C9600011C3B5 /* Plugin.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 177FCFA40B90C9600011C3B5 /* Plugin.h */; };
 		17C93FC30B90056C008627D6 /* TagLibMetadataReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C93FC20B90056C008627D6 /* TagLibMetadataReader.m */; };
 		17F563B40C3BDBB30019975C /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17F563A60C3BDB8F0019975C /* TagLib.framework */; };
@@ -246,7 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				17C93FC30B90056C008627D6 /* TagLibMetadataReader.m in Sources */,
-				07CACE8B0ED1AD1000C0F1E8 /* TagLibMetadataWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

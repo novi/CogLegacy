@@ -11,13 +11,16 @@
 #import "AudioPlayer.h"
 #import "BufferChain.h"
 
+#import "OutputCoreAudioDirect.h"
+
 @implementation OutputNode
 
 - (void)setup
 {
 	amountPlayed = 0;
 
-	output = [[OutputCoreAudio alloc] initWithController:self];
+//	output = [[OutputCoreAudio alloc] initWithController:self]; // TODO:
+    output = [[OutputCoreAudioDirect alloc] initWithController:self];
 	
 	[output setup];
 }
@@ -109,4 +112,16 @@
 //	if (s == NO)
 //		[output stop];
 }
+
+// ---
+
+- (void)setupWithInputFormat:(AudioStreamBasicDescription)f
+{
+    [self setFormat:&f];
+    NSLog(@"setupWithInputFormat:");
+    PrintStreamDesc(&f);
+    [(OutputCoreAudioDirect*)output setupWithInputFormat:f];
+    
+}
+
 @end
