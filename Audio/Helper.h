@@ -18,9 +18,17 @@ double linearToLogarithmic(double linear);
 
 
 AudioDeviceID getCurrentOutputDevice();
-BOOL isOutputStream(AudioStreamID streamID);
 
 // return value must be freed
-AudioStreamID* getAllStreams(AudioDeviceID deviceID, size_t* count);
+AudioStreamID* getAllOutputStreams(AudioDeviceID deviceID, size_t* count);
 AudioStreamRangedDescription* getAvailableFormats(AudioStreamID streamID, BOOL isPhysical, size_t* count);
 AudioStreamRangedDescription* getAvailableFormatsForFirstOutput(AudioDeviceID deviceID, BOOL isPhysical, size_t* count);
+
+
+AudioStreamRangedDescription* getAvailableFormats2(AudioStreamID streamID, BOOL isPhysical, size_t* count);
+
+//AudioStreamRangedDescription* getAvailablePhysicalFormatsForFirstOutput(AudioDeviceID deviceID, size_t* count);
+void saveAvailableFormatsForFirstOutput(AudioDeviceID deviceID, BOOL isPhysical);
+
+BOOL setHogMode(AudioDeviceID deviceID);
+BOOL unsetHogMode(AudioDeviceID deviceID);

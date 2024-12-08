@@ -125,6 +125,7 @@ static PluginController *sharedPluginController = nil;
 
 - (void)loadPluginsAtPath:(NSString *)path
 {
+    NSArray* validPlugins = [NSArray arrayWithObjects:@"FileSource", @"CoreAudio", @"M3u", nil];
 
 	NSArray *dirContents = [[NSFileManager defaultManager] directoryContentsAtPath:path];
     NSEnumerator* enumerator = [dirContents objectEnumerator];
@@ -136,8 +137,10 @@ static PluginController *sharedPluginController = nil;
 		
 		if ([[pname pathExtension] isEqualToString:@"bundle"])
 		{
-			NSBundle *b = [NSBundle bundleWithPath:ppath];
-			[b load];
+            if ([validPlugins indexOfObject:[pname stringByDeletingPathExtension]] != NSNotFound) {
+                NSBundle *b = [NSBundle bundleWithPath:ppath];
+                [b load];
+            }
 		}
 	}
 }

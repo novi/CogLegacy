@@ -25,7 +25,7 @@
 
 	if (![decoder open:source])
 	{
-		NSLog(@"Couldn't open decoder...");
+		NSLog(@"Couldn't open decoder... \n%@\n%@", decoder, source);
 		return NO;
 	}
     

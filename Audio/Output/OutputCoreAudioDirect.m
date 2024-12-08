@@ -7,7 +7,6 @@
 //
 
 #import "OutputCoreAudioDirect.h"
-#import <unistd.h>
 #import "Helper.h"
 #import "ConverterNode.h"
 
@@ -91,28 +90,89 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 	return err;
 }
 
-
-- (OSStatus)setHogMode:(BOOL)hogMode
+- (BOOL)getHogMode
 {
     AudioObjectPropertyAddress address;
     address.mScope = kAudioObjectPropertyScopeGlobal;
     address.mElement = kAudioObjectPropertyElementMaster;
     address.mSelector = kAudioDevicePropertyHogMode;
     UInt32 size = sizeof(pid_t);
-    pid_t data = hogMode ? getpid() : -1;
-    return AudioObjectSetPropertyData(outputDevice, &address,
-                                                 0, nil,
-                                      size, &data);
+    pid_t data;
+    OSStatus status = AudioObjectGetPropertyData(outputDevice, &address, 0, NULL, &size, &data);
+    if (status != noErr) {
+        NSLog(@"Get hog mode. error: %ld", status);
+        return NO;
+    }
+    NSLog(@"current hog mode %d", data);
+    return data != -1;
+}
+
+- (BOOL)setHogMode:(BOOL)hogMode
+{
+    if ([self getHogMode]) {
+        if (hogMode) return YES;
+    } else {
+        if (!hogMode) return YES;
+    }
+    if (hogMode) {
+        return setHogMode(outputDevice);
+    } else {
+        return unsetHogMode(outputDevice);
+//        return YES;
+    }
 }
 
 - (OSStatus)setFormat:(AudioStreamBasicDescription)description selector:(AudioObjectPropertySelector)selector
 {
+    size_t streamCount = 0;
+    AudioStreamID* streams = getAllOutputStreams(outputDevice, &streamCount);
+    NSAssert(streamCount > 0, @"no streams on current output");
+    
+    AudioStreamID first = streams[0];
+    free(streams);
+    
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    return AudioStreamSetProperty(first, NULL, 0, selector, size, &description);
+}
+
+- (OSStatus)setFormatToDevice:(AudioStreamBasicDescription)description selector:(AudioObjectPropertySelector)selector
+{
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    return AudioDeviceSetProperty(outputDevice, NULL, 0, false, selector, size, &description);
+}
+
+- (OSStatus)getFormatAlt:(AudioStreamBasicDescription*)description selector:(AudioObjectPropertySelector)selector
+{
+    size_t streamCount = 0;
+    AudioStreamID* streams = getAllOutputStreams(outputDevice, &streamCount);
+    NSAssert(streamCount > 0, @"no streams on current output");
+    
+    AudioStreamID first = streams[0];
+    free(streams);
+    
     AudioObjectPropertyAddress address;
     address.mScope = kAudioObjectPropertyScopeGlobal;
     address.mElement = kAudioObjectPropertyElementMaster;
     address.mSelector = selector;
     UInt32 size = sizeof(AudioStreamBasicDescription);
-    return AudioObjectSetPropertyData(outputDevice, &address,
+    return AudioObjectGetPropertyData(first, &address, 0, NULL, &size, description);
+}
+
+- (OSStatus)setFormatAlt:(AudioStreamBasicDescription)description selector:(AudioObjectPropertySelector)selector
+{
+    size_t streamCount = 0;
+    AudioStreamID* streams = getAllOutputStreams(outputDevice, &streamCount);
+    NSAssert(streamCount > 0, @"no streams on current output");
+    
+    AudioStreamID first = streams[0];
+    free(streams);
+    
+    AudioObjectPropertyAddress address;
+    address.mScope = kAudioObjectPropertyScopeGlobal;
+    address.mElement = kAudioObjectPropertyElementMaster;
+    address.mSelector = selector;
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    return AudioObjectSetPropertyData(first, &address,
                                       0, nil,
                                       size, &description);
 }
@@ -188,14 +248,11 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 {
     if (!isRunning) return YES;
     
-    
-    OSStatus status = [self setHogMode:NO];
-    if (status != noErr) {
-        NSLog(@"Set hog mode. error: %ld", status);
+    if (![self setHogMode:NO]) {
         return NO;
     }
     
-    status = AudioDeviceStop(outputDevice, Sound_Renderer_Direct);
+    OSStatus status = AudioDeviceStop(outputDevice, Sound_Renderer_Direct);
     if (status != noErr) {
         NSLog(@"Failed to start IO proc. error: %ld", status);
         return NO;
@@ -219,14 +276,33 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
     size_t i;
     AudioStreamBasicDescription result;
     bzero(&result, sizeof(AudioStreamBasicDescription));
-    for (i = 0; i < count; i++) {
-        AudioStreamBasicDescription d = descriptions[i].mFormat;
-        if (d.mSampleRate == f.mSampleRate && d.mBitsPerChannel == f.mBitsPerChannel) {
-            result = d;
-            break;
+    NSLog(@"num of physical format: %ld", count);
+    NSAssert(count, nil);
+    
+    if (1) {
+        // prefer non mixable
+        for (i = 0; i < count; i++) {
+            AudioStreamBasicDescription d = descriptions[i].mFormat;
+            NSLog(@"test1: %ld, %ld bit, 0x%lx, %ld", (unsigned long)d.mSampleRate, d.mBitsPerChannel, d.mFormatFlags, d.mFormatFlags & kAudioFormatFlagIsNonMixable);
+            if (d.mSampleRate == f.mSampleRate && d.mBitsPerChannel == f.mBitsPerChannel && (d.mFormatFlags & kAudioFormatFlagIsNonMixable)) {
+                result = d;
+                break;
+            }
         }
+        if (result.mFormatID) return result;
     }
-    if (result.mFormatID) return result;
+    
+    {
+        for (i = 0; i < count; i++) {
+            AudioStreamBasicDescription d = descriptions[i].mFormat;
+            NSLog(@"test2: %ld, %ld bit, 0x%lx", (unsigned long)d.mSampleRate, d.mBitsPerChannel, d.mFormatFlags);
+            if (d.mSampleRate == f.mSampleRate && d.mBitsPerChannel == f.mBitsPerChannel) {
+                result = d;
+                break;
+            }
+        }
+        if (result.mFormatID) return result;
+    }
     
     for (i = 0; i < count; i++) {
         AudioStreamBasicDescription d = descriptions[i].mFormat;
@@ -241,29 +317,53 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
 
 -(BOOL)setupWithInputFormat:(AudioStreamBasicDescription)f
 {
+    
     outputDevice = getCurrentOutputDevice();
     
     [self stopCurrent];
     
-    OSStatus status = [self setHogMode:YES];
-    if (status != noErr) {
-        NSLog(@"Set hog mode. error: %ld", status);
+    if (![self setHogMode:YES]) {
         return NO;
     }
     
     AudioStreamBasicDescription physicalFormat = [self determinePhysicalFormatWithInputFormat:f];
     NSLog(@"Physical format determined:");
     PrintStreamDesc(&physicalFormat);
-    status = [self setFormat:physicalFormat selector:kAudioStreamPropertyPhysicalFormat];
+    OSStatus status = [self setFormatAlt:physicalFormat selector:kAudioStreamPropertyPhysicalFormat];
     if (status != noErr) {
         NSLog(@"Set physical format. error: %ld", status);
         return NO;
     }
     
-    status = [self setFormat:f selector:kAudioStreamPropertyVirtualFormat];
-    if (status != noErr) {
-        NSLog(@"Set virtual format. error: %ld", status);
-        return NO;
+    if (physicalFormat.mFormatFlags & kAudioFormatFlagIsNonMixable) {
+        AudioStreamBasicDescription currentFormat;
+        size_t i;
+        for (i = 0; i < 50; i++) {
+            [self getFormatAlt:&currentFormat selector:kAudioStreamPropertyVirtualFormat];
+            // wait for virtual format changed to same as physical format
+            if (currentFormat.mFormatFlags & kAudioFormatFlagIsNonMixable) {
+                break;
+            }
+            usleep(100*1000);
+        }
+        NSLog(@"current format virtual:");
+        PrintStreamDesc(&currentFormat);
+        if (currentFormat.mFormatFlags & kAudioFormatFlagIsNonMixable) {
+            
+        } else {
+            NSLog(@"virtual format change timeout.");
+            return NO;
+        }
+//        [self getFormatAlt:&currentFormat selector:kAudioStreamPropertyPhysicalFormat];
+//        NSLog(@"current format physical:");
+//        PrintStreamDesc(&currentFormat);
+    } else {
+        status = [self setFormat:f selector:kAudioStreamPropertyVirtualFormat];
+        if (status != noErr) {
+            NSLog(@"Set virtual format 2. error: %ld\nformat:", status);
+            PrintStreamDesc(&f);
+            return NO;
+        }
     }
     
     status = AudioDeviceAddIOProc(outputDevice, Sound_Renderer_Direct, self);
