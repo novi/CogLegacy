@@ -32,3 +32,10 @@ void saveAvailableFormatsForFirstOutput(AudioDeviceID deviceID, BOOL isPhysical)
 
 BOOL setHogMode(AudioDeviceID deviceID);
 BOOL unsetHogMode(AudioDeviceID deviceID);
+
+@protocol DirectModeDecoder <NSObject>
+
+- (void)setAvailableVirtualFormats:(AudioStreamRangedDescription*)descriptions descriptionCount:(size_t)count;
+-(NSValue*)outputFormatForDirectMode;
+
+@end

@@ -33,6 +33,8 @@
 	if (self)
 	{
 		[self initDefaults];
+        
+        [CoreAudioUtils printAllAudioDevices];
 				
 		remote = [[AppleRemote alloc] init];
 		[remote setDelegate: self];
@@ -254,8 +256,6 @@ increase/decrease as long as the user holds the left/right, plus/minus button */
 	NSString *filename = @"~/Library/Application Support/Cog/Default.m3u";
 	[playlistLoader addURL:[NSURL fileURLWithPath:[filename stringByExpandingTildeInPath]]];
 	[[playlistController undoManager] enableUndoRegistration];
-    
-    [CoreAudioUtils printAllAudioDevices];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification

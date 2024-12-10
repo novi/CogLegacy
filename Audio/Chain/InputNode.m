@@ -10,6 +10,7 @@
 #import "BufferChain.h"
 #import "Plugin.h"
 #import "CoreAudioUtils.h"
+#import "Helper.h"
 
 @implementation InputNode
 
@@ -22,6 +23,17 @@
 		return NO;
 
 	[self registerObservers];
+    
+    
+    // TODO: direct mode
+    if ([(id)decoder respondsToSelector:@selector(setAvailableVirtualFormats:descriptionCount:)]) {
+        size_t count = 0;
+        AudioDeviceID deviceID = getCurrentOutputDevice();
+        AudioStreamRangedDescription* descriptions = getAvailableFormatsForFirstOutput(deviceID, NO, &count);
+        [(id)decoder setAvailableVirtualFormats:descriptions descriptionCount:count];
+    }
+    
+    //
 
 	if (![decoder open:source])
 	{

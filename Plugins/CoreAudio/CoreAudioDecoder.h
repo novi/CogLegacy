@@ -21,6 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 #include <AudioToolbox/ExtendedAudioFile.h>
+#import <CoreAudio/AudioHardware.h>
 
 #import "Plugin.h"
 
@@ -36,8 +37,16 @@
 	int channels;
 	float frequency;
 	long totalFrames;
+    
+    // for direct mode
+    AudioStreamRangedDescription* availableVirtualFormats;
+    size_t availableVirtualFormatCount;
 }
 
+
+// for direct mode
+- (void)setAvailableVirtualFormats:(AudioStreamRangedDescription*)descriptions descriptionCount:(size_t)count;
 -(NSValue*)outputFormatForDirectMode;
+
 
 @end

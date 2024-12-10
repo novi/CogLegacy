@@ -71,7 +71,7 @@ AudioDeviceID getCurrentOutputDevice();
 	
 	err = ExtAudioFileOpen(&ref, &_in);
 	if(noErr != err) {
-		NSLog(@"Error opening file: %s", &err);
+		NSLog(@"Error opening file: %ld", err);
 		return NO;
 	}
 	
@@ -239,7 +239,13 @@ AudioDeviceID getCurrentOutputDevice();
 		nil];
 }
 
--(NSValue *)outputFormatForDirectMode
+-(void)setAvailableVirtualFormats:(AudioStreamRangedDescription *)descriptions descriptionCount:(size_t)count
+{
+    availableVirtualFormatCount = count;
+    availableVirtualFormats = descriptions;
+}
+
+-(NSValue*)outputFormatForDirectMode
 {
     return [NSValue valueWithPointer:&outputFormat];
 }
@@ -250,12 +256,39 @@ AudioDeviceID getCurrentOutputDevice();
     
     NSLog(@"File format: %ld, %ld bit", (unsigned long)fileFormat.mSampleRate, fileFormat.mBitsPerChannel);
     
-    AudioDeviceID deviceID = getCurrentOutputDevice();
-    size_t count = 0;
-    AudioStreamRangedDescription* descriptions = ca_getAvailableFormatsForFirstOutput(deviceID, NO, &count);
+//    AudioDeviceID deviceID = getCurrentOutputDevice();
+    size_t count = availableVirtualFormatCount;
+    AudioStreamRangedDescription* descriptions = availableVirtualFormats;
+    
+    NSLog(@"num of virtual format: %ld", count);
+    
+    NSAssert(descriptions, nil);
     
     bzero(&outputFormat, sizeof(AudioStreamBasicDescription));
     size_t i;
+    
+    BOOL hasNonMixable = NO;
+    for (i = 0; i < count; i++) {
+        AudioStreamBasicDescription d = descriptions[i].mFormat;
+        if ( (d.mFormatFlags & kAudioFormatFlagIsNonMixable) ) {
+            hasNonMixable = YES;
+            break;
+        }
+    }
+    
+    if (hasNonMixable) {
+        outputFormat.mSampleRate = fileFormat.mSampleRate;
+        outputFormat.mFormatID = kAudioFormatLinearPCM;
+        outputFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonMixable;
+        outputFormat.mBytesPerPacket = (fileFormat.mBitsPerChannel/8) * fileFormat.mChannelsPerFrame;
+        outputFormat.mBytesPerFrame = outputFormat.mBytesPerPacket;
+        outputFormat.mFramesPerPacket = 1;
+        outputFormat.mChannelsPerFrame = fileFormat.mChannelsPerFrame;
+        outputFormat.mBitsPerChannel = fileFormat.mBitsPerChannel;
+        return;
+    }
+    
+    
     if (0) {
         // prefer float
         for (i = 0; i < count; i++) {
@@ -268,7 +301,6 @@ AudioDeviceID getCurrentOutputDevice();
         }
         
         if (outputFormat.mFormatID) {
-            free(descriptions);
             return;
         }
     }
@@ -285,7 +317,6 @@ AudioDeviceID getCurrentOutputDevice();
         }
         
         if (outputFormat.mFormatID) {
-            free(descriptions);
             return;
         }
     }
@@ -301,7 +332,6 @@ AudioDeviceID getCurrentOutputDevice();
         }
         
         if (outputFormat.mFormatID) {
-            free(descriptions);
             return;
         }
     }
@@ -315,143 +345,12 @@ AudioDeviceID getCurrentOutputDevice();
         }
     }
     
-//    NSAssert(outputFormat.mSampleRate > 0, nil);
-    
-    // TODO: determine
-//    outputFormat = descriptions[0].mFormat;
-    
-    free(descriptions);
-    
 }
 
 - (void)determineOutputVirtualFormat
 {
     [self performSelectorOnMainThread:@selector(determineOutputVirtualFormat_) withObject:nil waitUntilDone:YES];
+    NSAssert(outputFormat.mSampleRate > 0, nil);
 }
-
-// TODO:
-
-//+(void)printAllAudioDevices
-//{
-//    AudioObjectPropertyAddress address;
-//    address.mScope = kAudioObjectPropertyScopeGlobal;
-//    address.mElement = kAudioObjectPropertyElementMaster;
-//    address.mSelector = kAudioHardwarePropertyDevices;
-//    
-//    AudioObjectID systemObject = kAudioObjectSystemObject;
-//    UInt32 outDataSize = 0;
-//    OSStatus status = AudioObjectGetPropertyDataSize(systemObject, &address, 0, NULL, &outDataSize);
-//    if (status != noErr) return;
-//    
-//    AudioDeviceID* devices = malloc(sizeof(AudioDeviceID) * outDataSize);
-//    status = AudioObjectGetPropertyData(systemObject, &address,
-//                                        0, NULL, &outDataSize, devices);
-//    if (status != noErr) {
-//        free(devices);
-//        return;
-//    }
-//    
-//    size_t i;
-//    for (i = 0; i < outDataSize/sizeof(AudioDeviceID); i++) {
-//        NSLog(@"(ID:%ld):", devices[i]);
-//    }
-//    free(devices);
-//}
-
-
-// TODO: Duplicate codes
-
-AudioStreamRangedDescription* getAvailableFormats2(AudioStreamID streamID, BOOL isPhysical, size_t* count)
-{
-    AudioObjectPropertyAddress address;
-    address.mScope = kAudioObjectPropertyScopeGlobal;
-    address.mElement = kAudioObjectPropertyElementMaster;
-    address.mSelector = isPhysical ? kAudioStreamPropertyAvailablePhysicalFormats : kAudioStreamPropertyAvailableVirtualFormats;
-    
-    UInt32 outDataSize = 0;
-    OSStatus status = AudioObjectGetPropertyDataSize(streamID, &address, 0, NULL, &outDataSize);
-    if (status != noErr) {
-        NSLog(@"%s, AudioObjectGetPropertyDataSize error %ld", __func__, status);
-        return NULL;
-    }
-    
-    AudioStreamRangedDescription* descriptions = malloc(outDataSize);
-    status = AudioObjectGetPropertyData(streamID, &address,
-                                        0, NULL, &outDataSize, descriptions);
-    if (status != noErr) {
-        free(descriptions);
-        NSLog(@"%s, AudioObjectGetPropertyData error %ld", __func__, status);
-        return NULL;
-    }
-    *count = outDataSize/sizeof(AudioStreamRangedDescription);
-    return descriptions;
-}
-
-AudioDeviceID getCurrentOutputDevice()
-{
-    NSDictionary *device = [[[NSUserDefaultsController sharedUserDefaultsController] defaults] objectForKey:@"outputDevice"];
-	if (device) {
-        AudioDeviceID deviceID = [[device objectForKey:@"deviceID"] longValue];
-        NSLog(@"getCurrentOutputDevice %ld", deviceID);
-        return deviceID;
-    }
-    return 0;
-}
-
-//AudioStreamRangedDescription* getAvailableFormats(AudioStreamID streamID, BOOL isPhysical, size_t* count)
-//{
-//    AudioDevicePropertyID property = isPhysical ? kAudioStreamPropertyAvailablePhysicalFormats : kAudioStreamPropertyAvailableVirtualFormats;
-//    UInt32 outDataSize = 0;
-//    OSStatus status = AudioStreamGetPropertyInfo(streamID, 0, property, &outDataSize, NULL);
-//    if (status != noErr) return NULL;
-//    
-//    AudioStreamRangedDescription* descriptions = malloc(outDataSize);
-//    status = AudioStreamGetProperty(streamID, 0, property, &outDataSize, descriptions);
-//    if (status != noErr) {
-//        free(descriptions);
-//        return NULL;
-//    }
-//    *count = outDataSize/sizeof(AudioStreamRangedDescription);
-//    return descriptions;
-//}
-
-AudioStreamID* getAllOutputStreams(AudioDeviceID deviceID, size_t* count)
-{
-    UInt32 outDataSize = 0;
-    OSStatus status = AudioDeviceGetPropertyInfo(deviceID, 0, false, kAudioDevicePropertyStreams, &outDataSize, NULL);
-    if (status != noErr) {
-        NSLog(@"%s, AudioDeviceGetPropertyInfo error %ld", __func__, status);
-        return NULL;
-    }
-    
-    AudioStreamID* streams = malloc(outDataSize);
-    status = AudioDeviceGetProperty(deviceID, 0, false, kAudioDevicePropertyStreams, &outDataSize, streams);
-    if (status != noErr) {
-        NSLog(@"%s, AudioDeviceGetProperty error %ld", __func__, status);
-        free(streams);
-        return NULL;
-    }
-    *count = outDataSize/sizeof(AudioStreamID);
-    return streams;
-}
-
-AudioStreamRangedDescription* ca_getAvailableFormatsForFirstOutput(AudioDeviceID deviceID, BOOL isPhysical, size_t* count)
-{
-    size_t streamCount = 0;
-    AudioStreamID* streams = getAllOutputStreams(deviceID, &streamCount);
-    if (streams == NULL) {
-        return NULL;
-    }
-    
-    size_t i;
-    for (i = 0; i < streamCount; i++) {
-        AudioStreamRangedDescription* descriptions = getAvailableFormats2(streams[i], isPhysical, count);
-        free(streams);
-        return descriptions;
-    }
-    free(streams);
-    return NULL;
-}
-
 
 @end

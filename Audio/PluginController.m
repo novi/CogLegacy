@@ -1,5 +1,7 @@
 #import "PluginController.h"
 #import "Plugin.h"
+#import <CoreAudio/AudioHardware.h>
+#import "Helper.h"
 
 @implementation PluginController
 
@@ -314,6 +316,15 @@ static PluginController *sharedPluginController = nil;
 	{
 	
 		id<CogDecoder> decoder = [self audioDecoderForSource:source];
+        
+        // TODO: direct mode
+        if ([(id)decoder respondsToSelector:@selector(setAvailableVirtualFormats:descriptionCount:)]) {
+            size_t count = 0;
+            AudioDeviceID deviceID = getCurrentOutputDevice();
+            AudioStreamRangedDescription* descriptions = getAvailableFormatsForFirstOutput(deviceID, NO, &count);
+            [(id)decoder setAvailableVirtualFormats:descriptions descriptionCount:count];
+        }
+        
 		if (![decoder open:source])
 		{
 			return nil;

@@ -279,6 +279,12 @@ static OSStatus Sound_Renderer_Direct(   AudioDeviceID           inDevice,
     NSLog(@"num of physical format: %ld", count);
     NSAssert(count, nil);
     
+    if (f.mFormatFlags & kAudioFormatFlagIsNonMixable) {
+        // virtual format is non mixable
+        return f; // same as virtual format
+    }
+    
+    
     if (1) {
         // prefer non mixable
         for (i = 0; i < count; i++) {

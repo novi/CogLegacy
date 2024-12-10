@@ -86,7 +86,7 @@
     AudioPlayer* player = controller;
     AudioStreamBasicDescription* inputNodeOutputFormat = NULL;
     if ([[inputNode decoder] respondsToSelector:@selector(outputFormatForDirectMode)]) {
-        inputNodeOutputFormat = [[[inputNode decoder] outputFormatForDirectMode] pointerValue];
+        inputNodeOutputFormat = [[(id)[inputNode decoder] outputFormatForDirectMode] pointerValue];
     }
     if (!inputNodeOutputFormat) {
         NSLog(@"not supported direct mode");
